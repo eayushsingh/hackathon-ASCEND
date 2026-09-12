@@ -11,6 +11,7 @@ import { calculateLevelProgress, calculateXPForLevel } from '@/lib/progression/l
 import { ARCHETYPES } from '@/lib/progression/archetypes';
 import { ATTRIBUTE_LIST, calculateAttributeLevel, getAttributeMasteryTitle } from '@/lib/progression/attributes';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
+import { HabitTransformationCard } from '@/components/character/HabitTransformationCard';
 import {
   Sparkles,
   CheckCircle2,
@@ -137,6 +138,9 @@ export default function CharacterPage() {
           </div>
         </div>
       </div>
+
+      {/* 2. FLASHY 21-DAY HABIT TRANSFORMATION & MOTIVATION SURGE CARD */}
+      <HabitTransformationCard />
 
       {/* 3. ASCENSION RANK ROADMAP */}
       <div className="apple-card p-6 sm:p-8">
