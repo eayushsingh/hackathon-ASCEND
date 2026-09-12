@@ -2,13 +2,13 @@
 
 // ==============================================================================
 // ASCEND - LEVEL UP CELEBRATION MODAL
-// Minimalist Editorial Theme
+// Apple Bright Premium Celebration Modal
 // ==============================================================================
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGame } from '@/lib/context/game-context';
-import { Trophy, ArrowRight, Zap } from 'lucide-react';
+import { Trophy, ArrowRight, Zap, Sparkles } from 'lucide-react';
 import { ARCHETYPES } from '@/lib/progression/archetypes';
 
 export const LevelUpModal: React.FC = () => {
@@ -20,22 +20,22 @@ export const LevelUpModal: React.FC = () => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#141110]/60 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
         <motion.div
-          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+          initial={{ opacity: 0, scale: 0.85, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.8, y: 20 }}
-          transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-          className="relative w-full max-w-md overflow-hidden bg-white border-4 border-[#141110] p-8 text-center shadow-[8px_8px_0_0_#141110]"
+          exit={{ opacity: 0, scale: 0.85, y: 20 }}
+          transition={{ type: 'spring', damping: 22, stiffness: 320 }}
+          className="relative w-full max-w-md apple-card p-8 text-center"
         >
           {/* Icon Badge */}
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: [0, 1.2, 1] }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mx-auto w-24 h-24 border-4 border-[#141110] bg-[#F5F3EE] flex items-center justify-center mb-6"
+            className="mx-auto w-20 h-20 rounded-3xl bg-amber-50 border border-amber-200 flex items-center justify-center mb-5 shadow-sm"
           >
-            <Trophy className="w-12 h-12 text-[#E8552A]" />
+            <Trophy className="w-10 h-10 text-amber-500" />
           </motion.div>
 
           <motion.div
@@ -43,44 +43,44 @@ export const LevelUpModal: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <span className="text-xs uppercase font-sans font-bold tracking-widest text-[#6B6560] bg-[#F5F3EE] px-4 py-1.5 border-2 border-[#141110]">
-              Ascension Milestone
+            <span className="text-xs uppercase font-mono font-bold tracking-wider text-purple-700 bg-purple-50 px-3.5 py-1 rounded-full border border-purple-200">
+              Rank Milestone
             </span>
 
-            <h2 className="text-5xl font-display font-bold text-[#141110] mt-6 mb-2 tracking-widest uppercase">
+            <h2 className="text-3xl font-extrabold text-[#1D1D1F] mt-4 mb-2 tracking-tight">
               Level Up!
             </h2>
 
             <div className="flex items-center justify-center space-x-4 my-6">
-              <span className="text-3xl font-display font-bold text-[#A8A29E]">LVL {levelUpModal.oldLevel}</span>
-              <ArrowRight className="w-8 h-8 text-[#141110]" />
-              <span className="text-5xl font-display font-bold text-[#E8552A]">
+              <span className="text-2xl font-mono font-bold text-[#8E8E93]">LVL {levelUpModal.oldLevel}</span>
+              <ArrowRight className="w-6 h-6 text-purple-600" />
+              <span className="text-4xl font-mono font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-sky-500">
                 LVL {levelUpModal.newLevel}
               </span>
             </div>
 
-            <div className="bg-[#F5F3EE] border-2 border-[#141110] p-5 my-6 text-left space-y-3">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-[#6B6560] font-sans font-bold uppercase tracking-wider">Rank Title</span>
-                <span className="text-[#141110] font-display font-bold tracking-widest uppercase">{levelUpModal.rankTitle}</span>
+            <div className="bg-[#F5F5F7] border border-[#E5E5EA] rounded-2xl p-4 my-6 text-left space-y-2.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-[#6E6E73] font-medium">Rank Title</span>
+                <span className="text-[#1D1D1F] font-bold font-mono uppercase">{levelUpModal.rankTitle}</span>
               </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-[#6B6560] font-sans font-bold uppercase tracking-wider">Archetype</span>
-                <span className="text-[#141110] font-display font-bold tracking-widest uppercase">{archetypeInfo.name}</span>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-[#6E6E73] font-medium">Archetype</span>
+                <span className="text-purple-600 font-bold font-mono uppercase">{archetypeInfo.name}</span>
               </div>
-              <div className="flex items-center justify-between text-sm border-t-2 border-[#141110]/10 pt-3">
-                <span className="text-[#6B6560] font-sans font-bold uppercase tracking-wider flex items-center gap-1">
-                  <Zap className="w-4 h-4 text-[#C9A227]" /> Potential
+              <div className="flex items-center justify-between text-xs border-t border-[#E5E5EA] pt-2.5">
+                <span className="text-[#6E6E73] font-medium flex items-center gap-1">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Progression Bonus
                 </span>
-                <span className="text-[#E8552A] font-display font-bold tracking-widest uppercase">+100 Capacity</span>
+                <span className="text-amber-700 font-bold font-mono">+100 Capacity</span>
               </div>
             </div>
 
             <button
               onClick={closeLevelUpModal}
-              className="w-full py-4 bg-[#E8552A] border-2 border-[#141110] text-white hover:bg-[#C54A18] font-display font-bold uppercase tracking-widest text-lg transition-colors flex items-center justify-center space-x-2"
+              className="w-full py-3.5 btn-primary-gradient text-white rounded-xl font-bold text-sm shadow-sm transition-all flex items-center justify-center space-x-2 cursor-pointer"
             >
-              <span>Continue Ascending</span>
+              <span>Continue Journey</span>
             </button>
           </motion.div>
         </motion.div>
@@ -88,3 +88,4 @@ export const LevelUpModal: React.FC = () => {
     </AnimatePresence>
   );
 };
+

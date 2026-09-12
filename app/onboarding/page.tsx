@@ -2,12 +2,11 @@
 
 // ==============================================================================
 // ASCEND - ONBOARDING & ARCHETYPE SELECTION SCREEN
-// Minimalist Editorial Theme
+// Apple Bright Premium Onboarding
 // ==============================================================================
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
@@ -53,25 +52,27 @@ export default function OnboardingPage() {
       <div className="text-center max-w-2xl mx-auto mb-12">
         <div className="flex justify-center mb-6">
           <Link href="/">
-            <div className="font-display font-black text-4xl tracking-widest text-[#141110]">ASCEND</div>
+            <div className="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-sky-500">
+              ASCEND
+            </div>
           </Link>
         </div>
-        <div className="inline-flex items-center space-x-2 px-3 py-1 bg-[#F5F3EE] border-2 border-[#141110] text-[#141110] text-[10px] font-sans font-bold uppercase tracking-widest mb-4">
-          <Sparkles className="w-3.5 h-3.5 text-[#E8552A]" />
-          <span>Character Initialization</span>
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1 bg-purple-50 border border-purple-200 text-purple-700 text-xs font-mono font-bold uppercase tracking-wider rounded-full mb-3">
+          <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+          <span>Character Setup</span>
         </div>
-        <h1 className="font-display text-4xl sm:text-5xl font-black text-[#141110] tracking-widest uppercase mb-4">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1D1D1F] tracking-tight mb-3">
           Choose Your Archetype
         </h1>
-        <p className="text-sm text-[#4A463F] font-sans font-medium leading-relaxed">
-          Select your starting RPG class. Your archetype defines your primary attribute growth bonuses and provides your initial batch of starter quests.
+        <p className="text-sm text-[#6E6E73] font-sans leading-relaxed">
+          Select your starting character class. Your archetype boosts specific productivity attributes and generates custom starter habits.
         </p>
       </div>
 
-      <form onSubmit={handleInitialize} className="space-y-12">
+      <form onSubmit={handleInitialize} className="space-y-10">
         {/* Username input */}
         <div className="max-w-md mx-auto">
-          <label className="block text-xs font-sans font-bold text-[#6B6560] uppercase tracking-widest mb-3 text-center">
+          <label className="block text-xs font-mono font-bold text-[#1D1D1F] uppercase tracking-wider mb-2 text-center">
             Your Hero Codename / Username
           </label>
           <input
@@ -79,7 +80,7 @@ export default function OnboardingPage() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            className="w-full text-center px-4 py-4 bg-white border-2 border-[#141110] text-[#141110] font-display font-bold text-xl uppercase tracking-widest focus:outline-none focus:shadow-[4px_4px_0_0_#E8552A] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)] transition-all"
+            className="w-full text-center px-4 py-3.5 bg-white border border-[#E5E5EA] text-[#1D1D1F] rounded-2xl font-bold text-lg focus:outline-none focus:border-purple-500 shadow-sm transition-colors"
             placeholder="e.g., Kaelen Vance"
           />
         </div>
@@ -92,40 +93,41 @@ export default function OnboardingPage() {
             return (
               <motion.div
                 key={arch.id}
-                whileHover={{ y: -4 }}
+                whileHover={{ y: -3 }}
                 onClick={() => setSelectedArchetype(arch.id)}
-                className={`cursor-pointer p-6 border-4 transition-all relative flex flex-col justify-between ${
+                className={`cursor-pointer p-6 rounded-3xl border transition-all relative flex flex-col justify-between ${
                   isSelected
-                    ? 'bg-white border-[#141110] shadow-[8px_8px_0_0_#141110]'
-                    : 'bg-[#F5F3EE] border-[#141110]/20 hover:border-[#141110]/60'
+                    ? 'apple-card border-purple-400 ring-2 ring-purple-400/30'
+                    : 'bg-white border-[#E5E5EA] hover:border-[#C7C7CC]'
                 }`}
               >
                 {isSelected && (
-                  <div className="absolute -top-3 -right-3 w-8 h-8 border-2 border-[#141110] bg-[#E8552A] text-white flex items-center justify-center font-bold shadow-[2px_2px_0_0_#141110]">
-                    <Check className="w-5 h-5 stroke-[3]" />
+                  <div className="absolute -top-3 -right-3 w-7 h-7 rounded-full btn-primary-gradient text-white flex items-center justify-center font-bold shadow-md">
+                    <Check className="w-4 h-4 stroke-[3]" />
                   </div>
                 )}
 
                 <div>
                   <div
-                    className="inline-block text-[10px] font-sans font-bold uppercase tracking-widest px-3 py-1 border-2 border-[#141110] mb-4 bg-white"
+                    className="inline-block text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border border-[#E5E5EA] mb-3 bg-[#F5F5F7] text-[#1D1D1F]"
                   >
                     {arch.role}
                   </div>
 
-                  <h3 className="font-display text-2xl font-black text-[#141110] uppercase tracking-widest mb-1">{arch.name}</h3>
-                  <p className="text-xs text-[#E8552A] font-sans font-bold uppercase tracking-wider mb-3">{arch.title}</p>
-                  <p className="text-sm text-[#4A463F] font-medium leading-relaxed mb-6 font-sans">{arch.description}</p>
+                  <h3 className="text-xl font-bold text-[#1D1D1F] mb-1">{arch.name}</h3>
+                  <p className="text-xs text-purple-600 font-mono font-semibold uppercase mb-2">{arch.title}</p>
+                  <p className="text-xs text-[#6E6E73] leading-relaxed mb-5 font-sans">{arch.description}</p>
                 </div>
 
-                <div className="pt-4 border-t-2 border-[#141110]/10 space-y-3">
-                  <div className="text-xs font-sans font-bold text-[#141110]">
-                    <span className="text-[#E8552A]">⚡</span> {arch.perk}
+                <div className="pt-3 border-t border-[#E5E5EA] space-y-2">
+                  <div className="text-xs text-[#1D1D1F] font-medium flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-purple-600 shrink-0" />
+                    <span>{arch.perk}</span>
                   </div>
-                  <div className="flex items-center space-x-2 text-[10px] font-sans font-bold text-[#6B6560] uppercase tracking-wider">
-                    <span>Primary: <strong className="text-[#141110]">{arch.primaryAttribute}</strong></span>
+                  <div className="flex items-center space-x-2 text-[11px] font-mono text-[#6E6E73]">
+                    <span>Primary: <strong className="text-[#1D1D1F]">{arch.primaryAttribute}</strong></span>
                     <span>•</span>
-                    <span>Secondary: <strong className="text-[#141110]">{arch.secondaryAttribute}</strong></span>
+                    <span>Secondary: <strong className="text-[#1D1D1F]">{arch.secondaryAttribute}</strong></span>
                   </div>
                 </div>
               </motion.div>
@@ -134,40 +136,41 @@ export default function OnboardingPage() {
         </div>
 
         {/* Selected Archetype Starter Quests Preview */}
-        <div className="p-8 bg-white border-4 border-[#141110] max-w-3xl mx-auto shadow-[8px_8px_0_0_#141110]">
-          <div className="flex items-center justify-between mb-6 pb-3 border-b-2 border-[#141110]/10">
-            <h4 className="text-sm font-display font-black text-[#141110] uppercase tracking-widest flex items-center gap-2">
-              <Zap className="w-5 h-5 text-[#E8552A]" />
+        <div className="apple-card p-6 sm:p-8 max-w-3xl mx-auto">
+          <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#E5E5EA]">
+            <h4 className="text-sm font-bold text-[#1D1D1F] flex items-center gap-2">
+              <Zap className="w-4 h-4 text-purple-600" />
               <span>Starter Quests for {activeArch.name}</span>
             </h4>
-            <span className="text-[10px] text-[#4A463F] font-sans font-bold uppercase tracking-wider hidden sm:inline-block">Auto-Generated on Launch</span>
+            <span className="text-[11px] text-[#6E6E73] font-mono hidden sm:inline-block">Auto-Generated on Launch</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {activeArch.starterQuests.map((q, idx) => (
-              <div key={idx} className="p-4 bg-[#F5F3EE] border-2 border-[#141110]">
-                <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-[#141110] bg-white border border-[#141110] px-2 py-0.5">
+              <div key={idx} className="p-4 bg-[#F5F5F7] rounded-2xl border border-[#E5E5EA]">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-700 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-md">
                   {q.difficulty}
                 </span>
-                <div className="text-sm font-bold text-[#141110] mt-3 font-sans leading-snug">{q.title}</div>
-                <div className="text-[11px] font-sans font-bold text-[#E8552A] mt-2 uppercase tracking-wider">{q.attribute} XP</div>
+                <div className="text-xs font-bold text-[#1D1D1F] mt-2 leading-snug">{q.title}</div>
+                <div className="text-[11px] font-mono text-[#6E6E73] mt-1.5 font-medium">+{q.attribute} XP</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Submit button */}
-        <div className="text-center pt-8">
+        <div className="text-center pt-4">
           <button
             type="submit"
             disabled={isInitializing || !username.trim()}
-            className="px-12 py-5 bg-[#E8552A] border-2 border-[#141110] text-white font-display font-black text-base uppercase tracking-widest shadow-[6px_6px_0_0_#141110] hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_#141110] transition-all inline-flex items-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-10 py-4 btn-primary-gradient text-white font-bold text-sm uppercase font-mono tracking-wider rounded-2xl shadow-md transition-all inline-flex items-center space-x-2.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span>{isInitializing ? 'Calibrating...' : 'Initialize Ascension'}</span>
-            <ArrowRight className="w-6 h-6 stroke-[3]" />
+            <span>{isInitializing ? 'Starting Journey...' : 'Initialize Character & Begin'}</span>
+            <ArrowRight className="w-5 h-5 stroke-[2.5]" />
           </button>
         </div>
       </form>
     </div>
   );
 }
+

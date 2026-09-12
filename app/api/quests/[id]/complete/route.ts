@@ -36,8 +36,25 @@ export async function POST(
     }
 
     // 2. Prevent double-completion
-    if (quest.status === 'Completed') {
+    if (!quest.is_recurring && quest.status === 'Completed') {
       return NextResponse.json({ error: 'Quest has already been completed' }, { status: 400 });
+    }
+
+    const todayDateStr = getFormattedDateString();
+
+    // Check if recurring quest was already completed today
+    if (quest.is_recurring) {
+      const { data: alreadyDoneToday } = await supabase
+        .from('quest_completions')
+        .select('id')
+        .eq('quest_id', quest.id)
+        .eq('user_id', user.id)
+        .eq('completion_date', todayDateStr)
+        .maybeSingle();
+
+      if (alreadyDoneToday) {
+        return NextResponse.json({ error: 'This recurring quest has already been completed today.' }, { status: 400 });
+      }
     }
 
     // 3. Fetch User Profile, Attributes, Streaks, Inventory (for XP potions), Achievements
@@ -88,7 +105,7 @@ export async function POST(
       updated_at: new Date().toISOString(),
     };
 
-    // 4. Server-Authoritative Reward Calculation
+    // 4. Server-Authoritative Reward Calculation (Client payload is completely ignored)
     const rewardCalculation = calculateAuthoritativeRewards({
       category: quest.category,
       difficulty: quest.difficulty,
@@ -100,7 +117,6 @@ export async function POST(
     const { xpEarned, goldEarned, attributeXpEarned, archetypeBonusDescription } = rewardCalculation;
 
     // 5. Server-Authoritative Streak Calculation
-    const todayDateStr = getFormattedDateString();
     const streakResult = evaluateStreakOnCompletion(streakRecord, todayDateStr);
 
     // 6. Server-Authoritative Level Calculation
@@ -144,7 +160,7 @@ export async function POST(
     // 9. Persist all updates to Database
     const nowIso = new Date().toISOString();
 
-    // Mark quest completed (or if recurring, reset for tomorrow and log completion)
+    // Mark quest completed (with atomic status check to prevent race condition)
     if (quest.is_recurring) {
       await supabase
         .from('quests')
@@ -152,16 +168,24 @@ export async function POST(
           updated_at: nowIso,
           completed_at: nowIso,
         })
-        .eq('id', quest.id);
+        .eq('id', quest.id)
+        .eq('user_id', user.id);
     } else {
-      await supabase
+      const { data: updatedRows, error: updateErr } = await supabase
         .from('quests')
         .update({
           status: 'Completed',
           completed_at: nowIso,
           updated_at: nowIso,
         })
-        .eq('id', quest.id);
+        .eq('id', quest.id)
+        .eq('user_id', user.id)
+        .eq('status', 'Active')
+        .select();
+
+      if (updateErr || !updatedRows || updatedRows.length === 0) {
+        return NextResponse.json({ error: 'Quest already completed or concurrent update conflict' }, { status: 409 });
+      }
     }
 
     // Insert quest completion record
@@ -255,3 +279,4 @@ export async function POST(
     return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
 }
+

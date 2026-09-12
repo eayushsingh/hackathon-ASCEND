@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - SIGNUP AUTHENTICATION
-// Minimalist Editorial Theme
+// Clean Minimalist Theme
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import { useGame } from '@/lib/context/game-context';
-import { ArrowRight, UserPlus, Mail, Lock, User } from 'lucide-react';
+import { ArrowRight, UserPlus, Mail, Lock, User, AlertCircle } from 'lucide-react';
 import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
 import { Archetype } from '@/types/rpg';
 
@@ -28,6 +28,11 @@ export default function SignupPage() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password || !username || isLoading) return;
+
+    if (password.length < 6) {
+      setErrorMsg('Password must be at least 6 characters long.');
+      return;
+    }
 
     setIsLoading(true);
     setErrorMsg(null);
@@ -47,7 +52,11 @@ export default function SignupPage() {
         });
 
         if (error) {
-          setErrorMsg(error.message);
+          if (error.message.includes('User already registered')) {
+            setErrorMsg('An account with this email already exists. Please sign in.');
+          } else {
+            setErrorMsg(error.message);
+          }
           setIsLoading(false);
           return;
         }
@@ -58,91 +67,92 @@ export default function SignupPage() {
         router.push('/dashboard');
       }
     } catch (err: unknown) {
-      setErrorMsg((err as Error).message);
+      setErrorMsg((err as Error).message || 'An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto py-12 px-4">
-      <div className="p-8 bg-white border-4 border-[#141110] shadow-[8px_8px_0_0_#141110] text-center relative">
+    <div className="max-w-md mx-auto py-16 px-4">
+      <div className="p-8 sm:p-10 bg-white border border-[#E5E5E7] rounded-3xl shadow-sm text-center relative">
         {/* Top Logo */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-6">
           <Link href="/">
-            <div className="font-display font-black text-4xl tracking-widest text-[#141110]">ASCEND</div>
+            <div className="font-sans font-black text-3xl tracking-tight text-[#1D1D1F]">ASCEND</div>
           </Link>
         </div>
 
-        <h1 className="font-display text-3xl font-black text-[#141110] uppercase tracking-widest">Forge Your Hero</h1>
-        <p className="text-sm font-sans font-medium text-[#6B6560] mt-2">Register new consciousness in the ASCEND Grid</p>
+        <h1 className="text-2xl font-bold text-[#1D1D1F] tracking-tight">Forge Your Hero</h1>
+        <p className="text-sm font-medium text-[#86868B] mt-1.5">Begin your real-life RPG progression journey</p>
 
         {errorMsg && (
-          <div className="mt-6 p-4 border-2 border-[#141110] bg-[#F5F3EE] text-[#C9A227] text-xs font-bold uppercase tracking-wider text-left shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]">
-            Error: {errorMsg}
+          <div className="mt-6 p-4 rounded-xl border border-red-200 bg-red-50 text-red-700 text-xs font-medium text-left flex items-start space-x-2.5">
+            <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+            <span>{errorMsg}</span>
           </div>
         )}
 
-        <form onSubmit={handleSignup} className="space-y-6 mt-8 text-left">
+        <form onSubmit={handleSignup} className="space-y-4 mt-6 text-left">
           <div>
-            <label className="block text-[11px] font-sans font-bold text-[#6B6560] uppercase tracking-wider mb-2">
-              Codename / Username
+            <label className="block text-xs font-semibold text-[#1D1D1F] mb-1.5">
+              Hero Codename / Username
             </label>
             <div className="relative">
-              <User className="w-5 h-5 text-[#141110] absolute left-4 top-1/2 -translate-y-1/2" />
+              <User className="w-4 h-4 text-[#86868B] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 placeholder="e.g. Kaelen Vance"
-                className="w-full pl-12 pr-4 py-3 bg-white border-2 border-[#141110] text-[#141110] font-sans font-medium text-sm placeholder-[#6B6560] focus:outline-none focus:shadow-[4px_4px_0_0_#E8552A] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)] transition-all"
+                className="w-full pl-10 pr-4 py-2.5 bg-[#F5F5F7] border border-[#E5E5E7] rounded-xl text-[#1D1D1F] text-sm placeholder-[#86868B] focus:outline-none focus:border-[#FF5E3A] focus:bg-white transition-all"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[11px] font-sans font-bold text-[#6B6560] uppercase tracking-wider mb-2">
-              Neural Email
+            <label className="block text-xs font-semibold text-[#1D1D1F] mb-1.5">
+              Email Address
             </label>
             <div className="relative">
-              <Mail className="w-5 h-5 text-[#141110] absolute left-4 top-1/2 -translate-y-1/2" />
+              <Mail className="w-4 h-4 text-[#86868B] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="hero@ascend.rpg"
-                className="w-full pl-12 pr-4 py-3 bg-white border-2 border-[#141110] text-[#141110] font-sans font-medium text-sm placeholder-[#6B6560] focus:outline-none focus:shadow-[4px_4px_0_0_#E8552A] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)] transition-all"
+                className="w-full pl-10 pr-4 py-2.5 bg-[#F5F5F7] border border-[#E5E5E7] rounded-xl text-[#1D1D1F] text-sm placeholder-[#86868B] focus:outline-none focus:border-[#FF5E3A] focus:bg-white transition-all"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[11px] font-sans font-bold text-[#6B6560] uppercase tracking-wider mb-2">
-              Secret Passkey
+            <label className="block text-xs font-semibold text-[#1D1D1F] mb-1.5">
+              Password
             </label>
             <div className="relative">
-              <Lock className="w-5 h-5 text-[#141110] absolute left-4 top-1/2 -translate-y-1/2" />
+              <Lock className="w-4 h-4 text-[#86868B] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="••••••••••••"
-                className="w-full pl-12 pr-4 py-3 bg-white border-2 border-[#141110] text-[#141110] font-sans font-medium text-sm placeholder-[#6B6560] focus:outline-none focus:shadow-[4px_4px_0_0_#E8552A] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)] transition-all"
+                className="w-full pl-10 pr-4 py-2.5 bg-[#F5F5F7] border border-[#E5E5E7] rounded-xl text-[#1D1D1F] text-sm placeholder-[#86868B] focus:outline-none focus:border-[#FF5E3A] focus:bg-white transition-all"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[11px] font-sans font-bold text-[#6B6560] uppercase tracking-wider mb-2">
+            <label className="block text-xs font-semibold text-[#1D1D1F] mb-1.5">
               Starting Archetype
             </label>
             <select
               value={archetype}
               onChange={(e) => setArchetype(e.target.value as Archetype)}
-              className="w-full px-4 py-3 bg-white border-2 border-[#141110] text-[#141110] font-sans font-medium text-sm focus:outline-none focus:shadow-[4px_4px_0_0_#E8552A] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)] transition-all"
+              className="w-full px-3.5 py-2.5 bg-[#F5F5F7] border border-[#E5E5E7] rounded-xl text-[#1D1D1F] text-sm focus:outline-none focus:border-[#FF5E3A] focus:bg-white transition-all cursor-pointer"
             >
               {ARCHETYPE_LIST.map((arch) => (
                 <option key={arch.id} value={arch.id}>
@@ -155,17 +165,17 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-4 bg-[#E8552A] border-2 border-[#141110] text-white font-display font-black text-sm uppercase tracking-widest shadow-[4px_4px_0_0_#141110] hover:translate-y-0.5 hover:shadow-[2px_2px_0_0_#141110] transition-all flex items-center justify-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 mt-2 bg-gradient-to-r from-[#FF5E3A] to-[#FF2A6D] text-white font-semibold text-sm rounded-xl shadow-sm hover:opacity-95 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span>{isLoading ? 'Creating Hero...' : 'Forge Account & Launch'}</span>
-            <ArrowRight className="w-5 h-5 stroke-[3]" />
+            <span>{isLoading ? 'Creating Hero...' : 'Forge Hero Account'}</span>
+            <ArrowRight className="w-4 h-4" />
           </button>
         </form>
 
-        <div className="mt-8 text-xs font-sans font-bold text-[#6B6560] uppercase tracking-wider">
-          Already forged?{' '}
-          <Link href="/auth/login" className="text-[#E8552A] hover:underline">
-            Sign In to Existing Identity
+        <div className="mt-6 text-xs text-[#86868B]">
+          Already have an account?{' '}
+          <Link href="/auth/login" className="text-[#FF5E3A] font-semibold hover:underline">
+            Sign In
           </Link>
         </div>
       </div>

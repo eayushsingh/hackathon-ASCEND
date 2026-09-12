@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - ANALYTICS & TELEMETRY COMMAND MATRIX
-// Minimalist Editorial Theme
+// Apple Bright Premium Analytics Dashboard
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -41,42 +41,41 @@ export default function AnalyticsPage() {
   const totalAttrXP = getTotalAttributeXP(attributes);
 
   return (
-    <div className="space-y-12 pb-12 pt-8">
+    <div className="space-y-10 pb-16 pt-6 max-w-7xl mx-auto px-4 sm:px-6">
       {/* 1. TELEMETRY HEADER HUD */}
-      <div className="p-8 bg-white border-4 border-[#141110] shadow-[8px_8px_0_0_#141110]">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b-2 border-[#141110]/10">
-          <div className="flex items-center space-x-6 text-center md:text-left">
-            <div className="w-16 h-16 bg-[#141110] border-4 border-[#141110] flex items-center justify-center text-white shrink-0 shadow-[4px_4px_0_0_#E8552A]">
-              <Activity className="w-8 h-8" />
+      <div className="apple-card p-6 sm:p-8">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-[#E5E5EA]">
+          <div className="flex items-center space-x-5 text-center md:text-left">
+            <div className="w-14 h-14 bg-purple-50 border border-purple-200 rounded-2xl flex items-center justify-center text-purple-600 shrink-0 shadow-sm">
+              <Activity className="w-7 h-7" />
             </div>
             <div>
-              <div className="flex items-center justify-center md:justify-start space-x-2 text-[10px] font-sans font-bold uppercase tracking-widest text-[#E8552A]">
-                <Activity className="w-3 h-3" />
-                <span>Productivity Telemetry</span>
-              </div>
-              <h1 className="font-display text-3xl md:text-4xl font-black text-[#141110] uppercase tracking-widest mt-2">
-                System Analytics
+              <h1 className="text-3xl md:text-4xl font-extrabold text-[#1D1D1F] tracking-tight">
+                Activity Analytics
               </h1>
+              <p className="text-xs sm:text-sm font-sans text-[#6E6E73] mt-1 max-w-xl">
+                Comprehensive telemetry tracking consistency, task velocity, and attribute progression.
+              </p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2 bg-[#F5F3EE] p-1 border-2 border-[#141110] shadow-[4px_4px_0_0_#141110]">
+          <div className="flex items-center space-x-1.5 bg-[#F5F5F7] p-1 rounded-2xl border border-[#E5E5EA]">
             <button
               onClick={() => setActiveTimeframe('30d')}
-              className={`px-4 py-2 text-xs font-sans font-bold uppercase tracking-widest transition-all ${
+              className={`px-4 py-2 text-xs font-mono font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
                 activeTimeframe === '30d'
-                  ? 'bg-[#141110] text-white'
-                  : 'text-[#6B6560] hover:text-[#141110]'
+                  ? 'btn-primary-gradient text-white shadow-sm'
+                  : 'text-[#6E6E73] hover:text-[#1D1D1F]'
               }`}
             >
               30-Day
             </button>
             <button
               onClick={() => setActiveTimeframe('all')}
-              className={`px-4 py-2 text-xs font-sans font-bold uppercase tracking-widest transition-all ${
+              className={`px-4 py-2 text-xs font-mono font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
                 activeTimeframe === 'all'
-                  ? 'bg-[#141110] text-white'
-                  : 'text-[#6B6560] hover:text-[#141110]'
+                  ? 'btn-primary-gradient text-white shadow-sm'
+                  : 'text-[#6E6E73] hover:text-[#1D1D1F]'
               }`}
             >
               All-Time
@@ -85,49 +84,49 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Velocity Metric Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-          <div className="p-6 bg-[#F5F3EE] border-2 border-[#141110] shadow-[4px_4px_0_0_#141110]">
-            <div className="flex items-center justify-between text-[#6B6560] mb-2">
-              <span className="text-[10px] font-sans font-bold uppercase tracking-widest">Total XP</span>
-              <Zap className="w-4 h-4 text-[#E8552A]" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+          <div className="p-5 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA]">
+            <div className="flex items-center justify-between text-[#6E6E73] mb-1.5">
+              <span className="text-[11px] font-mono font-medium uppercase tracking-wider">Total XP</span>
+              <Zap className="w-4 h-4 text-purple-600" />
             </div>
-            <div className="font-display text-3xl font-black text-[#141110]">
+            <div className="font-mono text-2xl font-bold text-[#1D1D1F]">
               <AnimatedCounter value={profile.xp} />
             </div>
-            <div className="text-[10px] font-sans font-bold text-[#E8552A] uppercase tracking-widest mt-2">Non-linear progression</div>
+            <div className="text-[11px] font-mono text-purple-600 font-semibold mt-1">Progression curve</div>
           </div>
 
-          <div className="p-6 bg-[#F5F3EE] border-2 border-[#141110] shadow-[4px_4px_0_0_#141110]">
-            <div className="flex items-center justify-between text-[#6B6560] mb-2">
-              <span className="text-[10px] font-sans font-bold uppercase tracking-widest">Treasury Gains</span>
-              <Coins className="w-4 h-4 text-[#C9A227]" />
+          <div className="p-5 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA]">
+            <div className="flex items-center justify-between text-[#6E6E73] mb-1.5">
+              <span className="text-[11px] font-mono font-medium uppercase tracking-wider">Treasury Gold</span>
+              <Coins className="w-4 h-4 text-amber-500" />
             </div>
-            <div className="font-display text-3xl font-black text-[#C9A227]">
+            <div className="font-mono text-2xl font-bold text-amber-600">
               <AnimatedCounter value={profile.gold} /> G
             </div>
-            <div className="text-[10px] font-sans font-bold text-[#6B6560] uppercase tracking-widest mt-2">Available balance</div>
+            <div className="text-[11px] font-mono text-[#6E6E73] font-medium mt-1">Available balance</div>
           </div>
 
-          <div className="p-6 bg-[#F5F3EE] border-2 border-[#141110] shadow-[4px_4px_0_0_#141110]">
-            <div className="flex items-center justify-between text-[#6B6560] mb-2">
-              <span className="text-[10px] font-sans font-bold uppercase tracking-widest">Active Streak</span>
-              <Flame className="w-4 h-4 text-[#E8552A]" />
+          <div className="p-5 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA]">
+            <div className="flex items-center justify-between text-[#6E6E73] mb-1.5">
+              <span className="text-[11px] font-mono font-medium uppercase tracking-wider">Active Streak</span>
+              <Flame className="w-4 h-4 text-orange-600" />
             </div>
-            <div className="font-display text-3xl font-black text-[#E8552A]">
+            <div className="font-mono text-2xl font-bold text-orange-600">
               {streak.current_streak} Days
             </div>
-            <div className="text-[10px] font-sans font-bold text-[#6B6560] uppercase tracking-widest mt-2">All-time peak: {streak.longest_streak}d</div>
+            <div className="text-[11px] font-mono text-[#6E6E73] font-medium mt-1">Peak: {streak.longest_streak}d</div>
           </div>
 
-          <div className="p-6 bg-[#F5F3EE] border-2 border-[#141110] shadow-[4px_4px_0_0_#141110]">
-            <div className="flex items-center justify-between text-[#6B6560] mb-2">
-              <span className="text-[10px] font-sans font-bold uppercase tracking-widest">Discipline Rate</span>
-              <CheckCircle2 className="w-4 h-4 text-[#141110]" />
+          <div className="p-5 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA]">
+            <div className="flex items-center justify-between text-[#6E6E73] mb-1.5">
+              <span className="text-[11px] font-mono font-medium uppercase tracking-wider">Completion Rate</span>
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             </div>
-            <div className="font-display text-3xl font-black text-[#141110]">
+            <div className="font-mono text-2xl font-bold text-[#1D1D1F]">
               {completionRate}%
             </div>
-            <div className="text-[10px] font-sans font-bold text-[#6B6560] uppercase tracking-widest mt-2">{completedQuests.length} of {quests.length} cleared</div>
+            <div className="text-[11px] font-mono text-[#6E6E73] font-medium mt-1">{completedQuests.length} of {quests.length} cleared</div>
           </div>
         </div>
       </div>
@@ -138,29 +137,29 @@ export default function AnalyticsPage() {
       {/* 3. DUAL COLUMN BREAKDOWN */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Category Matrix */}
-        <div className="p-8 bg-white border-4 border-[#141110] shadow-[8px_8px_0_0_#141110]">
-          <div className="flex items-center space-x-3 pb-6 mb-6 border-b-2 border-[#141110]/10">
-            <Layers className="w-6 h-6 text-[#141110]" />
+        <div className="apple-card p-6 sm:p-8">
+          <div className="flex items-center space-x-3 pb-4 mb-5 border-b border-[#E5E5EA]">
+            <Layers className="w-5 h-5 text-purple-600" />
             <div>
-              <h2 className="font-display text-xl font-black text-[#141110] uppercase tracking-widest">
-                Category Productivity
+              <h2 className="text-lg font-bold text-[#1D1D1F]">
+                Category Performance
               </h2>
-              <p className="text-xs font-sans font-medium text-[#6B6560] mt-1">Task completion velocity per domain</p>
+              <p className="text-xs text-[#6E6E73] mt-0.5">Task completion velocity per domain</p>
             </div>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4">
             {categoryStats.map((cat) => (
-              <div key={cat.name} className="space-y-2">
-                <div className="flex items-center justify-between text-xs font-sans font-bold uppercase tracking-widest">
-                  <span className="text-[#141110]">{cat.name}</span>
-                  <span className="text-[#6B6560]">
+              <div key={cat.name} className="space-y-1.5">
+                <div className="flex items-center justify-between text-xs font-mono font-medium">
+                  <span className="text-[#1D1D1F] font-bold">{cat.name}</span>
+                  <span className="text-[#6E6E73]">
                     {cat.completed} / {cat.total} cleared ({cat.rate}%)
                   </span>
                 </div>
-                <div className="w-full bg-[#F5F3EE] border-2 border-[#141110] h-4">
+                <div className="w-full bg-[#E5E5EA] rounded-full h-2.5 overflow-hidden">
                   <div
-                    className="bg-[#141110] h-full transition-all duration-500"
+                    className="btn-primary-gradient h-full rounded-full transition-all duration-500"
                     style={{ width: `${cat.rate}%` }}
                   />
                 </div>
@@ -170,36 +169,36 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Attribute Mastery Share */}
-        <div className="p-8 bg-white border-4 border-[#141110] shadow-[8px_8px_0_0_#141110]">
-          <div className="flex items-center space-x-3 pb-6 mb-6 border-b-2 border-[#141110]/10">
-            <TrendingUp className="w-6 h-6 text-[#141110]" />
+        <div className="apple-card p-6 sm:p-8">
+          <div className="flex items-center space-x-3 pb-4 mb-5 border-b border-[#E5E5EA]">
+            <TrendingUp className="w-5 h-5 text-purple-600" />
             <div>
-              <h2 className="font-display text-xl font-black text-[#141110] uppercase tracking-widest">
+              <h2 className="text-lg font-bold text-[#1D1D1F]">
                 Attribute Distribution
               </h2>
-              <p className="text-xs font-sans font-medium text-[#6B6560] mt-1">Share of cumulative attribute points</p>
+              <p className="text-xs text-[#6E6E73] mt-0.5">Share of cumulative attribute points</p>
             </div>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4">
             {ATTRIBUTE_LIST.map((attr) => {
               const attrKey = `${attr.type.toLowerCase()}_xp` as keyof typeof attributes;
               const currentXP = (attributes[attrKey] as number) || 0;
               const sharePercent = totalAttrXP > 0 ? Math.round((currentXP / totalAttrXP) * 100) : 0;
 
               return (
-                <div key={attr.type} className="space-y-2">
-                  <div className="flex items-center justify-between text-xs font-sans font-bold uppercase tracking-widest">
-                    <span style={{ color: attr.color }}>
+                <div key={attr.type} className="space-y-1.5">
+                  <div className="flex items-center justify-between text-xs font-mono font-medium">
+                    <span className="text-[#1D1D1F] font-bold">
                       {attr.name} ({attr.shortName})
                     </span>
-                    <span className="text-[#6B6560]">
+                    <span className="text-[#6E6E73]">
                       {currentXP} XP ({sharePercent}%)
                     </span>
                   </div>
-                  <div className="w-full bg-[#F5F3EE] border-2 border-[#141110] h-4">
+                  <div className="w-full bg-[#E5E5EA] rounded-full h-2.5 overflow-hidden">
                     <div
-                      className="h-full transition-all duration-500"
+                      className="h-full rounded-full transition-all duration-500"
                       style={{
                         width: `${sharePercent}%`,
                         backgroundColor: attr.color,
@@ -215,3 +214,4 @@ export default function AnalyticsPage() {
     </div>
   );
 }
+
