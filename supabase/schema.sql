@@ -62,8 +62,12 @@ CREATE TABLE IF NOT EXISTS public.quests (
     status TEXT NOT NULL DEFAULT 'Active', -- Active, Completed, Failed, Archived
     is_recurring BOOLEAN NOT NULL DEFAULT false,
     recurrence_interval TEXT DEFAULT 'Daily', -- Daily, Weekly, None
+    recurring_days TEXT[],
     due_date TIMESTAMP WITH TIME ZONE,
     priority TEXT DEFAULT 'Medium', -- Low, Medium, High
+    reminder_time TEXT,
+    reminder_enabled BOOLEAN DEFAULT false,
+    timer_minutes INTEGER,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     completed_at TIMESTAMP WITH TIME ZONE,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL

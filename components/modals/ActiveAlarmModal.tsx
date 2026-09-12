@@ -17,7 +17,6 @@ import {
   Play,
   X,
   Zap,
-  Sparkles,
 } from 'lucide-react';
 
 interface ActiveAlarmModalProps {

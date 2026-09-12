@@ -8,7 +8,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGame } from '@/lib/context/game-context';
-import { Trophy, ArrowRight, Zap, Sparkles, Crown, Shield, Award } from 'lucide-react';
+import { Trophy, ArrowRight, Zap, Sparkles, Crown } from 'lucide-react';
 import { ARCHETYPES } from '@/lib/progression/archetypes';
 import { getRankTier } from '@/lib/progression/levels';
 
