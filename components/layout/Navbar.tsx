@@ -7,7 +7,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { Logo } from '@/components/ui/Logo';
 import { usePathname } from 'next/navigation';
 import { useGame } from '@/lib/context/game-context';
 import { calculateLevelProgress } from '@/lib/progression/levels';
@@ -61,14 +61,7 @@ export const Navbar: React.FC = () => {
         {/* Left: Brand Logo & Navigation */}
         <div className="flex items-center space-x-8">
           <Link href="/" className="flex items-center group transition-transform hover:opacity-90" title="ASCEND Home">
-            <Image
-              src="/logo.svg"
-              alt="ASCEND"
-              width={140}
-              height={38}
-              className="h-8.5 sm:h-9 w-auto object-contain"
-              priority
-            />
+            <Logo size="md" />
           </Link>
 
           {/* Desktop Navigation */}
