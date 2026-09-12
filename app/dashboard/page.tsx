@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - COMMAND CENTER DASHBOARD
-// Vibrant Modern RPG HUD Command Center
+// Apple-Inspired Bright Premium Command Center
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -53,16 +53,16 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* LEFT COLUMN: ACTIVE QUESTS (8 COLS) */}
         <div className="lg:col-span-8 space-y-6">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4">
+          <div className="flex items-center justify-between border-b border-[#E5E5EA] pb-4">
             <div>
-              <h2 className="text-2xl font-extrabold text-white uppercase tracking-tight font-sans flex items-center gap-2">
-                <Swords className="w-6 h-6 text-indigo-400" />
+              <h2 className="text-2xl font-bold text-[#1D1D1F] tracking-tight font-sans flex items-center gap-2">
+                <Swords className="w-6 h-6 text-[#7C3AED]" />
                 <span>Active Quests</span>
               </h2>
             </div>
             <button
               onClick={() => setIsCreateModalOpen(true)}
-              className="px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all flex items-center space-x-2 cursor-pointer"
+              className="px-5 py-2.5 btn-primary-gradient font-semibold text-xs rounded-full flex items-center space-x-2 cursor-pointer"
             >
               <Plus className="w-4 h-4 stroke-[3]" />
               <span>Forge Quest</span>
@@ -75,10 +75,10 @@ export default function DashboardPage() {
               <button
                 key={type}
                 onClick={() => setFilterType(type)}
-                className={`px-4 py-1.5 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all border cursor-pointer ${
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all border cursor-pointer ${
                   filterType === type
-                    ? 'bg-indigo-950/80 text-indigo-300 border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
-                    : 'bg-slate-900/60 text-slate-400 border-white/5 hover:text-slate-200 hover:border-white/10'
+                    ? 'bg-[#F2F2F7] text-[#7C3AED] border-[#7C3AED]/40'
+                    : 'bg-white text-[#6E6E73] border-[#E5E5EA] hover:text-[#1D1D1F]'
                 }`}
               >
                 {type}
@@ -89,9 +89,9 @@ export default function DashboardPage() {
           {/* Quest Cards List */}
           <div className="space-y-3">
             {displayedQuests.length === 0 ? (
-              <div className="py-16 text-center text-slate-500 rounded-3xl bg-[#0D111A]/60 border border-white/10">
-                <p className="font-mono text-base tracking-wider text-slate-400 uppercase">NO {filterType.toUpperCase()} QUESTS</p>
-                <p className="font-sans text-xs mt-2 text-slate-500">Awaiting your command to initialize new protocols.</p>
+              <div className="py-16 text-center text-[#6E6E73] apple-card bg-white">
+                <p className="font-semibold text-base text-[#1D1D1F]">No {filterType.toLowerCase()} quests</p>
+                <p className="text-xs mt-1 text-[#8E8E93]">Create a new quest to start earning XP.</p>
               </div>
             ) : (
               <AnimatePresence mode="popLayout">
@@ -103,89 +103,89 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: CYBER PANELS (4 COLS) */}
+        {/* RIGHT COLUMN: CARDS (4 COLS) */}
         <div className="lg:col-span-4 space-y-6">
-          {/* Command Links Panel */}
-          <div className="rounded-3xl bg-[#0D111A]/90 border border-white/10 p-5 shadow-[0_0_25px_rgba(0,0,0,0.3)]">
-            <h3 className="font-mono text-xs font-bold tracking-widest text-indigo-400 uppercase mb-3 flex items-center gap-2">
-              <Layers className="w-4 h-4" />
-              <span>COMMAND PROTOCOLS</span>
+          {/* Shortcuts Panel */}
+          <div className="apple-card p-6 space-y-3">
+            <h3 className="text-xs font-semibold text-[#8E8E93] uppercase tracking-wider flex items-center gap-2">
+              <Layers className="w-4 h-4 text-[#7C3AED]" />
+              <span>Quick Shortcuts</span>
             </h3>
             <div className="grid grid-cols-1 gap-2 pt-1">
-              <Link href="/calendar" className="p-3 rounded-2xl bg-slate-900/80 border border-white/5 hover:border-indigo-500/40 text-slate-300 hover:text-indigo-400 font-mono text-xs font-bold uppercase transition-all flex items-center justify-between group">
+              <Link href="/calendar" className="p-3 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] hover:border-[#D1D1D6] text-[#1D1D1F] font-semibold text-xs transition-all flex items-center justify-between group">
                 <span className="flex items-center gap-2.5">
-                  <Calendar className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+                  <Calendar className="w-4 h-4 text-[#38BDF8] group-hover:scale-110 transition-transform" />
                   Quest Calendar
                 </span>
-                <span className="text-slate-500 group-hover:text-indigo-400">→</span>
+                <span className="text-[#8E8E93]">→</span>
               </Link>
-              <Link href="/leaderboard" className="p-3 rounded-2xl bg-slate-900/80 border border-white/5 hover:border-indigo-500/40 text-slate-300 hover:text-indigo-400 font-mono text-xs font-bold uppercase transition-all flex items-center justify-between group">
+              <Link href="/leaderboard" className="p-3 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] hover:border-[#D1D1D6] text-[#1D1D1F] font-semibold text-xs transition-all flex items-center justify-between group">
                 <span className="flex items-center gap-2.5">
-                  <Crown className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
+                  <Crown className="w-4 h-4 text-[#C9A227] group-hover:scale-110 transition-transform" />
                   Global Leaderboard
                 </span>
-                <span className="text-slate-500 group-hover:text-indigo-400">→</span>
+                <span className="text-[#8E8E93]">→</span>
               </Link>
-              <Link href="/shop" className="p-3 rounded-2xl bg-slate-900/80 border border-white/5 hover:border-indigo-500/40 text-slate-300 hover:text-indigo-400 font-mono text-xs font-bold uppercase transition-all flex items-center justify-between group">
+              <Link href="/shop" className="p-3 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] hover:border-[#D1D1D6] text-[#1D1D1F] font-semibold text-xs transition-all flex items-center justify-between group">
                 <span className="flex items-center gap-2.5">
-                  <ShoppingBag className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform" />
+                  <ShoppingBag className="w-4 h-4 text-[#7C3AED] group-hover:scale-110 transition-transform" />
                   Guild Shop
                 </span>
-                <span className="text-slate-500 group-hover:text-indigo-400">→</span>
+                <span className="text-[#8E8E93]">→</span>
               </Link>
-              <Link href="/inventory" className="p-3 rounded-2xl bg-slate-900/80 border border-white/5 hover:border-indigo-500/40 text-slate-300 hover:text-indigo-400 font-mono text-xs font-bold uppercase transition-all flex items-center justify-between group">
+              <Link href="/inventory" className="p-3 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] hover:border-[#D1D1D6] text-[#1D1D1F] font-semibold text-xs transition-all flex items-center justify-between group">
                 <span className="flex items-center gap-2.5">
-                  <Package className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+                  <Package className="w-4 h-4 text-[#2E7D32] group-hover:scale-110 transition-transform" />
                   Inventory
                 </span>
-                <span className="text-slate-500 group-hover:text-indigo-400">→</span>
+                <span className="text-[#8E8E93]">→</span>
               </Link>
-              <Link href="/achievements" className="p-3 rounded-2xl bg-slate-900/80 border border-white/5 hover:border-indigo-500/40 text-slate-300 hover:text-indigo-400 font-mono text-xs font-bold uppercase transition-all flex items-center justify-between group">
+              <Link href="/achievements" className="p-3 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] hover:border-[#D1D1D6] text-[#1D1D1F] font-semibold text-xs transition-all flex items-center justify-between group">
                 <span className="flex items-center gap-2.5">
-                  <Trophy className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
+                  <Trophy className="w-4 h-4 text-[#C9A227] group-hover:scale-110 transition-transform" />
                   Trophies
                 </span>
-                <span className="text-slate-500 group-hover:text-indigo-400">→</span>
+                <span className="text-[#8E8E93]">→</span>
               </Link>
             </div>
           </div>
 
-          {/* Today's Targets Panel */}
-          <div className="rounded-3xl bg-[#0D111A]/90 border border-white/10 p-5 shadow-[0_0_25px_rgba(0,0,0,0.3)] space-y-3">
-            <h3 className="font-mono text-xs font-bold tracking-widest text-indigo-400 uppercase flex items-center gap-2">
-              <Sparkles className="w-4 h-4" />
-              <span>TODAY&apos;S TARGETS</span>
+          {/* Today's Goals Panel */}
+          <div className="apple-card p-6 space-y-3">
+            <h3 className="text-xs font-semibold text-[#8E8E93] uppercase tracking-wider flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-[#7C3AED]" />
+              <span>Today&apos;s Targets</span>
             </h3>
             
-            <div className="space-y-2 font-mono text-xs">
-              <div className="p-3 rounded-2xl bg-slate-900/80 border border-white/5 flex justify-between items-center">
-                <span className="text-slate-300 font-bold">Daily Quests</span>
+            <div className="space-y-2 text-xs">
+              <div className="p-3 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] flex justify-between items-center">
+                <span className="text-[#1D1D1F] font-semibold">Daily Habits</span>
                 <div className="flex items-center gap-3">
-                  <span className="text-slate-400 font-bold">{quests.filter(q => q.is_recurring && q.status === 'Completed').length}/{dailyQuests.length + quests.filter(q => q.is_recurring && q.status === 'Completed').length}</span>
-                  <span className="text-amber-400 font-bold">+25G</span>
+                  <span className="text-[#6E6E73] font-semibold">{quests.filter(q => q.is_recurring && q.status === 'Completed').length}/{dailyQuests.length + quests.filter(q => q.is_recurring && q.status === 'Completed').length}</span>
+                  <span className="text-[#C9A227] font-semibold">+25 Gold</span>
                 </div>
               </div>
-              <div className="p-3 rounded-2xl bg-slate-900/80 border border-white/5 flex justify-between items-center">
-                <span className="text-slate-300 font-bold">Active Quests</span>
+              <div className="p-3 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] flex justify-between items-center">
+                <span className="text-[#1D1D1F] font-semibold">Active Quests</span>
                 <div className="flex items-center gap-3">
-                  <span className="text-slate-400 font-bold">{completedQuests.length}/{quests.length}</span>
-                  <span className="text-indigo-400 font-bold">+XP</span>
+                  <span className="text-[#6E6E73] font-semibold">{completedQuests.length}/{quests.length}</span>
+                  <span className="text-[#7C3AED] font-semibold">+XP</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Attribute Mastery Panel */}
-          <div className="rounded-3xl bg-[#0D111A]/90 border border-white/10 p-5 shadow-[0_0_25px_rgba(0,0,0,0.3)]">
+          <div className="apple-card p-6">
             <div className="flex justify-between items-center mb-3">
-              <h3 className="font-mono text-xs font-bold tracking-widest text-indigo-400 uppercase">ATTRIBUTE MASTERY</h3>
-              <Link href="/character" className="font-mono text-xs text-slate-400 hover:text-indigo-400">VIEW →</Link>
+              <h3 className="text-xs font-semibold text-[#8E8E93] uppercase tracking-wider">Attribute Mastery</h3>
+              <Link href="/character" className="text-xs font-semibold text-[#7C3AED] hover:underline">View →</Link>
             </div>
             <AttributeBarList />
           </div>
           
           {/* Heatmap Grid Panel */}
-          <div className="rounded-3xl bg-[#0D111A]/90 border border-white/10 p-5 shadow-[0_0_25px_rgba(0,0,0,0.3)]">
+          <div className="apple-card p-6">
              <HeatmapGrid />
           </div>
         </div>

@@ -1,8 +1,8 @@
 'use client';
 
 // ==============================================================================
-// ASCEND - TACTICAL QUEST CALENDAR & WEEKLY SCHEDULER MATRIX
-// Vibrant Modern RPG HUD Scheduler Layout
+// ASCEND - QUEST CALENDAR & WEEKLY SCHEDULER
+// Apple-Inspired Bright Premium Scheduler Layout
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -23,10 +23,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Target,
-  Clock,
-  ShieldAlert,
 } from 'lucide-react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export default function CalendarPage() {
   const { quests, completeQuest, createQuest, profile } = useGame();
@@ -64,10 +62,8 @@ export default function CalendarPage() {
   const weekDates = getWeekDates(currentWeekOffset);
   const todayIso = new Date().toISOString().split('T')[0];
 
-  // Helper to format Date to YYYY-MM-DD
   const formatDateIso = (d: Date) => d.toISOString().split('T')[0];
 
-  // Map Quests to Date
   const getQuestsForDate = (dateStr: string) => {
     return quests.filter((q) => {
       if (q.due_date) {
@@ -84,10 +80,10 @@ export default function CalendarPage() {
 
     if (presetType === 'gym') {
       const gymPlan = [
-        { dayOffset: 0, title: 'Upper Body Power & Hypertrophy', category: 'Fitness' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Strength' as AttributeType },
-        { dayOffset: 2, title: 'Lower Body Squats & Core Matrix', category: 'Fitness' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Vitality' as AttributeType },
-        { dayOffset: 4, title: 'HIIT Conditioning & Endurance Run', category: 'Fitness' as QuestCategory, difficulty: 'Medium' as QuestDifficulty, attribute: 'Vitality' as AttributeType },
-        { dayOffset: 6, title: 'Active Recovery & Full-Body Mobility', category: 'Fitness' as QuestCategory, difficulty: 'Easy' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
+        { dayOffset: 0, title: 'Upper Body Power & Workout', category: 'Fitness' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Strength' as AttributeType },
+        { dayOffset: 2, title: 'Lower Body & Core Workout', category: 'Fitness' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Vitality' as AttributeType },
+        { dayOffset: 4, title: 'Cardio & Mobility Session', category: 'Fitness' as QuestCategory, difficulty: 'Medium' as QuestDifficulty, attribute: 'Vitality' as AttributeType },
+        { dayOffset: 6, title: 'Active Recovery & Stretching', category: 'Fitness' as QuestCategory, difficulty: 'Easy' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
       ];
 
       for (const p of gymPlan) {
@@ -104,10 +100,10 @@ export default function CalendarPage() {
       }
     } else if (presetType === 'code') {
       const codePlan = [
-        { dayOffset: 0, title: 'System Architecture & Schema Refactor', category: 'Work' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Intellect' as AttributeType },
-        { dayOffset: 1, title: 'Server-Authoritative Endpoint Hardening', category: 'Work' as QuestCategory, difficulty: 'Epic' as QuestDifficulty, attribute: 'Intellect' as AttributeType },
-        { dayOffset: 3, title: 'UI Glassmorphism & Neon Polish Pass', category: 'Work' as QuestCategory, difficulty: 'Medium' as QuestDifficulty, attribute: 'Creativity' as AttributeType },
-        { dayOffset: 5, title: 'CI/CD Pipeline Audit & Deployment', category: 'Work' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
+        { dayOffset: 0, title: 'System Architecture & Data Schema', category: 'Work' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Intellect' as AttributeType },
+        { dayOffset: 1, title: 'API Endpoint Hardening & Tests', category: 'Work' as QuestCategory, difficulty: 'Epic' as QuestDifficulty, attribute: 'Intellect' as AttributeType },
+        { dayOffset: 3, title: 'UI Polish & Styling Optimization', category: 'Work' as QuestCategory, difficulty: 'Medium' as QuestDifficulty, attribute: 'Creativity' as AttributeType },
+        { dayOffset: 5, title: 'Deployment Audit & Launch', category: 'Work' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
       ];
 
       for (const p of codePlan) {
@@ -124,9 +120,9 @@ export default function CalendarPage() {
       }
     } else if (presetType === 'habit') {
       const habitPlan = [
-        { dayOffset: 0, title: '20-Min Morning Meditation & Cold Shower', category: 'Habit' as QuestCategory, difficulty: 'Easy' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
-        { dayOffset: 1, title: 'Read 30 Pages of Technical Literature', category: 'Learning' as QuestCategory, difficulty: 'Medium' as QuestDifficulty, attribute: 'Intellect' as AttributeType },
-        { dayOffset: 3, title: '90-Min Zero-Distraction Focus Sprint', category: 'Work' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
+        { dayOffset: 0, title: '20-Min Morning Reading & Meditation', category: 'Habit' as QuestCategory, difficulty: 'Easy' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
+        { dayOffset: 1, title: 'Read 30 Pages of Non-Fiction Book', category: 'Learning' as QuestCategory, difficulty: 'Medium' as QuestDifficulty, attribute: 'Intellect' as AttributeType },
+        { dayOffset: 3, title: '90-Min Zero-Distraction Deep Work', category: 'Work' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
       ];
 
       for (const p of habitPlan) {
@@ -168,24 +164,24 @@ export default function CalendarPage() {
   const weeklyCompletionRate = totalThisWeek > 0 ? Math.round((completedThisWeek / totalThisWeek) * 100) : 0;
 
   return (
-    <div className="space-y-10 pb-16 pt-6">
-      {/* 1. TOP HERO HUD */}
-      <div className="rounded-3xl bg-[#0D111A]/90 border border-indigo-500/30 p-6 sm:p-8 shadow-[0_0_35px_rgba(99,102,241,0.15)]">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-white/10">
+    <div className="space-y-10 pb-16 pt-4">
+      {/* 1. TOP HERO CARD */}
+      <div className="apple-card p-6 sm:p-8">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-[#E5E5EA]">
           <div className="flex items-center space-x-5 text-center md:text-left">
-            <div className="w-14 h-14 bg-indigo-950/80 border border-indigo-500/40 rounded-2xl flex items-center justify-center text-indigo-400 shrink-0 shadow-[0_0_20px_rgba(99,102,241,0.3)]">
+            <div className="w-14 h-14 bg-[#F2F2F7] rounded-2xl flex items-center justify-center text-[#7C3AED] shrink-0">
               <CalendarDays className="w-7 h-7" />
             </div>
             <div>
-              <div className="flex items-center justify-center md:justify-start space-x-2 text-xs font-mono font-bold uppercase tracking-wider text-indigo-400">
+              <div className="flex items-center justify-center md:justify-start space-x-2 text-xs font-semibold text-[#7C3AED] uppercase tracking-wider">
                 <Target className="w-3.5 h-3.5" />
-                <span>Tactical Planning & Schedule Matrix</span>
+                <span>Weekly Schedule Matrix</span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight font-sans mt-1">
+              <h1 className="text-3xl md:text-4xl font-bold text-[#1D1D1F] mt-1">
                 Quest Calendar
               </h1>
-              <p className="text-xs sm:text-sm font-sans text-slate-400 mt-1 max-w-xl">
-                Schedule workouts, coding sprints, learning milestones, and habit routines into server-authoritative calendar slots.
+              <p className="text-sm text-[#6E6E73] mt-1 max-w-xl">
+                Organize workouts, deep work blocks, and habit routines into scheduled calendar slots.
               </p>
             </div>
           </div>
@@ -195,7 +191,7 @@ export default function CalendarPage() {
               setSelectedDateForNewQuest(todayIso);
               setIsScheduleModalOpen(true);
             }}
-            className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all flex items-center space-x-2 shrink-0 cursor-pointer"
+            className="px-6 py-3 btn-primary-gradient font-semibold text-xs rounded-full flex items-center space-x-2 shrink-0 cursor-pointer shadow-md"
           >
             <Plus className="w-4 h-4 stroke-[3]" />
             <span>Schedule Quest</span>
@@ -204,102 +200,102 @@ export default function CalendarPage() {
 
         {/* Telemetry Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-          <div className="p-4 rounded-2xl bg-slate-950/80 border border-white/5">
-            <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">Weekly Bounties</div>
-            <div className="font-mono text-2xl font-bold text-slate-100">
+          <div className="p-4 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA]">
+            <div className="text-xs font-medium text-[#6E6E73] uppercase">Weekly Quests</div>
+            <div className="text-2xl font-bold text-[#1D1D1F] mt-1">
               {completedThisWeek} / {totalThisWeek}
             </div>
-            <div className="text-[10px] font-mono text-indigo-400 uppercase mt-1">Scheduled in matrix</div>
+            <div className="text-xs font-semibold text-[#7C3AED] mt-1">Scheduled</div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-950/80 border border-white/5">
-            <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">Discipline Rate</div>
-            <div className="font-mono text-2xl font-bold text-emerald-400">
+          <div className="p-4 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA]">
+            <div className="text-xs font-medium text-[#6E6E73] uppercase">Completion Rate</div>
+            <div className="text-2xl font-bold text-[#2E7D32] mt-1">
               {weeklyCompletionRate}%
             </div>
-            <div className="text-[10px] font-mono text-slate-400 uppercase mt-1">Completion efficiency</div>
+            <div className="text-xs font-medium text-[#6E6E73] mt-1">Efficiency</div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-950/80 border border-white/5">
-            <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">Treasury Balance</div>
-            <div className="font-mono text-2xl font-bold text-amber-400 flex items-center gap-1.5">
-              <Coins className="w-4 h-4 text-amber-400" />
-              <AnimatedCounter value={profile.gold} /> G
+          <div className="p-4 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA]">
+            <div className="text-xs font-medium text-[#6E6E73] uppercase">Treasury</div>
+            <div className="text-2xl font-bold text-[#C9A227] flex items-center gap-1.5 mt-1">
+              <Coins className="w-4 h-4 text-[#C9A227]" />
+              <AnimatedCounter value={profile.gold} /> Gold
             </div>
-            <div className="text-[10px] font-mono text-slate-400 uppercase mt-1">Ready to claim</div>
+            <div className="text-xs font-medium text-[#6E6E73] mt-1">Available</div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-950/80 border border-white/5">
-            <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">Hero Level</div>
-            <div className="font-mono text-2xl font-bold text-indigo-400">
-              LVL {profile.level}
+          <div className="p-4 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA]">
+            <div className="text-xs font-medium text-[#6E6E73] uppercase">Character Level</div>
+            <div className="text-2xl font-bold text-[#7C3AED] mt-1">
+              Level {profile.level}
             </div>
-            <div className="text-[10px] font-mono text-slate-400 uppercase mt-1">{profile.archetype}</div>
+            <div className="text-xs font-medium text-[#6E6E73] mt-1">{profile.archetype}</div>
           </div>
         </div>
       </div>
 
       {/* 2. ROUTINE DEPLOYMENT PRESETS */}
-      <div className="rounded-3xl bg-[#0D111A]/90 border border-white/10 p-6 sm:p-8 shadow-[0_0_30px_rgba(0,0,0,0.3)]">
-        <div className="pb-4 mb-6 border-b border-white/10">
-          <h2 className="text-xl font-extrabold text-white uppercase font-sans">
-            Instant Campaign & Routine Deployment
+      <div className="apple-card p-6 sm:p-8">
+        <div className="pb-4 mb-6 border-b border-[#E5E5EA]">
+          <h2 className="text-xl font-bold text-[#1D1D1F]">
+            Routine Presets
           </h2>
-          <p className="text-xs font-mono text-slate-400 mt-1">
-            One-click deploy pre-configured weekly routines directly into your active quest matrix.
+          <p className="text-xs text-[#6E6E73] mt-1">
+            One-click deploy pre-configured weekly routines directly into your active quest calendar.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-5 rounded-2xl bg-slate-950/80 border border-white/5 hover:border-cyan-500/40 transition-all flex flex-col justify-between group">
+          <div className="p-5 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] flex flex-col justify-between hover:border-[#D1D1D6] transition-all">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-500/40 text-cyan-400 flex items-center justify-center font-bold mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[#F2F2F7] text-[#7C3AED] flex items-center justify-center font-bold mb-4">
                 <Dumbbell className="w-5 h-5" />
               </div>
-              <h3 className="text-base font-bold text-slate-100 uppercase font-sans">7-Day Gym Routine</h3>
-              <p className="text-xs font-sans text-slate-400 mt-2 leading-relaxed">
-                Upper body power, lower body squats, HIIT conditioning, and mobility recovery.
+              <h3 className="text-base font-bold text-[#1D1D1F]">7-Day Workout Routine</h3>
+              <p className="text-xs text-[#6E6E73] mt-2 leading-relaxed">
+                Upper body strength, lower body workouts, HIIT cardio, and recovery sessions.
               </p>
             </div>
             <button
               onClick={() => handleDeployPreset('gym')}
-              className="mt-6 w-full py-2.5 bg-cyan-950/60 hover:bg-cyan-500 hover:text-slate-950 text-cyan-400 font-mono text-xs font-bold uppercase tracking-wider rounded-xl border border-cyan-500/40 transition-all text-center cursor-pointer"
+              className="mt-6 w-full py-2.5 bg-white hover:bg-[#F2F2F7] text-[#1D1D1F] border border-[#E5E5EA] font-semibold text-xs rounded-full transition-all text-center cursor-pointer shadow-sm"
             >
-              Deploy Gym Plan
+              Deploy Workout Plan
             </button>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-950/80 border border-white/5 hover:border-amber-500/40 transition-all flex flex-col justify-between group">
+          <div className="p-5 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] flex flex-col justify-between hover:border-[#D1D1D6] transition-all">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-amber-950 border border-amber-500/40 text-amber-400 flex items-center justify-center font-bold mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[#F2F2F7] text-[#38BDF8] flex items-center justify-center font-bold mb-4">
                 <Brain className="w-5 h-5" />
               </div>
-              <h3 className="text-base font-bold text-slate-100 uppercase font-sans">Code Sprint Protocol</h3>
-              <p className="text-xs font-sans text-slate-400 mt-2 leading-relaxed">
-                System architecture, endpoint hardening, UI refactoring, and production deployment.
+              <h3 className="text-base font-bold text-[#1D1D1F]">Code Sprint Protocol</h3>
+              <p className="text-xs text-[#6E6E73] mt-2 leading-relaxed">
+                Architecture planning, API development, UI styling, and launch readiness.
               </p>
             </div>
             <button
               onClick={() => handleDeployPreset('code')}
-              className="mt-6 w-full py-2.5 bg-amber-950/60 hover:bg-amber-400 hover:text-slate-950 text-amber-400 font-mono text-xs font-bold uppercase tracking-wider rounded-xl border border-amber-500/40 transition-all text-center cursor-pointer"
+              className="mt-6 w-full py-2.5 bg-white hover:bg-[#F2F2F7] text-[#1D1D1F] border border-[#E5E5EA] font-semibold text-xs rounded-full transition-all text-center cursor-pointer shadow-sm"
             >
               Deploy Code Sprint
             </button>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-950/80 border border-white/5 hover:border-purple-500/40 transition-all flex flex-col justify-between group">
+          <div className="p-5 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] flex flex-col justify-between hover:border-[#D1D1D6] transition-all">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-purple-950 border border-purple-500/40 text-purple-400 flex items-center justify-center font-bold mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[#F2F2F7] text-[#C9A227] flex items-center justify-center font-bold mb-4">
                 <Layers className="w-5 h-5" />
               </div>
-              <h3 className="text-base font-bold text-slate-100 uppercase font-sans">Habit Mastery Routine</h3>
-              <p className="text-xs font-sans text-slate-400 mt-2 leading-relaxed">
-                Mindfulness meditation, technical reading, cold showers, and zero-distraction focus blocks.
+              <h3 className="text-base font-bold text-[#1D1D1F]">Habit Mastery Routine</h3>
+              <p className="text-xs text-[#6E6E73] mt-2 leading-relaxed">
+                Morning reading, mindfulness meditation, and deep work focus sessions.
               </p>
             </div>
             <button
               onClick={() => handleDeployPreset('habit')}
-              className="mt-6 w-full py-2.5 bg-purple-950/60 hover:bg-purple-500 hover:text-white text-purple-300 font-mono text-xs font-bold uppercase tracking-wider rounded-xl border border-purple-500/40 transition-all text-center cursor-pointer"
+              className="mt-6 w-full py-2.5 bg-white hover:bg-[#F2F2F7] text-[#1D1D1F] border border-[#E5E5EA] font-semibold text-xs rounded-full transition-all text-center cursor-pointer shadow-sm"
             >
               Deploy Habit Routine
             </button>
@@ -308,22 +304,22 @@ export default function CalendarPage() {
       </div>
 
       {/* 3. CALENDAR MATRIX CONTROLS */}
-      <div className="rounded-3xl bg-[#0D111A]/90 border border-white/10 p-5 shadow-[0_0_20px_rgba(0,0,0,0.3)]">
+      <div className="apple-card p-5">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
             <button
               onClick={() => setCurrentWeekOffset((prev) => prev - 1)}
-              className="p-2 rounded-xl bg-slate-900 border border-white/10 hover:border-indigo-400 text-slate-300 transition-colors cursor-pointer"
+              className="p-2 rounded-full bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#1D1D1F] transition-colors cursor-pointer"
               title="Previous Week"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="font-mono text-sm font-bold text-slate-100 uppercase">
+            <span className="text-sm font-semibold text-[#1D1D1F]">
               Week of {weekDates[0].toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – {weekDates[6].toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
             </span>
             <button
               onClick={() => setCurrentWeekOffset((prev) => prev + 1)}
-              className="p-2 rounded-xl bg-slate-900 border border-white/10 hover:border-indigo-400 text-slate-300 transition-colors cursor-pointer"
+              className="p-2 rounded-full bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#1D1D1F] transition-colors cursor-pointer"
               title="Next Week"
             >
               <ChevronRight className="w-4 h-4" />
@@ -331,26 +327,26 @@ export default function CalendarPage() {
             {currentWeekOffset !== 0 && (
               <button
                 onClick={() => setCurrentWeekOffset(0)}
-                className="px-3.5 py-1.5 text-xs font-mono font-bold uppercase tracking-wider rounded-xl bg-indigo-950 border border-indigo-500/40 text-indigo-300 cursor-pointer"
+                className="px-3.5 py-1.5 text-xs font-semibold rounded-full bg-[#F2F2F7] text-[#7C3AED] hover:bg-[#E5E5EA] transition-colors cursor-pointer"
               >
                 Today
               </button>
             )}
           </div>
 
-          <div className="flex items-center space-x-2 bg-slate-950 p-1.5 rounded-2xl border border-white/10">
+          <div className="flex items-center space-x-2 bg-[#F2F2F7] p-1 rounded-full border border-[#E5E5EA]">
             <button
               onClick={() => setViewMode('week')}
-              className={`px-4 py-1.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                viewMode === 'week' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-slate-200'
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                viewMode === 'week' ? 'btn-primary-gradient' : 'text-[#6E6E73] hover:text-[#1D1D1F]'
               }`}
             >
               Weekly Matrix
             </button>
             <button
               onClick={() => setViewMode('month')}
-              className={`px-4 py-1.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                viewMode === 'month' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-slate-200'
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                viewMode === 'month' ? 'btn-primary-gradient' : 'text-[#6E6E73] hover:text-[#1D1D1F]'
               }`}
             >
               Month Overview
@@ -372,25 +368,25 @@ export default function CalendarPage() {
             return (
               <div
                 key={dateIso}
-                className={`p-4 rounded-3xl border flex flex-col justify-between min-h-[380px] transition-all ${
+                className={`p-4 rounded-3xl border flex flex-col justify-between min-h-[380px] transition-all apple-card ${
                   isToday
-                    ? 'bg-[#0D111A] border-indigo-500/80 shadow-[0_0_25px_rgba(99,102,241,0.2)]'
-                    : 'bg-[#0D111A]/70 border-white/5 hover:border-white/15'
+                    ? 'bg-white border-[#7C3AED]/60 shadow-[0_4px_16px_rgba(124,58,237,0.12)]'
+                    : 'bg-white border-[#E5E5EA]'
                 }`}
               >
                 <div>
                   {/* Day Column Header */}
-                  <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
+                  <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#E5E5EA]">
                     <div>
-                      <div className={`font-mono text-xs font-bold uppercase tracking-wider ${isToday ? 'text-indigo-400' : 'text-slate-400'}`}>
+                      <div className={`text-xs font-semibold uppercase ${isToday ? 'text-[#7C3AED]' : 'text-[#6E6E73]'}`}>
                         {dayName}
                       </div>
-                      <div className="font-mono text-xl font-extrabold text-white leading-none mt-0.5">
+                      <div className="text-xl font-bold text-[#1D1D1F] leading-none mt-0.5">
                         {dayNum}
                       </div>
                     </div>
                     {isToday && (
-                      <span className="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 bg-indigo-500 text-white rounded-full">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 btn-primary-gradient rounded-full">
                         TODAY
                       </span>
                     )}
@@ -399,8 +395,8 @@ export default function CalendarPage() {
                   {/* Quests Scheduled For This Day */}
                   <div className="space-y-2">
                     {dayQuests.length === 0 ? (
-                      <div className="py-8 text-center text-slate-500">
-                        <p className="text-xs font-mono italic">No bounties</p>
+                      <div className="py-8 text-center text-[#8E8E93]">
+                        <p className="text-xs italic">No quests</p>
                       </div>
                     ) : (
                       dayQuests.map((q) => {
@@ -408,10 +404,10 @@ export default function CalendarPage() {
                         return (
                           <div
                             key={q.id}
-                            className={`p-2.5 rounded-xl border transition-all ${
+                            className={`p-2.5 rounded-2xl border transition-all ${
                               isCompleted
-                                ? 'bg-slate-950/80 border-white/5 opacity-60'
-                                : 'bg-slate-900/90 border-white/5 hover:border-indigo-500/40'
+                                ? 'bg-[#FAF9F5] border-[#E5E5EA] opacity-60'
+                                : 'bg-white border-[#E5E5EA] hover:border-[#D1D1D6]'
                             }`}
                           >
                             <div className="flex items-start justify-between gap-2">
@@ -420,26 +416,26 @@ export default function CalendarPage() {
                                 disabled={isCompleted}
                                 className={`w-4 h-4 rounded shrink-0 mt-0.5 border flex items-center justify-center transition-colors cursor-pointer ${
                                   isCompleted
-                                    ? 'bg-indigo-500 border-indigo-400 text-white'
-                                    : 'border-slate-700 hover:border-indigo-400 text-transparent'
+                                    ? 'btn-primary-gradient border-transparent text-white'
+                                    : 'border-[#C7C7CC] hover:border-[#7C3AED] text-transparent'
                                 }`}
                               >
                                 <CheckCircle2 className="w-3.5 h-3.5 stroke-[3]" />
                               </button>
                               <div className="flex-1 min-w-0">
                                 <h4
-                                  className={`text-xs font-sans font-bold leading-tight truncate ${
-                                    isCompleted ? 'line-through text-slate-500' : 'text-slate-100'
+                                  className={`text-xs font-semibold leading-tight truncate ${
+                                    isCompleted ? 'line-through text-[#8E8E93]' : 'text-[#1D1D1F]'
                                   }`}
                                 >
                                   {q.title}
                                 </h4>
-                                <div className="flex items-center gap-1.5 mt-1 flex-wrap font-mono text-[9px]">
-                                  <span className="text-indigo-400 font-bold">
+                                <div className="flex items-center gap-1.5 mt-1 flex-wrap text-[10px]">
+                                  <span className="text-[#7C3AED] font-semibold">
                                     +{q.xp_reward} XP
                                   </span>
-                                  <span className="text-amber-400 font-bold">
-                                    +{q.gold_reward}G
+                                  <span className="text-[#C9A227] font-semibold">
+                                    +{q.gold_reward} G
                                   </span>
                                 </div>
                               </div>
@@ -451,34 +447,34 @@ export default function CalendarPage() {
                   </div>
                 </div>
 
-                {/* Add Quest to Specific Day */}
+                {/* Add Quest Button */}
                 <button
                   onClick={() => {
                     setSelectedDateForNewQuest(dateIso);
                     setIsScheduleModalOpen(true);
                   }}
-                  className="mt-4 w-full py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-indigo-400 font-mono text-xs font-bold uppercase rounded-xl border border-white/5 hover:border-indigo-500/40 transition-colors flex items-center justify-center space-x-1 cursor-pointer"
+                  className="mt-4 w-full py-2 bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#1D1D1F] text-xs font-semibold uppercase tracking-wider rounded-xl transition-colors flex items-center justify-center space-x-1 cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>Add Bounty</span>
+                  <span>Add Quest</span>
                 </button>
               </div>
             );
           })}
         </div>
       ) : (
-        /* MONTHLY MATRIX OVERVIEW */
-        <div className="rounded-3xl bg-[#0D111A]/90 border border-white/10 p-6 sm:p-8 shadow-[0_0_30px_rgba(0,0,0,0.3)]">
-          <div className="mb-6 pb-3 border-b border-white/10 flex justify-between items-center">
-            <h3 className="text-lg font-extrabold text-white uppercase font-sans">
+        /* MONTHLY OVERVIEW */
+        <div className="apple-card p-6 sm:p-8">
+          <div className="mb-6 pb-3 border-b border-[#E5E5EA] flex justify-between items-center">
+            <h3 className="text-lg font-bold text-[#1D1D1F]">
               Monthly Calendar Matrix
             </h3>
-            <span className="text-xs font-mono text-slate-400 uppercase">
+            <span className="text-xs text-[#6E6E73]">
               30-Day Tactical Overview
             </span>
           </div>
 
-          <div className="grid grid-cols-7 gap-2 text-center font-mono text-xs font-bold uppercase text-slate-400 mb-3">
+          <div className="grid grid-cols-7 gap-2 text-center text-xs font-semibold text-[#6E6E73] uppercase mb-3">
             <div>Mon</div>
             <div>Tue</div>
             <div>Wed</div>
@@ -505,23 +501,23 @@ export default function CalendarPage() {
                   }}
                   className={`p-3 rounded-2xl border min-h-[90px] cursor-pointer transition-all flex flex-col justify-between ${
                     isToday
-                      ? 'bg-indigo-950/50 border-indigo-500'
-                      : 'bg-slate-900/60 border-white/5 hover:border-white/20'
+                      ? 'bg-[#F2F2F7] border-[#7C3AED]'
+                      : 'bg-white border-[#E5E5EA] hover:border-[#D1D1D6]'
                   }`}
                 >
                   <div className="flex justify-between items-center">
-                    <span className={`font-mono text-sm font-bold ${isToday ? 'text-indigo-400' : 'text-slate-200'}`}>
+                    <span className={`text-sm font-bold ${isToday ? 'text-[#7C3AED]' : 'text-[#1D1D1F]'}`}>
                       {d.getDate()}
                     </span>
                     {dayQuests.length > 0 && (
-                      <span className="text-[10px] font-mono font-bold text-white bg-indigo-500 px-1.5 py-0.5 rounded-full">
+                      <span className="text-[10px] font-bold text-white bg-[#7C3AED] px-1.5 py-0.5 rounded-full">
                         {dayQuests.length}
                       </span>
                     )}
                   </div>
 
                   {dayQuests.length > 0 && (
-                    <div className="text-[9px] font-sans text-indigo-300 uppercase truncate mt-1">
+                    <div className="text-[10px] font-semibold text-[#7C3AED] truncate mt-1">
                       {dayQuests[0].title}
                     </div>
                   )}
@@ -534,20 +530,20 @@ export default function CalendarPage() {
 
       {/* 5. SCHEDULE QUEST MODAL */}
       {isScheduleModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="w-full max-w-lg bg-[#0D111A] border border-indigo-500/40 rounded-3xl p-6 sm:p-8 shadow-[0_0_50px_rgba(99,102,241,0.3)]"
+            className="w-full max-w-lg bg-white border border-[#E5E5EA] rounded-3xl p-6 sm:p-8 shadow-2xl"
           >
-            <div className="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
-              <h3 className="text-xl font-extrabold text-white uppercase font-sans flex items-center gap-2">
-                <CalendarDays className="w-5 h-5 text-indigo-400" />
-                <span>Schedule Quest Bounty</span>
+            <div className="flex items-center justify-between pb-4 mb-6 border-b border-[#E5E5EA]">
+              <h3 className="text-xl font-bold text-[#1D1D1F] flex items-center gap-2">
+                <CalendarDays className="w-5 h-5 text-[#7C3AED]" />
+                <span>Schedule Quest</span>
               </h3>
               <button
                 onClick={() => setIsScheduleModalOpen(false)}
-                className="font-mono text-lg font-bold text-slate-400 hover:text-indigo-400 cursor-pointer"
+                className="text-lg font-bold text-[#8E8E93] hover:text-[#1D1D1F] cursor-pointer"
               >
                 ✕
               </button>
@@ -555,40 +551,40 @@ export default function CalendarPage() {
 
             <form onSubmit={handleScheduleCustomQuest} className="space-y-4">
               <div>
-                <label className="block text-xs font-mono text-slate-400 uppercase mb-1">
+                <label className="block text-xs font-semibold text-[#6E6E73] uppercase mb-1">
                   Target Scheduled Date
                 </label>
                 <input
                   type="date"
                   value={selectedDateForNewQuest}
                   onChange={(e) => setSelectedDateForNewQuest(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-2xl text-slate-100 font-mono text-xs focus:outline-none focus:border-indigo-500/50"
+                  className="w-full px-4 py-2.5 bg-[#FAF9F5] border border-[#E5E5EA] rounded-2xl text-[#1D1D1F] text-xs focus:outline-none focus:border-[#7C3AED]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono text-slate-400 uppercase mb-1">
-                  Quest Bounty Title
+                <label className="block text-xs font-semibold text-[#6E6E73] uppercase mb-1">
+                  Quest Title
                 </label>
                 <input
                   type="text"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                   required
-                  placeholder="e.g. 5K Cardio Run or 2-Hour Deep Code Block"
-                  className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-2xl text-slate-100 font-sans text-xs focus:outline-none focus:border-indigo-500/50"
+                  placeholder="e.g. 5K Workout or 2-Hour Deep Coding Block"
+                  className="w-full px-4 py-2.5 bg-[#FAF9F5] border border-[#E5E5EA] rounded-2xl text-[#1D1D1F] text-xs focus:outline-none focus:border-[#7C3AED]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-mono text-slate-400 uppercase mb-1">
-                    Domain Category
+                  <label className="block text-xs font-semibold text-[#6E6E73] uppercase mb-1">
+                    Category
                   </label>
                   <select
                     value={newCategory}
                     onChange={(e) => setNewCategory(e.target.value as QuestCategory)}
-                    className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-2xl text-slate-100 font-mono text-xs focus:outline-none focus:border-indigo-500/50"
+                    className="w-full px-4 py-2.5 bg-[#FAF9F5] border border-[#E5E5EA] rounded-2xl text-[#1D1D1F] text-xs focus:outline-none focus:border-[#7C3AED]"
                   >
                     <option value="Work">Work</option>
                     <option value="Fitness">Fitness</option>
@@ -600,13 +596,13 @@ export default function CalendarPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-slate-400 uppercase mb-1">
+                  <label className="block text-xs font-semibold text-[#6E6E73] uppercase mb-1">
                     Difficulty Tier
                   </label>
                   <select
                     value={newDifficulty}
                     onChange={(e) => setNewDifficulty(e.target.value as QuestDifficulty)}
-                    className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-2xl text-slate-100 font-mono text-xs focus:outline-none focus:border-indigo-500/50"
+                    className="w-full px-4 py-2.5 bg-[#FAF9F5] border border-[#E5E5EA] rounded-2xl text-[#1D1D1F] text-xs focus:outline-none focus:border-[#7C3AED]"
                   >
                     <option value="Easy">Easy (+30 XP)</option>
                     <option value="Medium">Medium (+60 XP)</option>
@@ -618,13 +614,13 @@ export default function CalendarPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono text-slate-400 uppercase mb-1">
+                <label className="block text-xs font-semibold text-[#6E6E73] uppercase mb-1">
                   Target Attribute Boost
                 </label>
                 <select
                   value={newAttribute}
                   onChange={(e) => setNewAttribute(e.target.value as AttributeType)}
-                  className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-2xl text-slate-100 font-mono text-xs focus:outline-none focus:border-indigo-500/50"
+                  className="w-full px-4 py-2.5 bg-[#FAF9F5] border border-[#E5E5EA] rounded-2xl text-[#1D1D1F] text-xs focus:outline-none focus:border-[#7C3AED]"
                 >
                   <option value="Intellect">Intellect</option>
                   <option value="Strength">Strength</option>
@@ -635,19 +631,19 @@ export default function CalendarPage() {
                 </select>
               </div>
 
-              <div className="flex items-center justify-end space-x-3 pt-4 border-t border-white/10">
+              <div className="flex items-center justify-end space-x-3 pt-4 border-t border-[#E5E5EA]">
                 <button
                   type="button"
                   onClick={() => setIsScheduleModalOpen(false)}
-                  className="px-5 py-2.5 rounded-xl border border-white/10 font-mono text-xs font-bold uppercase text-slate-400 hover:text-slate-200 cursor-pointer"
+                  className="px-5 py-2.5 rounded-full border border-[#E5E5EA] text-xs font-semibold text-[#6E6E73] hover:text-[#1D1D1F] cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all cursor-pointer"
+                  className="px-5 py-2.5 btn-primary-gradient text-xs font-semibold uppercase tracking-wider rounded-full shadow-md cursor-pointer"
                 >
-                  Schedule Bounty
+                  Schedule Quest
                 </button>
               </div>
             </form>

@@ -1,8 +1,8 @@
 'use client';
 
 // ==============================================================================
-// ASCEND - TOP HUD NAVIGATION BAR
-// Vibrant Modern RPG HUD Header
+// ASCEND - APPLE-INSPIRED NAVIGATION BAR
+// Clean, bright floating header with soft shadows and precise contrast
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -43,22 +43,22 @@ export const Navbar: React.FC = () => {
   const progress = calculateLevelProgress(profile.xp);
 
   const navLinks = [
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/quests', label: 'Quests', icon: Swords },
-    { href: '/calendar', label: 'Calendar', icon: CalendarDays },
-    { href: '/character', label: 'Character', icon: User },
-    { href: '/leaderboard', label: 'Leaderboard', icon: Crown },
-    { href: '/analytics', label: 'Analytics', icon: BarChart3 },
-    { href: '/shop', label: 'Shop', icon: ShoppingBag },
-    { href: '/inventory', label: 'Inventory', icon: Package },
-    { href: '/achievements', label: 'Trophies', icon: Trophy },
+    { href: '/dashboard', label: 'Dashboard' },
+    { href: '/quests', label: 'Quests' },
+    { href: '/calendar', label: 'Calendar' },
+    { href: '/character', label: 'Character' },
+    { href: '/leaderboard', label: 'Leaderboard' },
+    { href: '/analytics', label: 'Analytics' },
+    { href: '/shop', label: 'Shop' },
+    { href: '/inventory', label: 'Inventory' },
+    { href: '/achievements', label: 'Trophies' },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#07090E]/80 backdrop-blur-xl border-b border-white/10 py-3 transition-all">
+    <header className="sticky top-0 z-50 w-full bg-white/85 backdrop-blur-md border-b border-[#E5E5EA] py-3.5 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         
-        {/* Left: Brand & Main Navigation */}
+        {/* Left: Brand Logo & Navigation */}
         <div className="flex items-center space-x-8">
           <Link href="/" className="flex items-center group" title="ASCEND Home">
             <Image
@@ -71,18 +71,18 @@ export const Navbar: React.FC = () => {
             />
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center space-x-6 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center space-x-6 text-sm font-medium text-[#6E6E73]">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`transition-all py-1 border-b-2 ${
+                  className={`transition-colors py-1 ${
                     isActive
-                      ? 'text-indigo-400 border-indigo-500 font-bold drop-shadow-[0_0_10px_rgba(99,102,241,0.5)]'
-                      : 'border-transparent hover:text-slate-200 hover:border-slate-700'
+                      ? 'text-[#1D1D1F] font-semibold border-b-2 border-[#7C3AED]'
+                      : 'hover:text-[#1D1D1F]'
                   }`}
                 >
                   {link.label}
@@ -92,53 +92,53 @@ export const Navbar: React.FC = () => {
           </nav>
         </div>
 
-        {/* Right: Telemetry & User Profile */}
-        <div className="flex items-center space-x-4">
+        {/* Right: Telemetry Badges & Profile */}
+        <div className="flex items-center space-x-3">
           
-          {/* Telemetry Pills (Gold, Streak, Sound) */}
-          <div className="hidden sm:flex items-center space-x-2.5 text-xs font-mono">
+          {/* Telemetry Pills */}
+          <div className="hidden sm:flex items-center space-x-2 text-xs font-semibold">
             <Link
               href="/shop"
-              className="px-3 py-1.5 rounded-full bg-amber-950/50 border border-amber-500/40 text-amber-400 flex items-center space-x-1.5 hover:bg-amber-900/60 transition-colors shadow-[0_0_15px_rgba(245,158,11,0.15)]"
+              className="px-3 py-1.5 rounded-full bg-[#FAF9F5] border border-[#E5E5EA] text-[#C9A227] flex items-center space-x-1.5 hover:bg-[#F2F2F7] transition-colors"
             >
-              <Coins className="w-3.5 h-3.5 text-amber-400" />
+              <Coins className="w-4 h-4 text-[#C9A227]" />
               <span className="font-bold"><AnimatedCounter value={profile.gold} /> G</span>
             </Link>
             
-            <div className="px-3 py-1.5 rounded-full bg-rose-950/50 border border-rose-500/40 text-rose-400 flex items-center space-x-1.5 shadow-[0_0_15px_rgba(244,63,94,0.15)]">
-              <Flame className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
-              <span className="font-bold">{streak.current_streak}D STREAK</span>
+            <div className="px-3 py-1.5 rounded-full bg-[#FAF9F5] border border-[#E5E5EA] text-[#7C3AED] flex items-center space-x-1.5">
+              <Flame className="w-4 h-4 text-[#7C3AED]" />
+              <span>{streak.current_streak}d Streak</span>
             </div>
 
             <button
               onClick={() => toggleSound(!profile.sound_enabled)}
-              className="p-1.5 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/40 transition-colors cursor-pointer"
+              className="p-2 rounded-full bg-[#F2F2F7] text-[#6E6E73] hover:text-[#1D1D1F] transition-colors cursor-pointer"
               aria-label="Toggle Sound Effects"
             >
-              {profile.sound_enabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+              {profile.sound_enabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
             </button>
           </div>
 
-          {/* User Profile Selector */}
+          {/* User Profile Trigger */}
           <div className="relative">
             <button
               onClick={() => setArchetypeDropdownOpen(!archetypeDropdownOpen)}
-              className="flex items-center space-x-2.5 p-1.5 rounded-xl bg-slate-900/90 border border-white/10 hover:border-indigo-500/40 transition-all cursor-pointer"
+              className="flex items-center space-x-2.5 p-1.5 pr-3 rounded-full bg-[#F2F2F7] hover:bg-[#E5E5EA] transition-all cursor-pointer border border-[#E5E5EA]"
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-600 text-white font-mono font-bold flex items-center justify-center text-sm shadow-[0_0_10px_rgba(99,102,241,0.4)]">
+              <div className="w-7 h-7 rounded-full btn-primary-gradient flex items-center justify-center text-white font-bold text-xs">
                 {profile.username.charAt(0).toUpperCase()}
               </div>
               <div className="hidden md:flex flex-col items-start text-left">
-                <span className="text-xs font-bold text-slate-100 font-sans leading-none">{profile.username}</span>
-                <span className="text-[10px] font-mono text-indigo-400 leading-tight mt-0.5">LVL {progress.currentLevel} • {profile.archetype}</span>
+                <span className="text-xs font-semibold text-[#1D1D1F] leading-none">{profile.username}</span>
+                <span className="text-[11px] text-[#6E6E73] leading-tight mt-0.5">Lvl {progress.currentLevel} • {profile.archetype}</span>
               </div>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+              <ChevronDown className="w-3.5 h-3.5 text-[#6E6E73]" />
             </button>
 
             {archetypeDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-60 rounded-2xl bg-[#0D111A] border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.5)] p-2 z-50">
-                <div className="px-3 py-2 border-b border-slate-800 mb-1">
-                  <div className="text-[10px] font-mono text-slate-400 uppercase font-bold">SWITCH DEMO ARCHETYPE</div>
+              <div className="absolute right-0 mt-2 w-60 rounded-2xl bg-white border border-[#E5E5EA] shadow-[0_8px_24px_rgba(0,0,0,0.1)] p-2 z-50">
+                <div className="px-3 py-2 border-b border-[#E5E5EA] mb-1">
+                  <div className="text-xs font-semibold text-[#8E8E93] uppercase tracking-wider">Switch Archetype</div>
                 </div>
                 {ARCHETYPE_LIST.map((arch) => (
                   <button
@@ -147,24 +147,24 @@ export const Navbar: React.FC = () => {
                       loginAsDemoUser(arch.id);
                       setArchetypeDropdownOpen(false);
                     }}
-                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-mono flex items-center justify-between transition-colors cursor-pointer ${
+                    className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${
                       profile.archetype === arch.id
-                        ? 'text-indigo-400 bg-indigo-950/60 font-bold border border-indigo-500/40'
-                        : 'text-slate-300 hover:bg-slate-900 hover:text-white'
+                        ? 'text-[#7C3AED] bg-[#F2F2F7] font-semibold'
+                        : 'text-[#1D1D1F] hover:bg-[#FAF9F5]'
                     }`}
                   >
                     <span>{arch.name}</span>
-                    {profile.archetype === arch.id && <Sparkles className="w-3.5 h-3.5 text-indigo-400" />}
+                    {profile.archetype === arch.id && <Sparkles className="w-3.5 h-3.5 text-[#7C3AED]" />}
                   </button>
                 ))}
-                <div className="border-t border-slate-800 mt-1 pt-1">
+                <div className="border-t border-[#E5E5EA] mt-1 pt-1">
                   <Link
                     href="/settings"
                     onClick={() => setArchetypeDropdownOpen(false)}
-                    className="w-full text-left px-3 py-2 rounded-xl text-xs font-mono text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-colors flex items-center space-x-2"
+                    className="w-full text-left px-3 py-2 rounded-xl text-xs text-[#6E6E73] hover:text-[#1D1D1F] hover:bg-[#FAF9F5] transition-colors flex items-center space-x-2"
                   >
                     <Settings className="w-3.5 h-3.5" />
-                    <span>SETTINGS</span>
+                    <span>Settings</span>
                   </Link>
                 </div>
               </div>
@@ -174,23 +174,23 @@ export const Navbar: React.FC = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-slate-300 hover:text-white"
+            className="lg:hidden p-2 text-[#1D1D1F]"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#0D111A] border-y border-white/10 mt-3 py-4 px-6 space-y-3">
+        <div className="lg:hidden bg-white border-b border-[#E5E5EA] mt-3 py-4 px-6 space-y-3">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setMobileMenuOpen(false)}
-              className={`block font-mono text-sm uppercase tracking-wider ${
-                pathname === link.href ? 'text-indigo-400 font-bold' : 'text-slate-300'
+              className={`block text-sm font-medium ${
+                pathname === link.href ? 'text-[#7C3AED] font-semibold' : 'text-[#1D1D1F]'
               }`}
             >
               {link.label}

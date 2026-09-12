@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - QUEST MANAGEMENT BOARD
-// Vibrant Modern RPG HUD Quest Command
+// Apple-Inspired Bright Premium Quest Manager
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -54,40 +54,40 @@ export default function QuestsPage() {
   const categories = ['All', 'Work', 'Fitness', 'Learning', 'Habit', 'Creative', 'Social'];
 
   return (
-    <div className="space-y-10 pb-16 pt-6">
+    <div className="space-y-10 pb-16 pt-4">
       {/* 1. TOP STATS BAR */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-5 rounded-3xl bg-[#0D111A]/90 border border-white/10 text-center sm:text-left shadow-[0_0_25px_rgba(0,0,0,0.3)]">
-          <div className="font-mono text-3xl font-extrabold text-white">{quests.length}</div>
-          <div className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mt-1">Total Quests</div>
+        <div className="apple-card p-6 text-center sm:text-left">
+          <div className="text-3xl font-bold text-[#1D1D1F]">{quests.length}</div>
+          <div className="text-xs font-semibold text-[#6E6E73] uppercase tracking-wider mt-1">Total Quests</div>
         </div>
-        <div className="p-5 rounded-3xl bg-[#0D111A]/90 border border-white/10 text-center sm:text-left shadow-[0_0_25px_rgba(0,0,0,0.3)]">
-          <div className="font-mono text-3xl font-extrabold text-amber-400">
+        <div className="apple-card p-6 text-center sm:text-left">
+          <div className="text-3xl font-bold text-[#C9A227]">
             {quests.filter((q) => q.status === 'Active').length}
           </div>
-          <div className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mt-1">Active Bounties</div>
+          <div className="text-xs font-semibold text-[#6E6E73] uppercase tracking-wider mt-1">Active Quests</div>
         </div>
-        <div className="p-5 rounded-3xl bg-[#0D111A]/90 border border-white/10 text-center sm:text-left shadow-[0_0_25px_rgba(0,0,0,0.3)]">
-          <div className="font-mono text-3xl font-extrabold text-indigo-400">{totalCompleted}</div>
-          <div className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mt-1">Completed</div>
+        <div className="apple-card p-6 text-center sm:text-left">
+          <div className="text-3xl font-bold text-[#7C3AED]">{totalCompleted}</div>
+          <div className="text-xs font-semibold text-[#6E6E73] uppercase tracking-wider mt-1">Completed</div>
         </div>
-        <div className="p-5 rounded-3xl bg-[#0D111A]/90 border border-white/10 text-center sm:text-left shadow-[0_0_25px_rgba(0,0,0,0.3)]">
-          <div className="font-mono text-3xl font-extrabold text-emerald-400">{completionRate}%</div>
-          <div className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mt-1">Discipline Rate</div>
+        <div className="apple-card p-6 text-center sm:text-left">
+          <div className="text-3xl font-bold text-[#2E7D32]">{completionRate}%</div>
+          <div className="text-xs font-semibold text-[#6E6E73] uppercase tracking-wider mt-1">Completion Rate</div>
         </div>
       </div>
 
       {/* 2. SEARCH & CONTROLS */}
       <div className="space-y-4">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-white/10 pb-4">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-[#E5E5EA] pb-4">
           <div className="relative w-full md:w-96">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#8E8E93] absolute left-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search quests, attributes..."
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-900/90 border border-white/10 rounded-2xl text-slate-100 placeholder-slate-500 font-mono text-xs focus:outline-none focus:border-indigo-500/50"
+              placeholder="Search quests or attributes..."
+              className="w-full pl-11 pr-4 py-3 bg-white border border-[#E5E5EA] rounded-full text-[#1D1D1F] placeholder-[#8E8E93] text-sm focus:outline-none focus:border-[#7C3AED] shadow-sm"
             />
           </div>
 
@@ -97,10 +97,10 @@ export default function QuestsPage() {
                 <button
                   key={st}
                   onClick={() => setSelectedStatus(st)}
-                  className={`px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold uppercase transition-all border cursor-pointer ${
+                  className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all border cursor-pointer ${
                     selectedStatus === st
-                      ? 'bg-indigo-950/80 text-indigo-300 border-indigo-500/50'
-                      : 'bg-slate-900/60 text-slate-400 border-white/5 hover:text-slate-200'
+                      ? 'bg-[#F2F2F7] text-[#7C3AED] border-[#7C3AED]/40'
+                      : 'bg-white text-[#6E6E73] border-[#E5E5EA] hover:text-[#1D1D1F]'
                   }`}
                 >
                   {st}
@@ -110,7 +110,7 @@ export default function QuestsPage() {
 
             <button
               onClick={() => setIsCreateModalOpen(true)}
-              className="px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all flex items-center space-x-2 cursor-pointer"
+              className="px-6 py-3 btn-primary-gradient font-semibold text-xs rounded-full flex items-center space-x-2 cursor-pointer shadow-md"
             >
               <Plus className="w-4 h-4 stroke-[3]" />
               <span>Forge Quest</span>
@@ -124,10 +124,10 @@ export default function QuestsPage() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-1.5 rounded-full font-mono text-xs font-semibold uppercase tracking-wider transition-all border cursor-pointer ${
+              className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all border cursor-pointer ${
                 selectedCategory === cat
-                  ? 'bg-indigo-500 text-white border-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.4)]'
-                  : 'bg-slate-900/80 text-slate-400 border-white/5 hover:border-white/15'
+                  ? 'btn-primary-gradient border-transparent'
+                  : 'bg-white text-[#6E6E73] border-[#E5E5EA] hover:border-[#D1D1D6] hover:text-[#1D1D1F]'
               }`}
             >
               {cat}
@@ -139,9 +139,9 @@ export default function QuestsPage() {
       {/* 3. QUEST LIST */}
       <div className="space-y-3">
         {filteredQuests.length === 0 ? (
-          <div className="py-20 text-center text-slate-500 rounded-3xl bg-[#0D111A]/60 border border-white/10">
-            <p className="font-mono text-base tracking-wider text-slate-400 uppercase">NO QUESTS FOUND</p>
-            <p className="font-sans text-xs mt-2 text-slate-500">Adjust filters or create a new quest to populate telemetry.</p>
+          <div className="py-20 text-center text-[#6E6E73] apple-card bg-white">
+            <p className="font-semibold text-base text-[#1D1D1F]">No quests found</p>
+            <p className="text-xs mt-1 text-[#8E8E93]">Adjust your filters or forge a new quest to get started.</p>
           </div>
         ) : (
           <AnimatePresence mode="popLayout">

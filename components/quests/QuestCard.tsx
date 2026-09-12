@@ -1,8 +1,8 @@
 'use client';
 
 // ==============================================================================
-// ASCEND - VIBRANT MODERN RPG HUD QUEST CARD
-// High-contrast glass quest tile with electric neon spring interaction
+// ASCEND - QUIET, FOCUSED QUEST CARD WITH SATISFYING SPRING CHECKBOX
+// Apple-Inspired Bright Premium Quest Tile
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -35,15 +35,15 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
   const getDifficultyBadge = (diff: QuestDifficulty) => {
     switch (diff) {
       case 'Easy':
-        return 'text-emerald-400 border-emerald-500/40 bg-emerald-950/40';
+        return 'text-[#2E7D32] bg-[#E8F5E9] border-[#C8E6C9]';
       case 'Medium':
-        return 'text-cyan-400 border-cyan-500/40 bg-cyan-950/40';
+        return 'text-[#0284C7] bg-[#F0F9FF] border-[#BAE6FD]';
       case 'Hard':
-        return 'text-amber-400 border-amber-500/40 bg-amber-950/40';
+        return 'text-[#C9A227] bg-[#FEFCE8] border-[#FEF08A]';
       case 'Epic':
-        return 'text-purple-400 border-purple-500/40 bg-purple-950/40';
+        return 'text-[#7C3AED] bg-[#F3E8FF] border-[#DDD6FE]';
       case 'Legendary':
-        return 'text-rose-400 border-rose-500/40 bg-rose-950/40';
+        return 'text-[#D32F2F] bg-[#FFEBEE] border-[#FFCDD2]';
     }
   };
 
@@ -84,10 +84,10 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
       }}
       exit={{ opacity: 0, height: 0, marginBottom: 0, overflow: 'hidden' }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className={`group relative rounded-2xl border border-white/10 p-4.5 transition-all bg-[#0D111A]/90 hover:border-indigo-500/40 hover:shadow-[0_0_25px_rgba(99,102,241,0.15)]`}
+      className={`group relative apple-card apple-card-hover p-4.5 bg-white`}
     >
       <div className="flex items-start space-x-4">
-        {/* SATISFYING SPRING CHECKBOX */}
+        {/* SATISFYING SPRING CHECKBOX MICRO-INTERACTION */}
         <motion.button
           onClick={handleComplete}
           disabled={isCompleted || isCompleting}
@@ -96,8 +96,8 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
           aria-label={isCompleted ? 'Quest Completed' : 'Complete Quest'}
           className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 border transition-all mt-0.5 cursor-pointer ${
             isCompleted || justCompletedAnim
-              ? 'bg-gradient-to-r from-indigo-500 to-purple-600 border-indigo-400 text-white shadow-[0_0_15px_rgba(99,102,241,0.6)]'
-              : 'border-slate-700 hover:border-indigo-400 bg-slate-950 text-transparent hover:text-indigo-400'
+              ? 'btn-primary-gradient border-transparent text-white'
+              : 'border-[#C7C7CC] hover:border-[#7C3AED] bg-white text-transparent hover:text-[#7C3AED]'
           }`}
         >
           <motion.div
@@ -116,21 +116,21 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2 flex-wrap gap-y-1 mb-2">
             {/* Difficulty Badge */}
-            <span className={`text-[10px] font-mono font-bold uppercase px-2.5 py-0.5 rounded-full border ${getDifficultyBadge(quest.difficulty)}`}>
+            <span className={`text-xs font-semibold uppercase px-2.5 py-0.5 rounded-full border ${getDifficultyBadge(quest.difficulty)}`}>
               {quest.difficulty}
             </span>
 
             {/* Category Tag */}
-            <span className="text-[10px] font-mono text-slate-400 uppercase px-2.5 py-0.5 rounded-full border border-white/10 bg-slate-950">
+            <span className="text-xs font-semibold text-[#6E6E73] uppercase px-2.5 py-0.5 rounded-full border border-[#E5E5EA] bg-[#FAF9F5]">
               {quest.category}
             </span>
 
             {/* Attribute Tag */}
             <span
-              className="text-[10px] font-mono font-bold uppercase px-2.5 py-0.5 rounded-full border bg-slate-950"
+              className="text-xs font-semibold uppercase px-2.5 py-0.5 rounded-full border bg-white"
               style={{
                 color: attrMeta.color,
-                borderColor: `${attrMeta.color}60`,
+                borderColor: `${attrMeta.color}40`,
               }}
             >
               {attrMeta.name}
@@ -138,31 +138,31 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
 
             {/* Recurring Tag */}
             {quest.is_recurring && (
-              <span className="text-[10px] font-mono text-indigo-400 uppercase flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-indigo-500/30 bg-indigo-950/40">
-                <RotateCw className="w-3 h-3 text-indigo-400" />
-                <span>DAILY</span>
+              <span className="text-xs font-semibold text-[#7C3AED] uppercase flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-[#7C3AED]/30 bg-[#F2F2F7]">
+                <RotateCw className="w-3 h-3 text-[#7C3AED]" />
+                <span>Daily</span>
               </span>
             )}
           </div>
 
-          <h4 className={`text-base font-bold font-sans ${isCompleted ? 'line-through text-slate-500' : 'text-slate-100'}`}>
+          <h4 className={`text-base font-semibold ${isCompleted ? 'line-through text-[#8E8E93]' : 'text-[#1D1D1F]'}`}>
             {quest.title}
           </h4>
 
           {quest.description && (
-            <p className="text-xs text-slate-400 line-clamp-2 mt-1 leading-relaxed font-sans">
+            <p className="text-sm text-[#6E6E73] line-clamp-2 mt-1 leading-relaxed font-sans">
               {quest.description}
             </p>
           )}
 
-          {/* Rewards & Action Bar */}
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/5">
-            <div className="flex items-center space-x-4 text-xs font-mono font-bold">
-              <span className="flex items-center gap-1 text-indigo-400">
+          {/* Rewards & Actions */}
+          <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#E5E5EA]">
+            <div className="flex items-center space-x-4 text-xs font-semibold">
+              <span className="flex items-center gap-1 text-[#7C3AED]">
                 <Zap className="w-3.5 h-3.5" /> +{quest.xp_reward} XP
               </span>
-              <span className="flex items-center gap-1 text-amber-400">
-                <Coins className="w-3.5 h-3.5" /> +{quest.gold_reward} G
+              <span className="flex items-center gap-1 text-[#C9A227]">
+                <Coins className="w-3.5 h-3.5" /> +{quest.gold_reward} Gold
               </span>
             </div>
 
@@ -171,7 +171,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
                 onClick={handleDelete}
                 disabled={isDeleting}
                 aria-label="Delete quest"
-                className="p-1.5 text-slate-500 hover:text-rose-400 transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
+                className="p-1.5 text-[#8E8E93] hover:text-[#D32F2F] transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
               >
                 <Trash2 className="w-4 h-4" />
               </button>

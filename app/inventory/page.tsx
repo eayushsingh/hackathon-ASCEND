@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - TACTICAL LOADOUT & INVENTORY
-// Vibrant Modern RPG HUD Inventory Vault
+// Apple Bright Premium Loadout & Inventory
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -30,62 +30,62 @@ export default function InventoryPage() {
   });
 
   return (
-    <div className="space-y-10 pb-16 pt-6">
+    <div className="space-y-10 pb-16 pt-6 max-w-7xl mx-auto px-4 sm:px-6">
       {/* 1. TACTICAL LOADOUT DOCK */}
-      <div className="rounded-3xl bg-[#0D111A]/90 border border-indigo-500/30 p-6 sm:p-8 shadow-[0_0_35px_rgba(99,102,241,0.15)]">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-white/10">
+      <div className="apple-card p-6 sm:p-8">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-[#E5E5EA]">
           <div className="flex items-center space-x-5 text-center md:text-left">
-            <div className="w-14 h-14 bg-indigo-950/80 border border-indigo-500/40 rounded-2xl flex items-center justify-center text-indigo-400 shrink-0 shadow-[0_0_20px_rgba(99,102,241,0.3)]">
+            <div className="w-14 h-14 bg-purple-50 border border-purple-200 rounded-2xl flex items-center justify-center text-purple-600 shrink-0 shadow-sm">
               <Package className="w-7 h-7" />
             </div>
             <div>
-              <h1 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight font-sans">
+              <h1 className="text-3xl md:text-4xl font-extrabold text-[#1D1D1F] tracking-tight">
                 Loadout & Inventory
               </h1>
-              <p className="text-xs sm:text-sm font-sans text-slate-400 mt-1 max-w-xl">
-                Active cosmetic equipment, titles, and consumables stored in your neural vault.
+              <p className="text-xs sm:text-sm font-sans text-[#6E6E73] mt-1 max-w-xl">
+                Active cosmetic equipment, titles, and consumables stored in your personal vault.
               </p>
             </div>
           </div>
 
           <Link
             href="/shop"
-            className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all flex items-center space-x-2 shrink-0 cursor-pointer"
+            className="px-6 py-3 btn-primary-gradient text-white font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow-sm transition-all flex items-center space-x-2 shrink-0 cursor-pointer"
           >
             <ShoppingBag className="w-4 h-4" />
-            <span>Open Guild Shop</span>
+            <span>Open Guild Market</span>
           </Link>
         </div>
 
         {/* 3 EQUIPPED GEAR SLOTS */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-          <div className="p-4 rounded-2xl bg-slate-950/80 border border-white/5 flex items-center space-x-4">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shrink-0">
+          <div className="p-4 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] flex items-center space-x-4">
+            <div className="w-10 h-10 rounded-xl bg-white border border-[#E5E5EA] flex items-center justify-center text-purple-600 shrink-0 shadow-sm">
               <Palette className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[10px] font-mono text-slate-400 uppercase">Active Theme</div>
-              <div className="font-mono text-base font-bold text-indigo-400 uppercase mt-0.5">{profile.theme}</div>
+              <div className="text-[11px] font-mono text-[#6E6E73] uppercase font-medium">Active Theme</div>
+              <div className="font-mono text-base font-bold text-[#1D1D1F] uppercase mt-0.5">{profile.theme}</div>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-950/80 border border-white/5 flex items-center space-x-4">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0">
+          <div className="p-4 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] flex items-center space-x-4">
+            <div className="w-10 h-10 rounded-xl bg-white border border-[#E5E5EA] flex items-center justify-center text-sky-600 shrink-0 shadow-sm">
               <Tag className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[10px] font-mono text-slate-400 uppercase">Active Title</div>
-              <div className="font-mono text-base font-bold text-purple-400 uppercase mt-0.5">{profile.title}</div>
+              <div className="text-[11px] font-mono text-[#6E6E73] uppercase font-medium">Active Title</div>
+              <div className="font-mono text-base font-bold text-[#1D1D1F] uppercase mt-0.5">{profile.title}</div>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-950/80 border border-white/5 flex items-center space-x-4">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+          <div className="p-4 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] flex items-center space-x-4">
+            <div className="w-10 h-10 rounded-xl bg-white border border-[#E5E5EA] flex items-center justify-center text-amber-600 shrink-0 shadow-sm">
               <ShieldAlert className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[10px] font-mono text-slate-400 uppercase">Streak Freeze Vault</div>
-              <div className="font-mono text-base font-bold text-amber-400 uppercase mt-0.5">
+              <div className="text-[11px] font-mono text-[#6E6E73] uppercase font-medium">Streak Freeze Vault</div>
+              <div className="font-mono text-base font-bold text-amber-600 uppercase mt-0.5">
                 {streak.streak_freeze_count} / 3 Ready
               </div>
             </div>
@@ -94,15 +94,15 @@ export default function InventoryPage() {
       </div>
 
       {/* 2. CATEGORY TABS */}
-      <div className="flex items-center space-x-2 overflow-x-auto pb-2 border-b border-white/10">
+      <div className="flex items-center space-x-2 overflow-x-auto pb-2 border-b border-[#E5E5EA]">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}
             className={`px-4 py-2 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all shrink-0 border cursor-pointer ${
               selectedCategory === cat
-                ? 'bg-indigo-500 text-white border-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.4)]'
-                : 'bg-slate-900/80 text-slate-400 border-white/5 hover:border-white/15'
+                ? 'btn-primary-gradient text-white shadow-sm'
+                : 'bg-white text-[#6E6E73] border-[#E5E5EA] hover:border-[#C7C7CC] hover:text-[#1D1D1F]'
             }`}
           >
             {cat}s
@@ -112,15 +112,15 @@ export default function InventoryPage() {
 
       {/* 3. INVENTORY ITEMS GRID */}
       {filteredInventory.length === 0 ? (
-        <div className="py-20 text-center rounded-3xl bg-[#0D111A]/60 border border-white/10">
-          <Package className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-          <h3 className="font-mono text-base font-bold text-slate-300 uppercase">No acquired items</h3>
-          <p className="text-xs font-sans text-slate-500 mt-2 max-w-md mx-auto">
+        <div className="py-20 text-center apple-card">
+          <Package className="w-12 h-12 text-[#8E8E93] mx-auto mb-4" />
+          <h3 className="font-mono text-base font-bold text-[#1D1D1F] uppercase">No acquired items</h3>
+          <p className="text-xs font-sans text-[#6E6E73] mt-2 max-w-md mx-auto">
             Complete quests to earn gold, then acquire themes, badges, and titles from the Guild Market.
           </p>
           <Link
             href="/shop"
-            className="mt-6 inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all cursor-pointer"
+            className="mt-6 inline-flex items-center space-x-2 px-6 py-3 btn-primary-gradient text-white font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow-sm transition-all cursor-pointer"
           >
             <ShoppingBag className="w-4 h-4" />
             <span>Visit Guild Market</span>
@@ -136,30 +136,30 @@ export default function InventoryPage() {
             return (
               <div
                 key={inv.id}
-                className="p-6 rounded-3xl bg-[#0D111A]/90 border border-white/10 hover:border-indigo-500/40 flex flex-col justify-between shadow-[0_0_25px_rgba(0,0,0,0.3)] hover:shadow-[0_0_25px_rgba(99,102,241,0.15)] transition-all group"
+                className="apple-card p-6 flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="font-mono text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full border border-indigo-500/40 bg-indigo-950/40 text-indigo-300">
+                    <span className="font-mono text-[11px] font-semibold uppercase px-2.5 py-0.5 rounded-full border border-purple-200 bg-purple-50 text-purple-700">
                       {item.category}
                     </span>
-                    <span className="text-[10px] font-mono text-slate-400 uppercase">
+                    <span className="text-[11px] font-mono text-[#6E6E73] uppercase font-medium">
                       Acquired {formatDate(inv.acquired_at)}
                     </span>
                   </div>
 
-                  <h3 className="font-mono text-base font-bold text-slate-100 uppercase leading-tight">{item.name}</h3>
-                  <p className="text-xs font-sans text-slate-400 mt-2 leading-relaxed">{item.description}</p>
+                  <h3 className="font-mono text-base font-bold text-[#1D1D1F] uppercase leading-tight">{item.name}</h3>
+                  <p className="text-xs font-sans text-[#6E6E73] mt-2 leading-relaxed">{item.description}</p>
                 </div>
 
-                <div className="pt-4 border-t border-white/10 mt-6">
+                <div className="pt-4 border-t border-[#E5E5EA] mt-6">
                   {item.category !== 'Consumable' ? (
                     <button
                       onClick={() => equipItem(inv.id)}
                       className={`w-full py-2.5 font-mono text-xs font-bold uppercase tracking-wider rounded-xl flex items-center justify-center space-x-2 transition-all border cursor-pointer ${
                         isEquipped
-                          ? 'bg-indigo-500 text-white border-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.4)]'
-                          : 'bg-slate-900 text-slate-300 border-white/10 hover:border-indigo-500/40'
+                          ? 'btn-primary-gradient text-white border-transparent shadow-sm'
+                          : 'bg-white text-[#1D1D1F] border-[#E5E5EA] hover:border-[#C7C7CC]'
                       }`}
                     >
                       {isEquipped ? (
@@ -172,7 +172,7 @@ export default function InventoryPage() {
                       )}
                     </button>
                   ) : (
-                    <div className="text-center font-mono text-xs font-bold uppercase text-amber-400 bg-amber-950/40 py-2.5 rounded-xl border border-amber-500/40">
+                    <div className="text-center font-mono text-xs font-bold uppercase text-amber-800 bg-amber-50 py-2.5 rounded-xl border border-amber-200">
                       Active In Vault ({inv.quantity || 1}x)
                     </div>
                   )}
@@ -185,3 +185,4 @@ export default function InventoryPage() {
     </div>
   );
 }
+

@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - GUILD SHOP ITEM CARD COMPONENT
-// Vibrant Modern RPG HUD Shop Card
+// Apple Bright Premium Shop Card
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -73,15 +73,15 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
   const getRarityBadge = (rarity: ItemRarity) => {
     switch (rarity) {
       case 'Common':
-        return 'text-slate-400 border-white/10 bg-slate-950';
+        return 'text-[#6E6E73] border-[#E5E5EA] bg-[#F5F5F7]';
       case 'Rare':
-        return 'text-cyan-400 border-cyan-500/40 bg-cyan-950/40';
+        return 'text-sky-700 border-sky-200 bg-sky-50';
       case 'Epic':
-        return 'text-purple-400 border-purple-500/40 bg-purple-950/40';
+        return 'text-purple-700 border-purple-200 bg-purple-50';
       case 'Legendary':
-        return 'text-amber-400 border-amber-500/40 bg-amber-950/40 shadow-[0_0_12px_rgba(245,158,11,0.3)]';
+        return 'text-amber-800 border-amber-300 bg-amber-50 font-bold';
       case 'Mythic':
-        return 'text-rose-400 border-rose-500/40 bg-rose-950/40 shadow-[0_0_12px_rgba(244,63,94,0.3)]';
+        return 'text-rose-700 border-rose-200 bg-rose-50 font-bold';
     }
   };
 
@@ -106,28 +106,28 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
   };
 
   return (
-    <div className="p-6 rounded-3xl bg-[#0D111A]/90 border border-white/10 hover:border-indigo-500/40 flex flex-col justify-between shadow-[0_0_25px_rgba(0,0,0,0.3)] hover:shadow-[0_0_25px_rgba(99,102,241,0.15)] transition-all group">
+    <div className="apple-card p-6 flex flex-col justify-between group">
       <div>
         {/* Top Tag Bar */}
         <div className="flex items-center justify-between mb-4">
-          <span className={`font-mono text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full border ${getRarityBadge(item.rarity)}`}>
+          <span className={`font-mono text-[11px] font-semibold uppercase px-2.5 py-0.5 rounded-full border ${getRarityBadge(item.rarity)}`}>
             {item.rarity}
           </span>
-          <span className="text-[10px] font-mono text-slate-400 uppercase">
+          <span className="text-[11px] font-mono text-[#6E6E73] uppercase font-medium">
             {item.category}
           </span>
         </div>
 
         {/* Icon & Details */}
         <div className="flex items-start space-x-4 mb-4">
-          <div className="w-12 h-12 rounded-2xl bg-slate-950 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shrink-0 shadow-[0_0_15px_rgba(99,102,241,0.2)] group-hover:scale-105 transition-transform">
+          <div className="w-12 h-12 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] flex items-center justify-center text-purple-600 shrink-0 group-hover:scale-105 transition-transform shadow-sm">
             <IconComponent className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="font-mono text-base font-bold text-slate-100 uppercase leading-tight">
+            <h3 className="font-mono text-base font-bold text-[#1D1D1F] uppercase leading-tight">
               {item.name}
             </h3>
-            <p className="text-xs font-sans text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+            <p className="text-xs font-sans text-[#6E6E73] mt-1 line-clamp-2 leading-relaxed">
               {item.description}
             </p>
           </div>
@@ -135,17 +135,17 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
       </div>
 
       {/* Price & Action Button */}
-      <div className="pt-4 border-t border-white/10 mt-2">
+      <div className="pt-4 border-t border-[#E5E5EA] mt-2">
         <div className="flex items-center justify-between mb-4 font-mono">
-          <span className="text-xs text-slate-400 uppercase">Guild Price</span>
-          <span className="text-base font-bold text-amber-400 flex items-center gap-1.5">
-            <Coins className="w-4 h-4 text-amber-400" />
+          <span className="text-xs text-[#6E6E73] uppercase font-medium">Price</span>
+          <span className="text-base font-bold text-amber-600 flex items-center gap-1.5">
+            <Coins className="w-4 h-4 text-amber-500" />
             <AnimatedCounter value={item.price} /> G
           </span>
         </div>
 
         {feedback && (
-          <div className="text-[11px] text-indigo-300 font-mono font-bold uppercase mb-3 text-center bg-indigo-950/60 p-2 rounded-xl border border-indigo-500/40">
+          <div className="text-[11px] text-purple-700 font-mono font-bold uppercase mb-3 text-center bg-purple-50 p-2 rounded-xl border border-purple-200">
             {feedback}
           </div>
         )}
@@ -155,8 +155,8 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
             onClick={handleEquip}
             className={`w-full py-2.5 font-mono text-xs font-bold uppercase tracking-wider rounded-xl flex items-center justify-center space-x-2 transition-all border cursor-pointer ${
               isEquipped
-                ? 'bg-indigo-500 text-white border-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.4)]'
-                : 'bg-slate-900 text-slate-300 border-white/10 hover:border-indigo-500/40'
+                ? 'btn-primary-gradient text-white border-transparent shadow-sm'
+                : 'bg-white text-[#1D1D1F] border-[#E5E5EA] hover:border-[#C7C7CC]'
             }`}
           >
             {isEquipped ? (
@@ -165,7 +165,7 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
                 <span>Currently Active</span>
               </>
             ) : (
-              <span>Equip / Apply</span>
+              <span>Equip Item</span>
             )}
           </button>
         ) : (
@@ -174,8 +174,8 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
             disabled={!canAfford || isPurchasing}
             className={`w-full py-2.5 font-mono text-xs font-bold uppercase tracking-wider rounded-xl flex items-center justify-center space-x-2 transition-all border ${
               canAfford
-                ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white border-indigo-400 shadow-[0_0_20px_rgba(99,102,241,0.3)] cursor-pointer'
-                : 'bg-slate-950 text-slate-500 border-white/5 cursor-not-allowed opacity-60'
+                ? 'btn-primary-gradient text-white shadow-sm cursor-pointer'
+                : 'bg-[#F5F5F7] text-[#8E8E93] border-[#E5E5EA] cursor-not-allowed'
             }`}
           >
             {canAfford ? (
@@ -185,7 +185,7 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
               </>
             ) : (
               <>
-                <Lock className="w-4 h-4" />
+                <Lock className="w-4 h-4 text-[#8E8E93]" />
                 <span>Need {item.price - profile.gold} G</span>
               </>
             )}
@@ -195,3 +195,4 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
     </div>
   );
 };
+

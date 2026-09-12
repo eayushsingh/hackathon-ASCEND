@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - 30-DAY PRODUCTIVITY & STREAK HEATMAP GRID
-// Vibrant Modern RPG HUD Matrix Grid
+// Apple-Inspired Bright Premium Matrix Grid
 // ==============================================================================
 
 import React from 'react';
@@ -23,7 +23,6 @@ export const HeatmapGrid: React.FC = () => {
 
     const isToday = i === 0;
 
-    // Estimate completed quests for that day (or random realistic density for older demo days if today has completions)
     let count = 0;
     if (isToday) {
       count = quests.filter((q) => q.status === 'Completed').length;
@@ -40,25 +39,25 @@ export const HeatmapGrid: React.FC = () => {
   }
 
   const getCellColor = (count: number) => {
-    if (count === 0) return 'bg-slate-950 border-white/5 text-slate-600';
-    if (count === 1) return 'bg-emerald-950/80 border-emerald-700/60 text-emerald-400';
-    if (count === 2) return 'bg-emerald-600 border-emerald-400 text-emerald-100 shadow-[0_0_8px_rgba(16,185,129,0.4)]';
-    if (count === 3) return 'bg-emerald-400 border-emerald-300 text-slate-950 shadow-[0_0_12px_rgba(16,185,129,0.7)] font-bold';
-    return 'bg-amber-400 border-amber-300 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.8)] font-bold';
+    if (count === 0) return 'bg-[#F2F2F7] text-[#8E8E93] border-[#E5E5EA]';
+    if (count === 1) return 'bg-[#E8F5E9] text-[#2E7D32] border-[#C8E6C9]';
+    if (count === 2) return 'bg-[#A5D6A7] text-[#1B5E20] border-[#81C784] font-semibold';
+    if (count === 3) return 'bg-[#66BB6A] text-white border-[#4CAF50] font-semibold';
+    return 'bg-[#7C3AED] text-white border-[#6D28D9] font-bold';
   };
 
   return (
-    <div className="font-mono">
-      <div className="flex items-center justify-between mb-2">
-        <div className="text-xs text-slate-400 uppercase tracking-wider font-bold">4-WEEK STREAK MATRIX</div>
+    <div className="font-sans">
+      <div className="flex items-center justify-between mb-2.5">
+        <div className="text-xs text-[#6E6E73] font-semibold uppercase tracking-wider">4-Week Activity Matrix</div>
         
-        <div className="flex items-center space-x-1.5 text-[10px] text-slate-500 uppercase tracking-wider">
+        <div className="flex items-center space-x-1.5 text-[11px] text-[#8E8E93] font-medium">
           <span>Less</span>
-          <div className="w-2.5 h-2.5 rounded bg-slate-950 border border-white/10" />
-          <div className="w-2.5 h-2.5 rounded bg-emerald-950 border border-emerald-700" />
-          <div className="w-2.5 h-2.5 rounded bg-emerald-600 border border-emerald-400" />
-          <div className="w-2.5 h-2.5 rounded bg-emerald-400 border border-emerald-300" />
-          <div className="w-2.5 h-2.5 rounded bg-amber-400 border border-amber-300" />
+          <div className="w-2.5 h-2.5 rounded bg-[#F2F2F7] border border-[#E5E5EA]" />
+          <div className="w-2.5 h-2.5 rounded bg-[#E8F5E9] border border-[#C8E6C9]" />
+          <div className="w-2.5 h-2.5 rounded bg-[#A5D6A7] border border-[#81C784]" />
+          <div className="w-2.5 h-2.5 rounded bg-[#66BB6A] border border-[#4CAF50]" />
+          <div className="w-2.5 h-2.5 rounded bg-[#7C3AED] border border-[#6D28D9]" />
           <span>More</span>
         </div>
       </div>
@@ -73,17 +72,17 @@ export const HeatmapGrid: React.FC = () => {
             )}`}
             title={`${day.dateStr}: ${day.count} quests completed`}
           >
-            <span className="text-[9px] font-bold tracking-tighter leading-none">{day.label.split(' ')[1]}</span>
+            <span className="text-[9px] font-semibold tracking-tight leading-none">{day.label.split(' ')[1]}</span>
           </div>
         ))}
       </div>
 
-      <div className="mt-3 flex items-center justify-between text-xs text-slate-400">
-        <span className="font-mono">
-          Current Streak: <strong className="text-emerald-400 font-bold">{streak.current_streak} Days</strong>
+      <div className="mt-3.5 flex items-center justify-between text-xs text-[#6E6E73]">
+        <span>
+          Current Streak: <strong className="text-[#7C3AED] font-semibold">{streak.current_streak} Days</strong>
         </span>
-        <span className="text-amber-400 font-mono text-[11px]">
-          Freeze Relics: {streak.streak_freeze_count} Available
+        <span className="text-[#C9A227] font-medium">
+          {streak.streak_freeze_count} Freeze Relics
         </span>
       </div>
     </div>

@@ -1,106 +1,96 @@
 @import "tailwindcss";
 
 :root {
-  /* ASCEND Vibrant Modern RPG HUD System */
-  --bg-base: #07090E;
-  --bg-surface: #0D111A;
-  --bg-surface-elevated: #131A29;
-  --bg-card: rgba(13, 17, 26, 0.85);
+  /* ASCEND Apple-Inspired Bright Premium Palette */
+  --bg-base: #FAFAF8;
+  --bg-card: #FFFFFF;
+  --bg-subtle: #F2F2F7;
   
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.18);
-  --border-glow-indigo: rgba(99, 102, 241, 0.4);
-  --border-glow-cyan: rgba(6, 182, 212, 0.4);
+  --border-subtle: #E5E5EA;
+  --border-strong: #D1D1D6;
 
-  /* Vibrant RPG Palette */
-  --accent-indigo: #6366F1;
-  --accent-purple: #8B5CF6;
-  --accent-violet: #A855F7;
-  --accent-cyan: #06B6D4;
-  --accent-emerald: #10B981;
-  --accent-amber: #F59E0B;
-  --accent-rose: #F43F5E;
+  /* Accent Gradient (Primary CTAs, XP Progress ONLY) */
+  --accent-gradient: linear-gradient(135deg, #7C3AED 0%, #38BDF8 100%);
+  --accent-primary: #7C3AED;
+  --accent-secondary: #38BDF8;
+  
+  /* Status & Currency Tokens */
+  --accent-gold: #C9A227;
+  --accent-success: #2E7D32;
+  --accent-danger: #D32F2F;
 
-  /* Typography */
-  --text-main: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
+  /* Apple-Grade Typography Colors */
+  --text-primary: #1D1D1F;
+  --text-secondary: #6E6E73;
+  --text-tertiary: #8E8E93;
+
+  /* Card Shadow */
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.04);
+  --card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.08), 0 12px 32px rgba(0, 0, 0, 0.06);
 }
 
 body {
   background-color: var(--bg-base);
-  color: var(--text-main);
+  color: var(--text-primary);
   font-family: var(--font-sans, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
   overflow-x: hidden;
   min-height: 100vh;
 }
 
-/* Custom Scrollbar */
+/* Custom Soft Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #07090E;
+  background: #FAFAF8;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
+  background: #C7C7CC;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #AEAEB2;
 }
 
-/* Glassmorphism Card Utilities */
-.glass-card {
-  background: rgba(13, 17, 26, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.glass-card-hover {
+/* Apple Floating Card Utility */
+.apple-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E5EA;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.04);
+  border-radius: 20px;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.glass-card-hover:hover {
-  border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 0 25px rgba(99, 102, 241, 0.15);
+.apple-card-hover:hover {
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 12px 32px rgba(0, 0, 0, 0.06);
+  border-color: #D1D1D6;
 }
 
-/* Glowing Neon Utilities */
-.glow-indigo {
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+/* Gradient Pill Utilities */
+.btn-primary-gradient {
+  background: linear-gradient(135deg, #7C3AED 0%, #38BDF8 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.glow-cyan {
-  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+.btn-primary-gradient:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+  opacity: 0.96;
 }
 
-.glow-amber {
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+.btn-primary-gradient:active {
+  transform: scale(0.97);
 }
 
-.glow-emerald {
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
-}
-
-.glow-purple {
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
-}
-
-.text-gradient-indigo {
-  background: linear-gradient(135deg, #818CF8 0%, #C084FC 50%, #38BDF8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-gradient-gold {
-  background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 50%, #D97706 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* Focus Ring */
+*:focus-visible {
+  outline: 2px solid #7C3AED;
+  outline-offset: 2px;
 }
