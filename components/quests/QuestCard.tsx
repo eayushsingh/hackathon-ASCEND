@@ -16,6 +16,7 @@ import {
   Trash2,
   RotateCw,
   Clock,
+  Bell,
 } from 'lucide-react';
 import { ATTRIBUTE_CONFIG } from '@/lib/progression/attributes';
 import { TaskTimerModal } from '@/components/modals/TaskTimerModal';
@@ -138,6 +139,14 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
                 <span className="text-xs font-semibold text-[#7C3AED] uppercase flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-[#7C3AED]/30 bg-[#F2F2F7]">
                   <RotateCw className="w-3 h-3 text-[#7C3AED]" />
                   <span>Daily</span>
+                </span>
+              )}
+
+              {/* Scheduled Alarm Badge */}
+              {quest.reminder_time && (
+                <span className="text-xs font-semibold text-purple-700 uppercase flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-purple-200 bg-purple-50">
+                  <Bell className="w-3 h-3 text-purple-600 animate-pulse" />
+                  <span>{quest.reminder_time}</span>
                 </span>
               )}
             </div>

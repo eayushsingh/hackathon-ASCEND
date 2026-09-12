@@ -64,6 +64,8 @@ interface GameContextType {
     recurrence_interval?: 'Daily' | 'Weekly' | 'None';
     due_date?: string | null;
     priority?: 'Low' | 'Medium' | 'High';
+    reminder_time?: string | null;
+    reminder_enabled?: boolean;
   }) => Promise<Quest>;
   updateQuest: (id: string, updates: Partial<Quest>) => Promise<Quest | null>;
   deleteQuest: (id: string) => Promise<boolean>;
@@ -310,6 +312,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     recurrence_interval?: 'Daily' | 'Weekly' | 'None';
     due_date?: string | null;
     priority?: 'Low' | 'Medium' | 'High';
+    reminder_time?: string | null;
+    reminder_enabled?: boolean;
   }): Promise<Quest> => {
     soundManager.playClick();
 
@@ -347,6 +351,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       recurrence_interval: questData.recurrence_interval || 'Daily',
       due_date: questData.due_date || null,
       priority: questData.priority || 'Medium',
+      reminder_time: questData.reminder_time || null,
+      reminder_enabled: questData.reminder_enabled ?? Boolean(questData.reminder_time),
       created_at: new Date().toISOString(),
     };
 

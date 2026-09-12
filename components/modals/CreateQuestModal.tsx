@@ -23,6 +23,8 @@ import {
   Sparkles,
   RotateCw,
   AlertCircle,
+  Bell,
+  Clock,
 } from 'lucide-react';
 
 interface CreateQuestModalProps {
@@ -41,6 +43,8 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
   const [isRecurring, setIsRecurring] = useState(false);
   const [recurrenceInterval, setRecurrenceInterval] = useState<'Daily' | 'Weekly'>('Daily');
   const [priority, setPriority] = useState<QuestPriority>('Medium');
+  const [isAlarmEnabled, setIsAlarmEnabled] = useState(false);
+  const [reminderTime, setReminderTime] = useState('08:00');
   const [validationError, setValidationError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -82,9 +86,12 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
         is_recurring: isRecurring,
         recurrence_interval: isRecurring ? recurrenceInterval : undefined,
         priority,
+        reminder_time: isAlarmEnabled ? reminderTime : null,
+        reminder_enabled: isAlarmEnabled,
       });
       setTitle('');
       setDescription('');
+      setIsAlarmEnabled(false);
       setValidationError(null);
       onClose();
     } catch (err: unknown) {
@@ -239,6 +246,56 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
                 onChange={(e) => setIsRecurring(e.target.checked)}
                 className="w-5 h-5 accent-purple-600 rounded cursor-pointer"
               />
+            </div>
+
+            {/* Scheduled Alarm Reminder Toggle */}
+            <div className="p-3.5 bg-[#F5F5F7] rounded-xl border border-[#E5E5EA] space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Bell className="w-5 h-5 text-purple-600" />
+                  <div>
+                    <div className="text-xs font-bold text-[#1D1D1F]">Scheduled Alarm Reminder</div>
+                    <div className="text-[11px] text-[#6E6E73]">Rings an audio alarm chime when it&apos;s time for this task</div>
+                  </div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={isAlarmEnabled}
+                  onChange={(e) => setIsAlarmEnabled(e.target.checked)}
+                  className="w-5 h-5 accent-purple-600 rounded cursor-pointer"
+                />
+              </div>
+
+              {isAlarmEnabled && (
+                <div className="pt-2.5 border-t border-[#E5E5EA] flex flex-col sm:flex-row items-center gap-2">
+                  <input
+                    type="time"
+                    value={reminderTime}
+                    onChange={(e) => setReminderTime(e.target.value)}
+                    className="w-full sm:w-auto px-3 py-1.5 bg-white border border-[#E5E5EA] rounded-xl text-xs font-mono font-bold text-[#1D1D1F] focus:outline-none focus:border-purple-500 cursor-pointer"
+                  />
+                  <div className="flex items-center gap-1.5 w-full sm:w-auto flex-wrap">
+                    {[
+                      { label: '🌅 08:00 AM', time: '08:00' },
+                      { label: '☀️ 02:00 PM', time: '14:00' },
+                      { label: '🌙 08:00 PM', time: '20:00' },
+                    ].map((preset) => (
+                      <button
+                        key={preset.time}
+                        type="button"
+                        onClick={() => setReminderTime(preset.time)}
+                        className={`px-2 py-1 text-[11px] font-mono rounded-lg border transition-all cursor-pointer ${
+                          reminderTime === preset.time
+                            ? 'bg-purple-600 text-white border-purple-600 shadow-xs'
+                            : 'bg-white text-[#6E6E73] border-[#E5E5EA] hover:border-purple-300'
+                        }`}
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Estimated Rewards Preview */}

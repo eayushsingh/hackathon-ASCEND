@@ -102,6 +102,8 @@ export interface Quest {
   recurrence_interval?: 'Daily' | 'Weekly' | 'None';
   due_date?: string | null;
   priority?: QuestPriority;
+  reminder_time?: string | null; // e.g. "08:30" (24h format HH:MM)
+  reminder_enabled?: boolean;
   created_at: string;
   completed_at?: string | null;
   updated_at?: string;

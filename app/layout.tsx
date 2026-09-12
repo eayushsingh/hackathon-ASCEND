@@ -5,6 +5,7 @@ import { GameProvider } from '@/lib/context/game-context';
 import { Navbar } from '@/components/layout/Navbar';
 import { LevelUpModal } from '@/components/modals/LevelUpModal';
 import { AchievementUnlockBanner } from '@/components/modals/AchievementUnlockBanner';
+import { AlarmWatcher } from '@/components/layout/AlarmWatcher';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -39,6 +40,7 @@ export default function RootLayout({
             </main>
             <LevelUpModal />
             <AchievementUnlockBanner />
+            <AlarmWatcher />
           </div>
         </GameProvider>
       </body>
