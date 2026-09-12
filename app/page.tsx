@@ -101,11 +101,6 @@ export default function LandingPage() {
           {/* RIGHT: DEDICATED CHARACTER & MASCOT FRAME (5 COLS) */}
           <div className="lg:col-span-5 relative">
             <div className="apple-card p-6 sm:p-8 relative overflow-hidden group">
-              {/* Subtle Hanging Mascot on the Card Top Edge */}
-              <div className="absolute -top-3 right-6 z-20 hidden sm:block">
-                <PageMascot animationType="hanging" size={76} position="top-edge" />
-              </div>
-
               {/* Header with Mascot Activity Switcher */}
               <div className="flex flex-col gap-2 border-b border-[#E5E5EA] pb-3 mb-3">
                 <div className="flex items-center justify-between">
