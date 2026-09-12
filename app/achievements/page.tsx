@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - ACHIEVEMENTS & TROPHY HALL
-// Minimalist Editorial Theme
+// Vibrant Modern RPG HUD Trophy Hall
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -30,29 +30,29 @@ export default function AchievementsPage() {
   });
 
   return (
-    <div className="space-y-12 pb-12 pt-8">
-      {/* 1. TOP STATS HERO (GOLD PRESTIGE) */}
-      <div className="p-8 bg-white border-4 border-[#141110] shadow-[8px_8px_0_0_#141110]">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b-2 border-[#141110]/10">
-          <div className="flex items-center space-x-6 text-center md:text-left">
-            <div className="w-16 h-16 bg-[#C9A227] border-4 border-[#141110] flex items-center justify-center text-white shrink-0 shadow-[4px_4px_0_0_#141110]">
-              <Trophy className="w-8 h-8" />
+    <div className="space-y-10 pb-16 pt-6">
+      {/* 1. TOP STATS HERO */}
+      <div className="rounded-3xl bg-[#0D111A]/90 border border-indigo-500/30 p-6 sm:p-8 shadow-[0_0_35px_rgba(99,102,241,0.15)]">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-white/10">
+          <div className="flex items-center space-x-5 text-center md:text-left">
+            <div className="w-14 h-14 bg-amber-950/80 border border-amber-500/40 rounded-2xl flex items-center justify-center text-amber-400 shrink-0 shadow-[0_0_20px_rgba(245,158,11,0.25)]">
+              <Trophy className="w-7 h-7" />
             </div>
             <div>
-              <h1 className="font-display text-3xl md:text-4xl font-black text-[#141110] uppercase tracking-widest">
+              <h1 className="text-3xl md:text-4xl font-extrabold text-white uppercase tracking-tight font-sans">
                 Trophy Hall
               </h1>
-              <p className="text-sm font-sans font-medium text-[#6B6560] mt-2 max-w-lg">
+              <p className="text-xs sm:text-sm font-sans text-slate-400 mt-1 max-w-lg">
                 Permanent milestones achieved across quest eradication, habit streaks, and character levels.
               </p>
             </div>
           </div>
 
-          <div className="px-6 py-4 bg-[#F5F3EE] border-2 border-[#141110] flex items-center space-x-4 shrink-0 shadow-[4px_4px_0_0_#141110]">
-            <Crown className="w-6 h-6 text-[#C9A227]" />
+          <div className="px-5 py-3 rounded-2xl bg-slate-950 border border-white/10 flex items-center space-x-4 shrink-0 shadow-[0_0_15px_rgba(245,158,11,0.15)]">
+            <Crown className="w-6 h-6 text-amber-400" />
             <div>
-              <div className="text-[10px] font-sans font-bold text-[#6B6560] uppercase tracking-widest">Unlocked Trophies</div>
-              <div className="font-display text-xl font-black text-[#C9A227] uppercase tracking-widest mt-1">
+              <div className="text-[10px] font-mono text-slate-400 uppercase">Unlocked Trophies</div>
+              <div className="font-mono text-xl font-bold text-amber-400 mt-0.5">
                 <AnimatedCounter value={unlockedCount} /> / {totalCount} ({progressPercent}%)
               </div>
             </div>
@@ -61,13 +61,13 @@ export default function AchievementsPage() {
 
         {/* Global Trophy Progress Bar */}
         <div className="mt-6">
-          <div className="flex items-center justify-between text-xs font-sans font-bold uppercase tracking-widest text-[#141110] mb-3">
+          <div className="flex items-center justify-between text-xs font-mono text-slate-300 uppercase mb-2">
             <span>Overall Trophy Completion</span>
-            <span className="text-[#C9A227]">{progressPercent}%</span>
+            <span className="text-amber-400 font-bold">{progressPercent}%</span>
           </div>
-          <div className="w-full bg-[#F5F3EE] border-2 border-[#141110] h-4">
+          <div className="w-full bg-slate-950 border border-white/10 rounded-full h-3 overflow-hidden p-0.5">
             <div
-              className="bg-[#C9A227] h-full transition-all duration-500"
+              className="bg-gradient-to-r from-amber-500 to-amber-400 h-full rounded-full transition-all duration-500 shadow-[0_0_12px_rgba(245,158,11,0.7)]"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -75,15 +75,15 @@ export default function AchievementsPage() {
       </div>
 
       {/* 2. CATEGORY TABS */}
-      <div className="flex items-center space-x-2 overflow-x-auto pb-2 hide-scrollbar">
+      <div className="flex items-center space-x-2 overflow-x-auto pb-2 border-b border-white/10">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2 text-xs font-sans font-bold uppercase tracking-widest transition-all shrink-0 border-2 ${
+            className={`px-4 py-2 rounded-xl font-mono text-xs font-bold uppercase tracking-wider transition-all shrink-0 border cursor-pointer ${
               selectedCategory === cat
-                ? 'bg-[#141110] text-white border-[#141110] shadow-[4px_4px_0_0_#C9A227]'
-                : 'bg-white text-[#6B6560] hover:text-[#141110] border-[#141110]/20 hover:border-[#141110] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]'
+                ? 'bg-indigo-500 text-white border-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.4)]'
+                : 'bg-slate-900/80 text-slate-400 border-white/5 hover:border-white/15'
             }`}
           >
             {cat}
@@ -98,11 +98,7 @@ export default function AchievementsPage() {
             (ua) => ua.achievement_id === ach.id || ua.achievement?.code === ach.code
           );
           return (
-            <AchievementCard
-              key={ach.id}
-              achievement={ach}
-              userAchievement={userAch}
-            />
+            <AchievementCard key={ach.id} achievement={ach} userAchievement={userAch} />
           );
         })}
       </div>

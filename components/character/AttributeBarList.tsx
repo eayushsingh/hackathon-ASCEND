@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - ATTRIBUTE PROGRESSION BARS & MASTERY BREAKDOWN
-// Minimalist Editorial Theme
+// Vibrant Modern RPG HUD Attribute Bar List
 // ==============================================================================
 
 import React from 'react';
@@ -13,7 +13,7 @@ export const AttributeBarList: React.FC = () => {
   const { attributes } = useGame();
 
   return (
-    <div className="space-y-4 font-sans text-sm">
+    <div className="space-y-3.5 font-mono text-sm">
       {ATTRIBUTE_LIST.map((attr) => {
         const attrKey = `${attr.type.toLowerCase()}_xp` as keyof typeof attributes;
         const currentXP = (attributes[attrKey] as number) || 0;
@@ -25,29 +25,30 @@ export const AttributeBarList: React.FC = () => {
         const percent = Math.min(100, Math.floor((xpInCurrentLevel / 150) * 100));
 
         return (
-          <div key={attr.type} className="group">
-            <div className="flex justify-between items-end mb-1">
+          <div key={attr.type} className="group p-2.5 rounded-xl bg-slate-950/60 border border-white/5 hover:border-white/20 transition-all">
+            <div className="flex justify-between items-end mb-1.5">
               <div>
-                <span className="font-bold text-[#141110] uppercase mr-2" style={{ color: attr.color }}>{attr.name}</span>
-                <span className="font-display tracking-widest text-[#6B6560] text-xs">LVL {level} — {mastery}</span>
+                <span className="font-bold uppercase mr-2" style={{ color: attr.color }}>{attr.name}</span>
+                <span className="text-slate-400 text-xs font-mono">LVL {level} — {mastery}</span>
               </div>
               <div className="text-right">
-                <span className="font-display tracking-widest text-[#141110] text-xs">{xpInCurrentLevel}/150</span>
+                <span className="text-slate-200 text-xs font-mono font-bold">{xpInCurrentLevel}/150 XP</span>
               </div>
             </div>
 
-            {/* Flat Progress Bar */}
-            <div className="w-full bg-[#E5E5E5] h-1.5 overflow-hidden">
+            {/* Glowing Neon Progress Bar */}
+            <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-white/10">
               <div
-                className="h-full transition-all duration-500"
+                className="h-full rounded-full transition-all duration-500"
                 style={{
                   width: `${percent}%`,
                   backgroundColor: attr.color,
+                  boxShadow: `0 0 12px ${attr.color}`,
                 }}
               />
             </div>
             
-            <div className="text-[10px] text-[#A8A29E] italic mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="text-[10px] text-slate-400 italic mt-1 opacity-80 group-hover:opacity-100 transition-opacity">
               {attr.buffBenefit}
             </div>
           </div>

@@ -2,11 +2,10 @@
 
 // ==============================================================================
 // ASCEND - TROPHY & ACHIEVEMENT CARD COMPONENT
-// Minimalist Editorial Theme
+// Vibrant Modern RPG HUD Achievement Tile
 // ==============================================================================
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Achievement, UserAchievement } from '@/types/rpg';
 import { useGame } from '@/lib/context/game-context';
 import {
@@ -28,7 +27,6 @@ import {
   Lock,
 } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
-import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 
 const ICON_MAP: Record<string, React.ElementType> = {
   Zap,
@@ -102,28 +100,28 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, u
 
   return (
     <div
-      className={`p-6 bg-white border-4 border-[#141110] flex flex-col justify-between transition-all ${
+      className={`p-6 rounded-3xl border flex flex-col justify-between transition-all ${
         isUnlocked
           ? isClaimed
-            ? 'shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]'
-            : 'shadow-[8px_8px_0_0_#C9A227]'
-          : 'opacity-70 bg-[#F5F3EE] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]'
+            ? 'bg-[#0D111A]/90 border-white/10'
+            : 'bg-[#0D111A]/90 border-amber-500/50 shadow-[0_0_25px_rgba(245,158,11,0.2)]'
+          : 'bg-[#0D111A]/40 border-white/5 opacity-60'
       }`}
     >
       <div>
         {/* Category & Status Bar */}
-        <div className="flex items-center justify-between mb-4">
-          <span className="font-sans text-[10px] font-bold uppercase tracking-widest px-2 py-1 border-2 border-[#141110] bg-white text-[#141110]">
+        <div className="flex items-center justify-between mb-4 font-mono text-xs">
+          <span className="font-bold uppercase px-2.5 py-0.5 rounded-full border border-white/10 bg-slate-950 text-slate-300">
             {achievement.category}
           </span>
           {isUnlocked ? (
-            <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#C9A227] flex items-center gap-1.5 px-2 py-1 border-2 border-[#C9A227] bg-white">
+            <span className="font-bold uppercase text-amber-400 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-amber-500/40 bg-amber-950/40">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Unlocked {formatDate(userAchievement?.unlocked_at)}</span>
             </span>
           ) : (
-            <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#6B6560] flex items-center gap-1.5">
-              <Lock className="w-3 h-3" />
+            <span className="font-bold uppercase text-slate-500 flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5" />
               <span>Locked</span>
             </span>
           )}
@@ -132,20 +130,20 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, u
         {/* Icon & Details */}
         <div className="flex items-start space-x-4 mb-4">
           <div
-            className={`w-12 h-12 flex items-center justify-center shrink-0 border-2 border-[#141110] transition-all ${
+            className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border transition-all ${
               isUnlocked
-                ? 'bg-[#141110] text-[#C9A227] shadow-[2px_2px_0_0_#C9A227]'
-                : 'bg-white text-[#141110] shadow-[2px_2px_0_0_#141110]'
+                ? 'bg-amber-950 border-amber-500/50 text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.25)]'
+                : 'bg-slate-950 border-white/5 text-slate-500'
             }`}
           >
             <IconComponent className="w-6 h-6" />
           </div>
 
           <div>
-            <h3 className="font-display text-lg font-black text-[#141110] uppercase tracking-widest leading-tight">
+            <h3 className="font-mono text-base font-bold text-slate-100 uppercase leading-tight">
               {achievement.title}
             </h3>
-            <p className="text-xs font-sans font-medium text-[#6B6560] mt-1 leading-relaxed">
+            <p className="text-xs font-sans text-slate-400 mt-1 leading-relaxed">
               {achievement.description}
             </p>
           </div>
@@ -153,16 +151,16 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, u
 
         {/* Progress bar if locked */}
         {!isUnlocked && (
-          <div className="my-4">
-            <div className="flex items-center justify-between text-[11px] font-sans font-bold uppercase tracking-widest text-[#6B6560] mb-2">
+          <div className="my-4 font-mono text-xs">
+            <div className="flex items-center justify-between text-[10px] text-slate-400 uppercase mb-1.5">
               <span>Goal Progress</span>
               <span>
                 {currentMetricValue} / {achievement.threshold} ({progressPercent}%)
               </span>
             </div>
-            <div className="w-full bg-white border-2 border-[#141110] h-3">
+            <div className="w-full bg-slate-950 border border-white/10 rounded-full h-2 overflow-hidden">
               <div
-                className="bg-[#141110] h-full transition-all duration-500"
+                className="bg-indigo-500 h-full rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -171,12 +169,12 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, u
       </div>
 
       {/* Rewards & Claim Action */}
-      <div className="pt-4 border-t-2 border-[#141110]/10 flex flex-col sm:flex-row sm:items-center justify-between mt-2 gap-4">
-        <div className="flex items-center space-x-4 text-xs font-sans font-bold uppercase tracking-widest">
-          <span className="text-[#141110] flex items-center gap-1.5">
+      <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between mt-2 gap-4">
+        <div className="flex items-center space-x-4 font-mono text-xs font-bold">
+          <span className="text-indigo-400 flex items-center gap-1.5">
             <Zap className="w-4 h-4" /> +{achievement.reward_xp} XP
           </span>
-          <span className="text-[#C9A227] flex items-center gap-1.5">
+          <span className="text-amber-400 flex items-center gap-1.5">
             <Coins className="w-4 h-4" /> +{achievement.reward_gold} G
           </span>
         </div>
@@ -184,14 +182,14 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, u
         {isUnlocked && (
           <div className="shrink-0">
             {isClaimed ? (
-              <span className="text-xs font-sans font-bold uppercase tracking-widest text-[#4A463F] flex items-center gap-1.5">
-                <Check className="w-4 h-4" /> Claimed
+              <span className="font-mono text-xs font-bold uppercase text-slate-400 flex items-center gap-1.5">
+                <Check className="w-4 h-4 stroke-[3]" /> Claimed
               </span>
             ) : (
               <button
                 onClick={handleClaim}
                 disabled={isClaiming}
-                className="py-2 px-4 border-2 border-[#141110] bg-[#C9A227] text-white font-sans text-xs font-bold uppercase tracking-widest shadow-[4px_4px_0_0_#141110] hover:bg-[#B45309] transition-all cursor-pointer w-full sm:w-auto"
+                className="py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-mono text-xs font-bold uppercase tracking-wider shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all cursor-pointer w-full sm:w-auto"
               >
                 {isClaiming ? 'Claiming...' : 'Claim Reward'}
               </button>

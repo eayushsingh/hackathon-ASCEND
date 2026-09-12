@@ -37,9 +37,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${oswald.variable} ${inter.variable}`}>
-      <body className="min-h-screen bg-[#F5F3EE] font-sans text-[#141110] antialiased selection:bg-[#E8552A] selection:text-[#F5F3EE]">
-        {/* Minimalist edge (No border) */}
-        
+      <body className="min-h-screen bg-[#07090E] font-sans text-slate-100 antialiased selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
+        {/* Vibrant Ambient Lighting Spotlights */}
+        <div className="fixed top-0 left-1/4 w-[35rem] h-[35rem] bg-indigo-600/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+        <div className="fixed top-1/3 right-1/4 w-[30rem] h-[30rem] bg-purple-600/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+        <div className="fixed bottom-10 left-1/3 w-[25rem] h-[25rem] bg-cyan-600/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+
         <GameProvider>
           <div className="relative min-h-screen flex flex-col">
             <Navbar />
