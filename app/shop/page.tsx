@@ -21,10 +21,11 @@ export default function ShopPage() {
   const { shopItems, profile, purchaseItem, inventory } = useGame();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
-  const categories = ['All', 'Theme', 'Badge', 'Title', 'Frame', 'Consumable'];
+  const categories = ['All', 'Characters', 'Theme', 'Badge', 'Title', 'Frame', 'Consumable'];
 
   const filteredItems = shopItems.filter((item) => {
     if (selectedCategory === 'All') return true;
+    if (selectedCategory === 'Characters') return item.category === 'Character';
     return item.category === selectedCategory;
   });
 

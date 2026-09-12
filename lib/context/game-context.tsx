@@ -20,8 +20,14 @@ import {
   QuestCompletionResult,
   Archetype,
   Weekday,
+  ArchetypeDetails,
 } from '@/types/rpg';
-import { ARCHETYPES } from '@/lib/progression/archetypes';
+import {
+  ARCHETYPES,
+  ARCHETYPE_LIST,
+  isArchetypeUnlocked,
+  evaluateNewlyUnlockedArchetypes,
+} from '@/lib/progression/archetypes';
 import { calculateLevelFromXP, calculateLevelProgress } from '@/lib/progression/levels';
 import { calculateAuthoritativeRewards } from '@/lib/progression/rewards';
 import { evaluateStreakOnCompletion, getFormattedDateString } from '@/lib/progression/streaks';
@@ -53,6 +59,7 @@ interface GameContextType {
   shopItems: ShopItem[];
   levelUpModal: LevelUpModalData;
   unlockedAchievementNotification: Achievement | null;
+  unlockedCharacterNotification: ArchetypeDetails | null;
   
   // Actions
   createQuest: (questData: {
@@ -75,10 +82,13 @@ interface GameContextType {
   completeQuest: (id: string) => Promise<QuestCompletionResult>;
   purchaseItem: (itemId: string) => Promise<{ success: boolean; message: string }>;
   equipItem: (inventoryItemId: string) => Promise<boolean>;
+  switchArchetype: (archetypeId: Archetype) => Promise<{ success: boolean; message: string }>;
+  isArchetypeUnlockedStatus: (archetypeId: Archetype) => boolean;
   claimAchievementReward: (code: string) => Promise<boolean>;
   updateUserProfile: (updates: Partial<Profile>) => Promise<void>;
   closeLevelUpModal: () => void;
   closeAchievementNotification: () => void;
+  closeCharacterNotification: () => void;
   toggleSound: (enabled: boolean) => void;
   setTheme: (themeId: string) => void;
   loginAsDemoUser: (archetype?: Archetype) => void;
@@ -223,6 +233,11 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const [unlockedAchievementNotification, setUnlockedAchievementNotification] = useState<Achievement | null>(null);
+  const [unlockedCharacterNotification, setUnlockedCharacterNotification] = useState<ArchetypeDetails | null>(null);
+
+  const closeCharacterNotification = useCallback(() => {
+    setUnlockedCharacterNotification(null);
+  }, []);
 
   // Apply theme class to document element
   useEffect(() => {
@@ -604,6 +619,52 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       ]);
     }
 
+    // Goal-based character unlock check (e.g. 7-day streak for Bio Hacker, Level 10 for Astral Sage, 50 quests for Nova Paladin)
+    const prevUnlockedArchetypeIds = ARCHETYPE_LIST.filter((a) =>
+      isArchetypeUnlocked(a.id, profile, streak, quests, inventory)
+    ).map((a) => a.id);
+
+    const newlyUnlockedChars = evaluateNewlyUnlockedArchetypes(
+      { ...profile, xp: newXP, level: newLevel, gold: newGold },
+      { ...streak, current_streak: streakResult.currentStreak, longest_streak: streakResult.longestStreak },
+      targetQuest.is_recurring ? quests : [...quests.filter((q) => q.id !== questId), completedQuest],
+      inventory,
+      prevUnlockedArchetypeIds
+    );
+
+    if (newlyUnlockedChars.length > 0) {
+      const topUnlockedChar = newlyUnlockedChars[0];
+      setTimeout(() => {
+        soundManager.playAchievementUnlocked();
+        confetti({
+          particleCount: 120,
+          spread: 75,
+          origin: { y: 0.5 },
+          colors: ['#7C3AED', '#38BDF8', '#C9A227', '#10B981'],
+        });
+        setUnlockedCharacterNotification(topUnlockedChar);
+      }, 700);
+
+      // Add character unlock record to inventory
+      const charShopItem = STATIC_SHOP_ITEMS.find(
+        (i) => i.effect_type === 'archetype_unlock' && i.effect_value === topUnlockedChar.id
+      );
+      if (charShopItem) {
+        const charInvItem: InventoryItem = {
+          id: `inv-char-${Date.now()}-${topUnlockedChar.id}`,
+          user_id: profile.user_id,
+          item_id: charShopItem.id,
+          is_equipped: false,
+          quantity: 1,
+          acquired_at: new Date().toISOString(),
+          item: charShopItem,
+        };
+        setInventory((prev) =>
+          prev.some((inv) => inv.item_id === charShopItem.id) ? prev : [...prev, charInvItem]
+        );
+      }
+    }
+
     return {
       success: true,
       quest: completedQuest,
@@ -627,6 +688,42 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   };
 
+  // Is Archetype Unlocked Helper
+  const isArchetypeUnlockedStatus = useCallback(
+    (archetypeId: Archetype): boolean => {
+      return isArchetypeUnlocked(archetypeId, profile, streak, quests, inventory);
+    },
+    [profile, streak, quests, inventory]
+  );
+
+  // Switch Archetype / Select Character Class
+  const switchArchetype = async (
+    archetypeId: Archetype
+  ): Promise<{ success: boolean; message: string }> => {
+    soundManager.playClick();
+    const unlocked = isArchetypeUnlockedStatus(archetypeId);
+
+    if (!unlocked) {
+      return {
+        success: false,
+        message: `${archetypeId} is locked. Meet its unlock condition or purchase it in the Shop!`,
+      };
+    }
+
+    const archInfo = ARCHETYPES[archetypeId];
+    if (!archInfo) {
+      return { success: false, message: 'Character class not found.' };
+    }
+
+    soundManager.playEquip();
+    await updateUserProfile({
+      archetype: archetypeId,
+      avatar_url: archInfo.avatar,
+    });
+
+    return { success: true, message: `Switched character class to ${archetypeId}!` };
+  };
+
   // Purchase Shop Item
   const purchaseItem = async (itemId: string): Promise<{ success: boolean; message: string }> => {
     soundManager.playClick();
@@ -645,6 +742,17 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       soundManager.playGoldClink();
       setProfile((prev) => ({ ...prev, gold: data.newGold }));
       setInventory((prev) => [...prev, data.inventoryItem]);
+
+      const boughtItem = data.inventoryItem?.item;
+      if (boughtItem?.effect_type === 'archetype_unlock' && boughtItem.effect_value) {
+        confetti({
+          particleCount: 120,
+          spread: 70,
+          origin: { y: 0.5 },
+          colors: ['#7C3AED', '#38BDF8', '#C9A227'],
+        });
+      }
+
       return { success: true, message: data.message };
     }
 
@@ -674,6 +782,15 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }));
     }
 
+    if (item.effect_type === 'archetype_unlock' && item.effect_value) {
+      confetti({
+        particleCount: 120,
+        spread: 70,
+        origin: { y: 0.5 },
+        colors: ['#7C3AED', '#38BDF8', '#C9A227'],
+      });
+    }
+
     const newInvItem: InventoryItem = {
       id: `inv-${Date.now()}`,
       user_id: profile.user_id,
@@ -700,6 +817,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setProfile((prev) => ({ ...prev, theme: item.effect_value! }));
     } else if (item.category === 'Title' && item.effect_value) {
       setProfile((prev) => ({ ...prev, title: item.effect_value! }));
+    } else if (item.category === 'Character' && item.effect_value) {
+      await switchArchetype(item.effect_value as Archetype);
     }
 
     setInventory((prev) =>
@@ -875,16 +994,20 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
         shopItems,
         levelUpModal,
         unlockedAchievementNotification,
+        unlockedCharacterNotification,
         createQuest,
         updateQuest,
         deleteQuest,
         completeQuest,
         purchaseItem,
         equipItem,
+        switchArchetype,
+        isArchetypeUnlockedStatus,
         claimAchievementReward,
         updateUserProfile,
         closeLevelUpModal,
         closeAchievementNotification,
+        closeCharacterNotification,
         toggleSound,
         setTheme,
         loginAsDemoUser,

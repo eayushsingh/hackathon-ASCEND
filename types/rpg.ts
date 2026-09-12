@@ -39,7 +39,7 @@ export type QuestPriority = 'Low' | 'Medium' | 'High';
 
 export type ItemRarity = 'Common' | 'Rare' | 'Epic' | 'Legendary' | 'Mythic';
 
-export type ItemCategory = 'Theme' | 'Badge' | 'Title' | 'Frame' | 'Consumable';
+export type ItemCategory = 'Theme' | 'Badge' | 'Title' | 'Frame' | 'Consumable' | 'Character';
 
 export type ThemeId =
   | 'cyberpunk'
@@ -182,6 +182,9 @@ export interface Transaction {
   created_at: string;
 }
 
+export type ArchetypeUnlockType = 'free' | 'gold' | 'goal';
+export type ArchetypeGoalMetric = 'streak' | 'level' | 'quests_completed';
+
 export interface ArchetypeDetails {
   id: Archetype;
   name: string;
@@ -195,6 +198,11 @@ export interface ArchetypeDetails {
   accentGlow: string;
   lore: string;
   perk: string;
+  unlock_type: ArchetypeUnlockType;
+  unlock_value: number; // gold cost or goal count
+  unlock_goal_metric?: ArchetypeGoalMetric;
+  unlock_goal_description?: string;
+  is_starter?: boolean;
   starterQuests: {
     title: string;
     description: string;

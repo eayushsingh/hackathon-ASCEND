@@ -1,9 +1,10 @@
 // ==============================================================================
 // ASCEND - ARCHETYPE DEFINITIONS & STARTER QUESTS
-// Simple, Friendly, Action-Oriented Language
+// Simple, Friendly, Action-Oriented Language with Character Roster Progression
 // ==============================================================================
 
-import { ArchetypeDetails } from '@/types/rpg';
+import { ArchetypeDetails, Profile, Streak, Quest, InventoryItem } from '@/types/rpg';
+import { calculateLevelProgress } from '@/lib/progression/levels';
 
 export const ARCHETYPES: Record<string, ArchetypeDetails> = {
   'Cyber Mage': {
@@ -19,6 +20,9 @@ export const ARCHETYPES: Record<string, ArchetypeDetails> = {
     accentGlow: 'rgba(6, 182, 212, 0.4)',
     lore: 'Master of deep concentration and technical learning, conquering intellectual challenges with razor-sharp focus.',
     perk: '+15% bonus Intellect XP on Work & Learning quests.',
+    unlock_type: 'free',
+    unlock_value: 0,
+    is_starter: true,
     starterQuests: [
       {
         title: '90-Min Focused Deep Work',
@@ -56,6 +60,8 @@ export const ARCHETYPES: Record<string, ArchetypeDetails> = {
     accentGlow: 'rgba(239, 68, 68, 0.4)',
     lore: 'Relentless in training and endurance, building unbreakable physical energy every single day.',
     perk: '+15% bonus Strength & Vitality XP on Fitness & Health quests.',
+    unlock_type: 'gold',
+    unlock_value: 250,
     starterQuests: [
       {
         title: 'Heavy Workout (45+ Mins)',
@@ -93,6 +99,8 @@ export const ARCHETYPES: Record<string, ArchetypeDetails> = {
     accentGlow: 'rgba(168, 85, 247, 0.4)',
     lore: 'Quick and efficient, knocking out huge to-do lists and complex tasks without procrastinating.',
     perk: '+15% bonus Gold on all Medium & Hard quests.',
+    unlock_type: 'gold',
+    unlock_value: 600,
     starterQuests: [
       {
         title: 'Clear Inbox to Zero',
@@ -130,6 +138,10 @@ export const ARCHETYPES: Record<string, ArchetypeDetails> = {
     accentGlow: 'rgba(16, 185, 129, 0.4)',
     lore: 'Optimizing daily health, clean eating, cold showers, and restful sleep for all-day energy.',
     perk: '+20% longer Streak protection window & Vitality bonus.',
+    unlock_type: 'goal',
+    unlock_value: 7,
+    unlock_goal_metric: 'streak',
+    unlock_goal_description: 'Reach a 7-day streak',
     starterQuests: [
       {
         title: '15-Min Morning Sunlight',
@@ -167,6 +179,10 @@ export const ARCHETYPES: Record<string, ArchetypeDetails> = {
     accentGlow: 'rgba(245, 158, 11, 0.4)',
     lore: 'Channeling inspiration and mindfulness into creative art, writing, and thoughtful connection.',
     perk: '+20% bonus XP on Creative & Social quests.',
+    unlock_type: 'goal',
+    unlock_value: 10,
+    unlock_goal_metric: 'level',
+    unlock_goal_description: 'Reach Level 10',
     starterQuests: [
       {
         title: 'Daily Creative Writing or Art',
@@ -204,6 +220,10 @@ export const ARCHETYPES: Record<string, ArchetypeDetails> = {
     accentGlow: 'rgba(59, 130, 246, 0.4)',
     lore: 'Leading with positive presence and courage, inspiring teammates to win together.',
     perk: '+25% bonus Charisma XP on networking and leadership quests.',
+    unlock_type: 'goal',
+    unlock_value: 50,
+    unlock_goal_metric: 'quests_completed',
+    unlock_goal_description: 'Complete 50 total quests',
     starterQuests: [
       {
         title: 'Lead a Meeting or Presentation',
@@ -231,3 +251,135 @@ export const ARCHETYPES: Record<string, ArchetypeDetails> = {
 };
 
 export const ARCHETYPE_LIST = Object.values(ARCHETYPES);
+
+// ─── Character Unlock Evaluation Helpers ─────────────────────────────────────
+
+export function isArchetypeUnlocked(
+  archetypeId: string,
+  profile: Profile,
+  streak: Streak,
+  quests: Quest[],
+  inventory: InventoryItem[]
+): boolean {
+  // Cyber Mage is free starter and always unlocked
+  if (archetypeId === 'Cyber Mage') return true;
+
+  // Active archetype is always treated as unlocked for the active session
+  if (profile.archetype === archetypeId) return true;
+
+  // Check inventory for explicit unlock item
+  const hasUnlockItem = inventory.some(
+    (inv) =>
+      inv.item?.effect_type === 'archetype_unlock' &&
+      inv.item?.effect_value === archetypeId
+  );
+  if (hasUnlockItem) return true;
+
+  const details = ARCHETYPES[archetypeId];
+  if (!details) return false;
+
+  // Goal-based unlocks
+  if (details.unlock_type === 'goal') {
+    if (details.unlock_goal_metric === 'streak') {
+      const bestStreak = Math.max(streak?.current_streak || 0, streak?.longest_streak || 0);
+      return bestStreak >= details.unlock_value;
+    }
+    if (details.unlock_goal_metric === 'level') {
+      const currentLevel = Math.max(profile?.level || 1, calculateLevelProgress(profile?.xp || 0).currentLevel);
+      return currentLevel >= details.unlock_value;
+    }
+    if (details.unlock_goal_metric === 'quests_completed') {
+      const completedCount = quests.filter((q) => q.status === 'Completed').length;
+      return completedCount >= details.unlock_value;
+    }
+  }
+
+  return false;
+}
+
+export function getArchetypeUnlockProgress(
+  archetype: ArchetypeDetails,
+  profile: Profile,
+  streak: Streak,
+  quests: Quest[],
+  inventory: InventoryItem[]
+): {
+  isUnlocked: boolean;
+  currentValue: number;
+  targetValue: number;
+  progressPercent: number;
+  progressLabel: string;
+  conditionLabel: string;
+} {
+  const unlocked = isArchetypeUnlocked(archetype.id, profile, streak, quests, inventory);
+
+  if (archetype.unlock_type === 'free' || unlocked) {
+    return {
+      isUnlocked: true,
+      currentValue: archetype.unlock_value,
+      targetValue: archetype.unlock_value,
+      progressPercent: 100,
+      progressLabel: 'Unlocked',
+      conditionLabel: 'Free Starter Class',
+    };
+  }
+
+  if (archetype.unlock_type === 'gold') {
+    const gold = profile.gold || 0;
+    const target = archetype.unlock_value;
+    const percent = Math.min(100, Math.round((gold / target) * 100));
+    return {
+      isUnlocked: false,
+      currentValue: gold,
+      targetValue: target,
+      progressPercent: percent,
+      progressLabel: `${gold} / ${target} Gold`,
+      conditionLabel: `${target} Gold`,
+    };
+  }
+
+  // Goal-based
+  let current = 0;
+  let label = '';
+  if (archetype.unlock_goal_metric === 'streak') {
+    current = Math.max(streak?.current_streak || 0, streak?.longest_streak || 0);
+    label = `${current} / ${archetype.unlock_value} Days`;
+  } else if (archetype.unlock_goal_metric === 'level') {
+    current = Math.max(profile?.level || 1, calculateLevelProgress(profile?.xp || 0).currentLevel);
+    label = `Level ${current} / ${archetype.unlock_value}`;
+  } else if (archetype.unlock_goal_metric === 'quests_completed') {
+    current = quests.filter((q) => q.status === 'Completed').length;
+    label = `${current} / ${archetype.unlock_value} Quests`;
+  }
+
+  const percent = Math.min(100, Math.round((current / archetype.unlock_value) * 100));
+  return {
+    isUnlocked: current >= archetype.unlock_value,
+    currentValue: current,
+    targetValue: archetype.unlock_value,
+    progressPercent: percent,
+    progressLabel: label,
+    conditionLabel: archetype.unlock_goal_description || `Reach ${archetype.unlock_value}`,
+  };
+}
+
+export function evaluateNewlyUnlockedArchetypes(
+  profile: Profile,
+  streak: Streak,
+  quests: Quest[],
+  inventory: InventoryItem[],
+  previouslyUnlockedIds: string[] = []
+): ArchetypeDetails[] {
+  const newlyUnlocked: ArchetypeDetails[] = [];
+
+  for (const arch of ARCHETYPE_LIST) {
+    if (arch.unlock_type === 'goal') {
+      const isNowUnlocked = isArchetypeUnlocked(arch.id, profile, streak, quests, inventory);
+      if (isNowUnlocked && !previouslyUnlockedIds.includes(arch.id)) {
+        newlyUnlocked.push(arch);
+      }
+    }
+  }
+
+  return newlyUnlocked;
+}

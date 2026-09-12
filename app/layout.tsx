@@ -5,6 +5,7 @@ import { GameProvider } from '@/lib/context/game-context';
 import { Navbar } from '@/components/layout/Navbar';
 import { LevelUpModal } from '@/components/modals/LevelUpModal';
 import { AchievementUnlockBanner } from '@/components/modals/AchievementUnlockBanner';
+import { CharacterUnlockWatcher } from '@/components/modals/CharacterUnlockWatcher';
 import { AlarmWatcher } from '@/components/layout/AlarmWatcher';
 import { AmbientBackground } from '@/components/ui/AmbientBackground';
 
@@ -42,6 +43,7 @@ export default function RootLayout({
             </main>
             <LevelUpModal />
             <AchievementUnlockBanner />
+            <CharacterUnlockWatcher />
             <AlarmWatcher />
           </div>
         </GameProvider>
