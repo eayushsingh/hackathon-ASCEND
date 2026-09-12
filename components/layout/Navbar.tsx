@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useGame } from '@/lib/context/game-context';
 import { calculateLevelProgress } from '@/lib/progression/levels';
+import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import {
   Flame,
   Coins,
@@ -27,7 +28,6 @@ import {
   Trophy,
   Settings,
 } from 'lucide-react';
-import { formatNumber } from '@/lib/utils';
 import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
 
 export const Navbar: React.FC = () => {
@@ -49,17 +49,15 @@ export const Navbar: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-[#080B11]/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-[#07090E]/95 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Left: Brand Logo */}
+        {/* Left: Brand Logo with Orbitron Display Font */}
         <div className="flex items-center space-x-6">
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500 via-indigo-600 to-purple-600 flex items-center justify-center p-0.5 shadow-[0_0_15px_rgba(6,182,212,0.4)] group-hover:shadow-[0_0_25px_rgba(6,182,212,0.7)] transition-all">
-              <div className="w-full h-full bg-[#080B11] rounded-[7px] flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-cyan-400" />
-              </div>
+          <Link href="/" className="flex items-center space-x-2.5 group">
+            <div className="w-8 h-8 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 group-hover:border-cyan-400 transition-colors">
+              <Sparkles className="w-4 h-4" />
             </div>
-            <span className="text-xl font-black tracking-widest bg-gradient-to-r from-cyan-400 via-teal-300 to-purple-400 bg-clip-text text-transparent">
+            <span className="font-display text-lg font-black tracking-widest text-white group-hover:text-cyan-400 transition-colors">
               ASCEND
             </span>
           </Link>
@@ -75,7 +73,7 @@ export const Navbar: React.FC = () => {
                   href={link.href}
                   className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-all ${
                     isActive
-                      ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
+                      ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30'
                       : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
                   }`}
                 >
@@ -87,49 +85,49 @@ export const Navbar: React.FC = () => {
           </nav>
         </div>
 
-        {/* Right: Real-Time HUD Stats & Audio Toggle */}
+        {/* Right: Real-Time Telemetry HUD & Controls */}
         <div className="flex items-center space-x-3">
-          {/* Level & XP Mini Bar */}
+          {/* Level & XP Mini Telemetry */}
           <Link
             href="/character"
-            className="hidden sm:flex items-center space-x-2.5 px-3 py-1.5 rounded-lg bg-slate-900/80 border border-white/10 hover:border-cyan-500/40 transition-all"
+            className="hidden sm:flex items-center space-x-2.5 px-3 py-1.5 rounded-lg bg-[#0D111A] border border-white/10 hover:border-cyan-500/40 transition-colors"
             title="Character Level & XP"
           >
-            <div className="flex items-center space-x-1 text-cyan-400 font-bold text-xs">
+            <div className="flex items-center space-x-1 text-cyan-400 font-display font-bold text-xs">
               <Shield className="w-3.5 h-3.5 text-cyan-400" />
               <span>LVL {progress.currentLevel}</span>
             </div>
-            <div className="w-16 bg-slate-800 rounded-full h-2 overflow-hidden border border-white/5">
+            <div className="w-16 bg-slate-900 rounded-full h-1.5 overflow-hidden border border-white/5">
               <div
-                className="bg-gradient-to-r from-cyan-500 to-indigo-500 h-full rounded-full transition-all duration-500"
+                className="bg-cyan-400 h-full rounded-full transition-all duration-500"
                 style={{ width: `${progress.progressPercent}%` }}
               />
             </div>
           </Link>
 
-          {/* Gold Counter */}
+          {/* Gold Counter (Animated Counter) */}
           <Link
             href="/shop"
-            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 hover:border-amber-500/40 text-amber-400 text-xs font-bold transition-all"
+            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg bg-[#141008] border border-amber-500/30 hover:border-amber-500/60 text-amber-400 text-xs font-bold transition-all"
             title="Guild Gold Treasury"
           >
             <Coins className="w-3.5 h-3.5 text-amber-400" />
-            <span>{formatNumber(profile.gold)}</span>
+            <AnimatedCounter value={profile.gold} className="font-display font-bold" />
           </Link>
 
           {/* Daily Streak Indicator */}
           <div
-            className="flex items-center space-x-1 px-2.5 py-1.5 rounded-lg bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-bold"
+            className="flex items-center space-x-1 px-2.5 py-1.5 rounded-lg bg-[#140E0A] border border-orange-500/30 text-orange-400 text-xs font-bold"
             title={`Current Daily Streak: ${streak.current_streak} days`}
           >
-            <Flame className="w-3.5 h-3.5 text-orange-400 animate-pulse" />
-            <span>{streak.current_streak}d</span>
+            <Flame className="w-3.5 h-3.5 text-orange-400" />
+            <span className="font-display font-bold">{streak.current_streak}d</span>
           </div>
 
           {/* Sound Toggle Button */}
           <button
             onClick={() => toggleSound(!profile.sound_enabled)}
-            className="p-2 rounded-lg bg-slate-900 border border-white/10 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/30 transition-all"
+            className="p-2 rounded-lg bg-[#0D111A] border border-white/10 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/30 transition-all"
             title={profile.sound_enabled ? 'Mute Procedural SFX' : 'Enable Procedural SFX'}
             aria-label="Toggle Sound Effects"
           >
@@ -144,21 +142,21 @@ export const Navbar: React.FC = () => {
           <div className="relative">
             <button
               onClick={() => setArchetypeDropdownOpen(!archetypeDropdownOpen)}
-              className="flex items-center space-x-2 px-2 py-1 rounded-lg bg-slate-900/90 border border-white/10 hover:border-cyan-500/40 text-xs text-slate-200 transition-all"
+              className="flex items-center space-x-2 px-2 py-1 rounded-lg bg-[#0D111A] border border-white/10 hover:border-cyan-500/40 text-xs text-slate-200 transition-all"
             >
-              <div className="w-5 h-5 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center text-[10px] font-bold text-white">
+              <div className="w-5 h-5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center justify-center text-[10px] font-bold">
                 {profile.archetype.charAt(0)}
               </div>
               <span className="hidden md:inline font-semibold">{profile.archetype}</span>
             </button>
 
             {archetypeDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-56 rounded-xl bg-[#0F1420] border border-white/15 shadow-2xl p-2 z-50">
+              <div className="absolute right-0 mt-2 w-56 rounded-xl bg-[#0D111A] border border-white/15 shadow-2xl p-2 z-50">
                 <div className="px-3 py-2 border-b border-white/10 mb-1">
                   <div className="text-xs font-bold text-slate-200">{profile.username}</div>
                   <div className="text-[11px] text-cyan-400 font-medium">{profile.title}</div>
                 </div>
-                <div className="text-[10px] uppercase font-bold text-slate-400 px-3 py-1">
+                <div className="text-[10px] uppercase font-bold text-slate-500 px-3 py-1">
                   Switch Archetype
                 </div>
                 {ARCHETYPE_LIST.map((arch) => (
@@ -170,12 +168,12 @@ export const Navbar: React.FC = () => {
                     }}
                     className={`w-full text-left px-3 py-1.5 rounded-lg text-xs flex items-center justify-between transition-all ${
                       profile.archetype === arch.id
-                        ? 'bg-cyan-500/20 text-cyan-300 font-bold'
+                        ? 'bg-cyan-500/15 text-cyan-300 font-bold border border-cyan-500/30'
                         : 'text-slate-300 hover:bg-white/5'
                     }`}
                   >
                     <span>{arch.name}</span>
-                    <span className="text-[10px] text-slate-400">{arch.role.split(' ')[0]}</span>
+                    <span className="text-[10px] text-slate-500">{arch.role.split(' ')[0]}</span>
                   </button>
                 ))}
                 <div className="border-t border-white/10 mt-1 pt-1">
@@ -192,10 +190,10 @@ export const Navbar: React.FC = () => {
             )}
           </div>
 
-          {/* Mobile Menu Hamburger */}
+          {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-lg bg-slate-900 border border-white/10 text-slate-300"
+            className="lg:hidden p-2 rounded-lg bg-[#0D111A] border border-white/10 text-slate-300"
             aria-label="Toggle Navigation Menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -205,7 +203,7 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-white/10 bg-[#080B11] px-4 py-4 space-y-2">
+        <div className="lg:hidden border-t border-white/10 bg-[#07090E] px-4 py-4 space-y-2">
           {navLinks.map((link) => {
             const Icon = link.icon;
             const isActive = pathname === link.href;

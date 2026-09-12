@@ -1,13 +1,28 @@
 import type { Metadata } from 'next';
+import { Orbitron, Inter } from 'next/font/google';
 import './globals.css';
 import { GameProvider } from '@/lib/context/game-context';
 import { Navbar } from '@/components/layout/Navbar';
 import { LevelUpModal } from '@/components/modals/LevelUpModal';
 import { AchievementUnlockBanner } from '@/components/modals/AchievementUnlockBanner';
 
+const orbitron = Orbitron({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: ['400', '600', '700', '800', '900'],
+  display: 'swap',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
-  title: 'ASCEND | Life RPG & Productivity Cyber-Matrix',
-  description: 'Transform your daily goals, fitness, learning, and habits into an immersive full-stack Life RPG experience. Earn XP, level up attributes, forge streaks, and conquer reality.',
+  title: 'ASCEND | Life RPG & Productivity Protocol',
+  description: 'Transform your daily tasks, workouts, learning, and habits into an immersive full-stack Life RPG. Earn authoritative XP, level up attributes, forge streaks, and conquer reality.',
 };
 
 export default function RootLayout({
@@ -16,8 +31,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark theme-cyberpunk">
-      <body className="min-h-screen bg-[#080B11] text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
+    <html lang="en" className={`dark theme-cyberpunk ${orbitron.variable} ${inter.variable}`}>
+      <body className="min-h-screen bg-[#07090E] font-sans text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
         <GameProvider>
           <div className="relative min-h-screen flex flex-col cyber-grid-bg">
             <Navbar />
