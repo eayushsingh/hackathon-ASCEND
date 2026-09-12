@@ -22,6 +22,7 @@ import {
   Sparkles,
   LayoutDashboard,
   Swords,
+  CalendarDays,
   User,
   BarChart3,
   ShoppingBag,
@@ -43,6 +44,7 @@ export const Navbar: React.FC = () => {
   const navLinks = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/quests', label: 'Quests', icon: Swords },
+    { href: '/calendar', label: 'Calendar', icon: CalendarDays },
     { href: '/character', label: 'Character', icon: User },
     { href: '/leaderboard', label: 'Leaderboard', icon: Crown },
     { href: '/analytics', label: 'Analytics', icon: BarChart3 },

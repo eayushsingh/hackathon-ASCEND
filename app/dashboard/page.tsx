@@ -105,6 +105,9 @@ export default function DashboardPage() {
             <h3 className="font-display text-lg tracking-widest text-[#141110] uppercase mb-2">Command Links</h3>
             <hr className="border-[#141110]/20 mb-4" />
             <div className="flex flex-col space-y-4">
+              <Link href="/calendar" className="font-display text-2xl uppercase tracking-widest text-[#6B6560] hover:text-[#E8552A] transition-colors">
+                Quest Calendar
+              </Link>
               <Link href="/leaderboard" className="font-display text-2xl uppercase tracking-widest text-[#6B6560] hover:text-[#E8552A] transition-colors">
                 Global Leaderboard
               </Link>
