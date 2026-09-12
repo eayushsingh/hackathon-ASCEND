@@ -144,11 +144,11 @@ export default function QuestsPage() {
             <p className="text-xs mt-1 text-[#8E8E93]">Adjust your filters or forge a new quest to get started.</p>
           </div>
         ) : (
-          <AnimatePresence mode="popLayout">
+          <div className="space-y-3">
             {filteredQuests.map((quest) => (
               <QuestCard key={quest.id} quest={quest} />
             ))}
-          </AnimatePresence>
+          </div>
         )}
       </div>
 

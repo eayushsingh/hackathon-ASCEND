@@ -74,17 +74,10 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
   };
 
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 10 }}
-      animate={{
-        opacity: isCompleted ? 0.5 : 1,
-        y: 0,
-        scale: justCompletedAnim ? [1, 1.02, 1] : 1,
-      }}
-      exit={{ opacity: 0, height: 0, marginBottom: 0, overflow: 'hidden' }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className={`group relative apple-card apple-card-hover p-4.5 bg-white`}
+    <div
+      className={`group relative apple-card apple-card-hover p-4.5 bg-white transition-all duration-200 ${
+        isCompleted ? 'opacity-60 bg-[#FAF9F5]' : 'opacity-100'
+      }`}
     >
       <div className="flex items-start space-x-4">
         {/* SATISFYING SPRING CHECKBOX MICRO-INTERACTION */}
@@ -92,7 +85,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
           onClick={handleComplete}
           disabled={isCompleted || isCompleting}
           whileTap={{ scale: 0.85 }}
-          whileHover={{ scale: 1.08 }}
+          whileHover={{ scale: 1.05 }}
           aria-label={isCompleted ? 'Quest Completed' : 'Complete Quest'}
           className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 border transition-all mt-0.5 cursor-pointer ${
             isCompleted || justCompletedAnim
@@ -179,6 +172,6 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
