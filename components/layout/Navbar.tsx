@@ -59,13 +59,17 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         
         {/* Left: Brand Logo & Navigation */}
-        <div className="flex items-center space-x-8">
-          <Link href="/" className="flex items-center group transition-transform hover:opacity-90" title="ASCEND Home">
+        <div className="flex items-center">
+          <Link
+            href="/"
+            className="flex items-center group transition-transform hover:opacity-90 mr-8 lg:mr-10 xl:mr-12 shrink-0"
+            title="ASCEND Home"
+          >
             <Logo size="md" />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-6 text-sm font-medium text-[#6E6E73]">
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-[13px] xl:text-sm font-medium text-[#6E6E73] whitespace-nowrap">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
