@@ -37,7 +37,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${oswald.variable} ${inter.variable}`}>
-      <body className="min-h-screen bg-[#F3F1EC] font-sans text-[#141210] antialiased selection:bg-[#E85D25] selection:text-[#F3F1EC]">
+      <body className="min-h-screen bg-[#F5F3EE] font-sans text-[#141110] antialiased selection:bg-[#E8552A] selection:text-[#F5F3EE]">
         {/* Minimalist edge (No border) */}
         
         <GameProvider>

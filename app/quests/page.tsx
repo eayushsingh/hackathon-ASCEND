@@ -51,38 +51,38 @@ export default function QuestsPage() {
   return (
     <div className="space-y-12 pb-16 pt-8">
       {/* 1. TOP STATS BAR */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 border-b-2 border-[#141210] pb-8">
-        <div className="text-center sm:text-left sm:border-r border-[#141210]/20 last:border-0 sm:pr-4">
-          <div className="font-display text-5xl font-bold text-[#141210]">{quests.length}</div>
-          <div className="text-sm font-sans font-bold text-[#57534E] uppercase tracking-widest mt-1">Total Quests</div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 border-b-2 border-[#141110] pb-8">
+        <div className="text-center sm:text-left sm:border-r border-[#141110]/20 last:border-0 sm:pr-4">
+          <div className="font-display text-5xl font-bold text-[#141110]">{quests.length}</div>
+          <div className="text-sm font-sans font-bold text-[#6B6560] uppercase tracking-widest mt-1">Total Quests</div>
         </div>
-        <div className="text-center sm:text-left sm:border-r border-[#141210]/20 last:border-0 sm:pr-4">
-          <div className="font-display text-5xl font-bold text-[#D97706]">
+        <div className="text-center sm:text-left sm:border-r border-[#141110]/20 last:border-0 sm:pr-4">
+          <div className="font-display text-5xl font-bold text-[#C9A227]">
             {quests.filter((q) => q.status === 'Active').length}
           </div>
-          <div className="text-sm font-sans font-bold text-[#57534E] uppercase tracking-widest mt-1">Active Bounties</div>
+          <div className="text-sm font-sans font-bold text-[#6B6560] uppercase tracking-widest mt-1">Active Bounties</div>
         </div>
-        <div className="text-center sm:text-left sm:border-r border-[#141210]/20 last:border-0 sm:pr-4">
-          <div className="font-display text-5xl font-bold text-[#E85D25]">{totalCompleted}</div>
-          <div className="text-sm font-sans font-bold text-[#57534E] uppercase tracking-widest mt-1">Eradicated</div>
+        <div className="text-center sm:text-left sm:border-r border-[#141110]/20 last:border-0 sm:pr-4">
+          <div className="font-display text-5xl font-bold text-[#E8552A]">{totalCompleted}</div>
+          <div className="text-sm font-sans font-bold text-[#6B6560] uppercase tracking-widest mt-1">Eradicated</div>
         </div>
         <div className="text-center sm:text-left">
-          <div className="font-display text-5xl font-bold text-[#141210]">{completionRate}%</div>
-          <div className="text-sm font-sans font-bold text-[#57534E] uppercase tracking-widest mt-1">Discipline Rate</div>
+          <div className="font-display text-5xl font-bold text-[#141110]">{completionRate}%</div>
+          <div className="text-sm font-sans font-bold text-[#6B6560] uppercase tracking-widest mt-1">Discipline Rate</div>
         </div>
       </div>
 
       {/* 2. SEARCH & CONTROLS */}
       <div className="flex flex-col space-y-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-[#141210]/20 pb-6">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-[#141110]/20 pb-6">
           <div className="relative w-full md:w-96">
-            <Search className="w-5 h-5 text-[#57534E] absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-5 h-5 text-[#6B6560] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search quests, attributes..."
-              className="w-full pl-10 pr-4 py-3 bg-white border-2 border-[#141210] text-[#141210] placeholder-[#6B665C] font-sans font-bold uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-[#E85D25]"
+              className="w-full pl-10 pr-4 py-3 bg-white border-2 border-[#141110] text-[#141110] placeholder-[#6B6560] font-sans font-bold uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-[#E8552A]"
             />
           </div>
 
@@ -94,8 +94,8 @@ export default function QuestsPage() {
                   onClick={() => setSelectedStatus(st)}
                   className={`font-display text-lg tracking-widest uppercase transition-colors ${
                     selectedStatus === st
-                      ? 'text-[#E85D25] font-bold border-b-2 border-[#E85D25]'
-                      : 'text-[#6B665C] hover:text-[#141210]'
+                      ? 'text-[#E8552A] font-bold border-b-2 border-[#E8552A]'
+                      : 'text-[#6B6560] hover:text-[#141110]'
                   }`}
                 >
                   {st}
@@ -105,7 +105,7 @@ export default function QuestsPage() {
 
             <button
               onClick={() => setIsCreateModalOpen(true)}
-              className="px-6 py-3 bg-[#E85D25] text-white font-display text-sm font-bold tracking-widest uppercase hover:bg-[#C54A18] transition-colors whitespace-nowrap border-2 border-[#141210]"
+              className="px-6 py-3 bg-[#E8552A] text-white font-display text-sm font-bold tracking-widest uppercase hover:bg-[#C54A18] transition-colors whitespace-nowrap border-2 border-[#141110]"
             >
               Forge Quest
             </button>
@@ -121,8 +121,8 @@ export default function QuestsPage() {
                 onClick={() => setSelectedCategory(cat)}
                 className={`font-sans text-sm font-bold tracking-wider uppercase transition-colors whitespace-nowrap ${
                   selectedCategory === cat
-                    ? 'text-[#141210] border-b-2 border-[#141210]'
-                    : 'text-[#6B665C] hover:text-[#141210]'
+                    ? 'text-[#141110] border-b-2 border-[#141110]'
+                    : 'text-[#6B6560] hover:text-[#141110]'
                 }`}
               >
                 {cat}
@@ -131,11 +131,11 @@ export default function QuestsPage() {
           </div>
 
           <div className="flex items-center space-x-3 shrink-0">
-            <span className="text-xs font-sans font-bold uppercase text-[#6B665C]">Sort by:</span>
+            <span className="text-xs font-sans font-bold uppercase text-[#6B6560]">Sort by:</span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as 'newest' | 'xp' | 'gold')}
-              className="bg-transparent text-[#141210] font-sans font-bold uppercase text-sm border-b-2 border-[#141210] pb-1 focus:outline-none cursor-pointer"
+              className="bg-transparent text-[#141110] font-sans font-bold uppercase text-sm border-b-2 border-[#141110] pb-1 focus:outline-none cursor-pointer"
             >
               <option value="newest">Newest</option>
               <option value="xp">Highest XP</option>
@@ -146,11 +146,11 @@ export default function QuestsPage() {
       </div>
 
       {/* 3. QUESTS GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6 border-t border-[#141210]/10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6 border-t border-[#141110]/10">
         {filteredQuests.length === 0 ? (
           <div className="col-span-full py-20 text-center">
-            <h4 className="font-display text-2xl font-bold text-[#141210] tracking-widest uppercase">No Quests Match Criteria</h4>
-            <p className="text-sm font-sans font-bold text-[#57534E] uppercase tracking-widest mt-2">Try resetting search filters or forge a new quest.</p>
+            <h4 className="font-display text-2xl font-bold text-[#141110] tracking-widest uppercase">No Quests Match Criteria</h4>
+            <p className="text-sm font-sans font-bold text-[#6B6560] uppercase tracking-widest mt-2">Try resetting search filters or forge a new quest.</p>
           </div>
         ) : (
           <AnimatePresence mode="popLayout">

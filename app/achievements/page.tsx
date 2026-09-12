@@ -32,27 +32,27 @@ export default function AchievementsPage() {
   return (
     <div className="space-y-12 pb-12 pt-8">
       {/* 1. TOP STATS HERO (GOLD PRESTIGE) */}
-      <div className="p-8 bg-white border-4 border-[#141210] shadow-[8px_8px_0_0_#141210]">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b-2 border-[#141210]/10">
+      <div className="p-8 bg-white border-4 border-[#141110] shadow-[8px_8px_0_0_#141110]">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b-2 border-[#141110]/10">
           <div className="flex items-center space-x-6 text-center md:text-left">
-            <div className="w-16 h-16 bg-[#D97706] border-4 border-[#141210] flex items-center justify-center text-white shrink-0 shadow-[4px_4px_0_0_#141210]">
+            <div className="w-16 h-16 bg-[#C9A227] border-4 border-[#141110] flex items-center justify-center text-white shrink-0 shadow-[4px_4px_0_0_#141110]">
               <Trophy className="w-8 h-8" />
             </div>
             <div>
-              <h1 className="font-display text-3xl md:text-4xl font-black text-[#14120F] uppercase tracking-widest">
+              <h1 className="font-display text-3xl md:text-4xl font-black text-[#141110] uppercase tracking-widest">
                 Trophy Hall
               </h1>
-              <p className="text-sm font-sans font-medium text-[#6B665C] mt-2 max-w-lg">
+              <p className="text-sm font-sans font-medium text-[#6B6560] mt-2 max-w-lg">
                 Permanent milestones achieved across quest eradication, habit streaks, and character levels.
               </p>
             </div>
           </div>
 
-          <div className="px-6 py-4 bg-[#F3F1EC] border-2 border-[#141210] flex items-center space-x-4 shrink-0 shadow-[4px_4px_0_0_#141210]">
-            <Crown className="w-6 h-6 text-[#D97706]" />
+          <div className="px-6 py-4 bg-[#F5F3EE] border-2 border-[#141110] flex items-center space-x-4 shrink-0 shadow-[4px_4px_0_0_#141110]">
+            <Crown className="w-6 h-6 text-[#C9A227]" />
             <div>
-              <div className="text-[10px] font-sans font-bold text-[#6B665C] uppercase tracking-widest">Unlocked Trophies</div>
-              <div className="font-display text-xl font-black text-[#D97706] uppercase tracking-widest mt-1">
+              <div className="text-[10px] font-sans font-bold text-[#6B6560] uppercase tracking-widest">Unlocked Trophies</div>
+              <div className="font-display text-xl font-black text-[#C9A227] uppercase tracking-widest mt-1">
                 <AnimatedCounter value={unlockedCount} /> / {totalCount} ({progressPercent}%)
               </div>
             </div>
@@ -61,13 +61,13 @@ export default function AchievementsPage() {
 
         {/* Global Trophy Progress Bar */}
         <div className="mt-6">
-          <div className="flex items-center justify-between text-xs font-sans font-bold uppercase tracking-widest text-[#141210] mb-3">
+          <div className="flex items-center justify-between text-xs font-sans font-bold uppercase tracking-widest text-[#141110] mb-3">
             <span>Overall Trophy Completion</span>
-            <span className="text-[#D97706]">{progressPercent}%</span>
+            <span className="text-[#C9A227]">{progressPercent}%</span>
           </div>
-          <div className="w-full bg-[#F3F1EC] border-2 border-[#141210] h-4">
+          <div className="w-full bg-[#F5F3EE] border-2 border-[#141110] h-4">
             <div
-              className="bg-[#D97706] h-full transition-all duration-500"
+              className="bg-[#C9A227] h-full transition-all duration-500"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -82,8 +82,8 @@ export default function AchievementsPage() {
             onClick={() => setSelectedCategory(cat)}
             className={`px-4 py-2 text-xs font-sans font-bold uppercase tracking-widest transition-all shrink-0 border-2 ${
               selectedCategory === cat
-                ? 'bg-[#141210] text-white border-[#141210] shadow-[4px_4px_0_0_#D97706]'
-                : 'bg-white text-[#57534E] hover:text-[#141210] border-[#141210]/20 hover:border-[#141210] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]'
+                ? 'bg-[#141110] text-white border-[#141110] shadow-[4px_4px_0_0_#C9A227]'
+                : 'bg-white text-[#6B6560] hover:text-[#141110] border-[#141110]/20 hover:border-[#141110] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]'
             }`}
           >
             {cat}

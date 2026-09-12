@@ -28,11 +28,11 @@ export const AttributeBarList: React.FC = () => {
           <div key={attr.type} className="group">
             <div className="flex justify-between items-end mb-1">
               <div>
-                <span className="font-bold text-[#141210] uppercase mr-2" style={{ color: attr.color }}>{attr.name}</span>
-                <span className="font-display tracking-widest text-[#57534E] text-xs">LVL {level} — {mastery}</span>
+                <span className="font-bold text-[#141110] uppercase mr-2" style={{ color: attr.color }}>{attr.name}</span>
+                <span className="font-display tracking-widest text-[#6B6560] text-xs">LVL {level} — {mastery}</span>
               </div>
               <div className="text-right">
-                <span className="font-display tracking-widest text-[#141210] text-xs">{xpInCurrentLevel}/150</span>
+                <span className="font-display tracking-widest text-[#141110] text-xs">{xpInCurrentLevel}/150</span>
               </div>
             </div>
 

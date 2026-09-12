@@ -43,21 +43,21 @@ export const HeatmapGrid: React.FC = () => {
     if (count === 0) return 'bg-[#E5E5E5]';
     if (count === 1) return 'bg-[#FDE68A] text-[#B45309]';
     if (count === 2) return 'bg-[#F59E0B] text-white';
-    if (count === 3) return 'bg-[#D97706] text-white';
+    if (count === 3) return 'bg-[#C9A227] text-white';
     return 'bg-[#92400E] text-white';
   };
 
   return (
     <div className="font-sans">
       <div className="flex items-center justify-between mb-2">
-        <div className="text-xs text-[#57534E] uppercase tracking-wider font-bold">4-Week Grid</div>
+        <div className="text-xs text-[#6B6560] uppercase tracking-wider font-bold">4-Week Grid</div>
         
         <div className="flex items-center space-x-1.5 text-[10px] text-[#A8A29E] font-bold uppercase tracking-widest">
           <span>Less</span>
           <div className="w-2.5 h-2.5 bg-[#E5E5E5]" />
           <div className="w-2.5 h-2.5 bg-[#FDE68A]" />
           <div className="w-2.5 h-2.5 bg-[#F59E0B]" />
-          <div className="w-2.5 h-2.5 bg-[#D97706]" />
+          <div className="w-2.5 h-2.5 bg-[#C9A227]" />
           <div className="w-2.5 h-2.5 bg-[#92400E]" />
           <span>More</span>
         </div>
@@ -78,11 +78,11 @@ export const HeatmapGrid: React.FC = () => {
         ))}
       </div>
 
-      <div className="mt-3 flex items-center justify-between text-xs text-[#57534E]">
+      <div className="mt-3 flex items-center justify-between text-xs text-[#6B6560]">
         <span className="font-bold">
-          Current Streak: <strong className="text-[#E85D25]">{streak.current_streak} Days</strong>
+          Current Streak: <strong className="text-[#E8552A]">{streak.current_streak} Days</strong>
         </span>
-        <span className="text-[#D97706] italic">
+        <span className="text-[#C9A227] italic">
           Freeze Relics: {streak.streak_freeze_count} Available
         </span>
       </div>

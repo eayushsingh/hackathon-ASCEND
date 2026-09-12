@@ -102,27 +102,27 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, u
 
   return (
     <div
-      className={`p-6 bg-white border-4 border-[#141210] flex flex-col justify-between transition-all ${
+      className={`p-6 bg-white border-4 border-[#141110] flex flex-col justify-between transition-all ${
         isUnlocked
           ? isClaimed
             ? 'shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]'
-            : 'shadow-[8px_8px_0_0_#D97706]'
-          : 'opacity-70 bg-[#F3F1EC] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]'
+            : 'shadow-[8px_8px_0_0_#C9A227]'
+          : 'opacity-70 bg-[#F5F3EE] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]'
       }`}
     >
       <div>
         {/* Category & Status Bar */}
         <div className="flex items-center justify-between mb-4">
-          <span className="font-sans text-[10px] font-bold uppercase tracking-widest px-2 py-1 border-2 border-[#141210] bg-white text-[#141210]">
+          <span className="font-sans text-[10px] font-bold uppercase tracking-widest px-2 py-1 border-2 border-[#141110] bg-white text-[#141110]">
             {achievement.category}
           </span>
           {isUnlocked ? (
-            <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#D97706] flex items-center gap-1.5 px-2 py-1 border-2 border-[#D97706] bg-white">
+            <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#C9A227] flex items-center gap-1.5 px-2 py-1 border-2 border-[#C9A227] bg-white">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Unlocked {formatDate(userAchievement?.unlocked_at)}</span>
             </span>
           ) : (
-            <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#6B665C] flex items-center gap-1.5">
+            <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#6B6560] flex items-center gap-1.5">
               <Lock className="w-3 h-3" />
               <span>Locked</span>
             </span>
@@ -132,20 +132,20 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, u
         {/* Icon & Details */}
         <div className="flex items-start space-x-4 mb-4">
           <div
-            className={`w-12 h-12 flex items-center justify-center shrink-0 border-2 border-[#141210] transition-all ${
+            className={`w-12 h-12 flex items-center justify-center shrink-0 border-2 border-[#141110] transition-all ${
               isUnlocked
-                ? 'bg-[#141210] text-[#D97706] shadow-[2px_2px_0_0_#D97706]'
-                : 'bg-white text-[#141210] shadow-[2px_2px_0_0_#141210]'
+                ? 'bg-[#141110] text-[#C9A227] shadow-[2px_2px_0_0_#C9A227]'
+                : 'bg-white text-[#141110] shadow-[2px_2px_0_0_#141110]'
             }`}
           >
             <IconComponent className="w-6 h-6" />
           </div>
 
           <div>
-            <h3 className="font-display text-lg font-black text-[#141210] uppercase tracking-widest leading-tight">
+            <h3 className="font-display text-lg font-black text-[#141110] uppercase tracking-widest leading-tight">
               {achievement.title}
             </h3>
-            <p className="text-xs font-sans font-medium text-[#6B665C] mt-1 leading-relaxed">
+            <p className="text-xs font-sans font-medium text-[#6B6560] mt-1 leading-relaxed">
               {achievement.description}
             </p>
           </div>
@@ -154,15 +154,15 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, u
         {/* Progress bar if locked */}
         {!isUnlocked && (
           <div className="my-4">
-            <div className="flex items-center justify-between text-[11px] font-sans font-bold uppercase tracking-widest text-[#6B665C] mb-2">
+            <div className="flex items-center justify-between text-[11px] font-sans font-bold uppercase tracking-widest text-[#6B6560] mb-2">
               <span>Goal Progress</span>
               <span>
                 {currentMetricValue} / {achievement.threshold} ({progressPercent}%)
               </span>
             </div>
-            <div className="w-full bg-white border-2 border-[#141210] h-3">
+            <div className="w-full bg-white border-2 border-[#141110] h-3">
               <div
-                className="bg-[#141210] h-full transition-all duration-500"
+                className="bg-[#141110] h-full transition-all duration-500"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -171,12 +171,12 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, u
       </div>
 
       {/* Rewards & Claim Action */}
-      <div className="pt-4 border-t-2 border-[#141210]/10 flex flex-col sm:flex-row sm:items-center justify-between mt-2 gap-4">
+      <div className="pt-4 border-t-2 border-[#141110]/10 flex flex-col sm:flex-row sm:items-center justify-between mt-2 gap-4">
         <div className="flex items-center space-x-4 text-xs font-sans font-bold uppercase tracking-widest">
-          <span className="text-[#141210] flex items-center gap-1.5">
+          <span className="text-[#141110] flex items-center gap-1.5">
             <Zap className="w-4 h-4" /> +{achievement.reward_xp} XP
           </span>
-          <span className="text-[#D97706] flex items-center gap-1.5">
+          <span className="text-[#C9A227] flex items-center gap-1.5">
             <Coins className="w-4 h-4" /> +{achievement.reward_gold} G
           </span>
         </div>
@@ -191,7 +191,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, u
               <button
                 onClick={handleClaim}
                 disabled={isClaiming}
-                className="py-2 px-4 border-2 border-[#141210] bg-[#D97706] text-white font-sans text-xs font-bold uppercase tracking-widest shadow-[4px_4px_0_0_#141210] hover:bg-[#B45309] transition-all cursor-pointer w-full sm:w-auto"
+                className="py-2 px-4 border-2 border-[#141110] bg-[#C9A227] text-white font-sans text-xs font-bold uppercase tracking-widest shadow-[4px_4px_0_0_#141110] hover:bg-[#B45309] transition-all cursor-pointer w-full sm:w-auto"
               >
                 {isClaiming ? 'Claiming...' : 'Claim Reward'}
               </button>

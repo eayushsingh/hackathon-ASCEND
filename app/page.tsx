@@ -40,17 +40,17 @@ export default function LandingPage() {
         
         <div className="flex justify-center mb-8">
           {/* Logo updated to rely on black rather than white/glow */}
-          <div className="font-display font-black text-5xl tracking-widest text-[#14120F]">ASCEND</div>
+          <div className="font-display font-black text-5xl tracking-widest text-[#141110]">ASCEND</div>
         </div>
 
-        <div className="inline-flex items-center space-x-2 px-4 py-1.5 bg-white border-2 border-[#141210] text-[#14120F] font-display text-xs font-bold uppercase tracking-widest mb-8 shadow-[4px_4px_0_0_#141210]">
-          <Sparkles className="w-4 h-4 text-[#E85D25]" />
+        <div className="inline-flex items-center space-x-2 px-4 py-1.5 bg-white border-2 border-[#141110] text-[#141110] font-display text-xs font-bold uppercase tracking-widest mb-8 shadow-[4px_4px_0_0_#141110]">
+          <Sparkles className="w-4 h-4 text-[#E8552A]" />
           <span>LIFE RPG PRODUCTIVITY PROTOCOL</span>
         </div>
 
-        <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight text-[#14120F] leading-none uppercase">
+        <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight text-[#141110] leading-none uppercase">
           Transform Reality <br />
-          <span className="text-[#E85D25]">
+          <span className="text-[#E8552A]">
             Into an Epic RPG
           </span>
         </h1>
@@ -63,7 +63,7 @@ export default function LandingPage() {
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/onboarding"
-            className="w-full sm:w-auto px-8 py-4 bg-[#E85D25] text-white border-2 border-[#141210] font-display font-black text-sm uppercase tracking-widest shadow-[6px_6px_0_0_#141210] hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_#141210] transition-all flex items-center justify-center space-x-2"
+            className="w-full sm:w-auto px-8 py-4 bg-[#E8552A] text-white border-2 border-[#141110] font-display font-black text-sm uppercase tracking-widest shadow-[6px_6px_0_0_#141110] hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_#141110] transition-all flex items-center justify-center space-x-2"
           >
             <span>Initialize Ascension</span>
             <ArrowRight className="w-5 h-5 stroke-[3]" />
@@ -72,59 +72,59 @@ export default function LandingPage() {
           <Link
             href="/dashboard"
             onClick={() => loginAsDemoUser('Cyber Mage')}
-            className="w-full sm:w-auto px-8 py-4 bg-white border-2 border-[#141210] text-[#14120F] font-display font-bold text-sm uppercase tracking-widest shadow-[6px_6px_0_0_#141210] hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_#141210] transition-all flex items-center justify-center space-x-2"
+            className="w-full sm:w-auto px-8 py-4 bg-white border-2 border-[#141110] text-[#141110] font-display font-bold text-sm uppercase tracking-widest shadow-[6px_6px_0_0_#141110] hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_#141110] transition-all flex items-center justify-center space-x-2"
           >
-            <Play className="w-5 h-5 text-[#E85D25]" />
+            <Play className="w-5 h-5 text-[#E8552A]" />
             <span>Instant Demo Mode</span>
           </Link>
         </div>
 
         {/* 2. LIVE INTERACTIVE QUEST DEMO WIDGET */}
-        <div className="mt-16 max-w-xl mx-auto p-6 bg-white border-4 border-[#141210] text-left relative overflow-hidden shadow-[8px_8px_0_0_#141210]">
-          <div className="flex items-center justify-between mb-4 border-b-2 border-[#141210]/20 pb-3">
+        <div className="mt-16 max-w-xl mx-auto p-6 bg-white border-4 border-[#141110] text-left relative overflow-hidden shadow-[8px_8px_0_0_#141110]">
+          <div className="flex items-center justify-between mb-4 border-b-2 border-[#141110]/20 pb-3">
             <div className="flex items-center space-x-3">
-              <div className="w-3 h-3 rounded-none bg-[#E85D25]" />
-              <span className="font-display text-xs font-black text-[#14120F] uppercase tracking-widest">
+              <div className="w-3 h-3 rounded-none bg-[#E8552A]" />
+              <span className="font-display text-xs font-black text-[#141110] uppercase tracking-widest">
                 Live Interactive Testbed
               </span>
             </div>
-            <span className="text-[11px] font-sans font-bold text-[#6B665C] uppercase tracking-wider">Click quest checkbox</span>
+            <span className="text-[11px] font-sans font-bold text-[#6B6560] uppercase tracking-wider">Click quest checkbox</span>
           </div>
 
           <div
             onClick={() => setDemoQuestCompleted(!demoQuestCompleted)}
             className={`p-4 border-2 transition-all cursor-pointer flex items-center justify-between ${
               demoQuestCompleted
-                ? 'bg-[#F3F1EC] border-[#141210]'
-                : 'bg-white border-[#141210]/30 hover:border-[#141210]'
+                ? 'bg-[#F5F3EE] border-[#141110]'
+                : 'bg-white border-[#141110]/30 hover:border-[#141110]'
             }`}
           >
             <div className="flex items-center space-x-4">
               <div
                 className={`w-8 h-8 flex items-center justify-center border-2 transition-all ${
                   demoQuestCompleted
-                    ? 'bg-[#141210] text-white border-[#141210]'
-                    : 'border-[#141210]/30 text-transparent'
+                    ? 'bg-[#141110] text-white border-[#141110]'
+                    : 'border-[#141110]/30 text-transparent'
                 }`}
               >
                 <CheckCircle2 className="w-6 h-6 stroke-[3]" />
               </div>
               <div>
-                <h4 className={`text-sm sm:text-base font-bold font-sans ${demoQuestCompleted ? 'line-through text-[#6B665C]' : 'text-[#14120F]'}`}>
+                <h4 className={`text-sm sm:text-base font-bold font-sans ${demoQuestCompleted ? 'line-through text-[#6B6560]' : 'text-[#141110]'}`}>
                   Deep Work Protocol: Complete Next.js Matrix
                 </h4>
                 <div className="flex items-center gap-2 mt-1.5">
-                  <span className="text-[10px] font-sans font-bold text-[#E85D25] border-2 border-[#E85D25] px-2 py-0.5 uppercase tracking-wider">
+                  <span className="text-[10px] font-sans font-bold text-[#E8552A] border-2 border-[#E8552A] px-2 py-0.5 uppercase tracking-wider">
                     Hard
                   </span>
-                  <span className="text-[10px] font-sans font-bold text-[#14120F] border-2 border-[#141210] px-2 py-0.5 uppercase tracking-wider">
+                  <span className="text-[10px] font-sans font-bold text-[#141110] border-2 border-[#141110] px-2 py-0.5 uppercase tracking-wider">
                     +120 Intellect XP
                   </span>
                 </div>
               </div>
             </div>
 
-            <span className="font-display text-sm font-black text-[#D97706] flex items-center gap-1 uppercase tracking-widest">
+            <span className="font-display text-sm font-black text-[#C9A227] flex items-center gap-1 uppercase tracking-widest">
               <Coins className="w-4 h-4" /> +60 G
             </span>
           </div>
@@ -133,7 +133,7 @@ export default function LandingPage() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="mt-4 p-3 border-2 border-[#141210] bg-[#E85D25] text-xs font-bold text-white flex items-center justify-between font-sans uppercase tracking-wider"
+              className="mt-4 p-3 border-2 border-[#141110] bg-[#E8552A] text-xs font-bold text-white flex items-center justify-between font-sans uppercase tracking-wider"
             >
               <span>+ Authoritative XP calculated: +120 XP</span>
               <span>🔥 Combo: 1 Day</span>
@@ -145,40 +145,40 @@ export default function LandingPage() {
       {/* 3. CORE RPG PILLARS */}
       <section className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="font-display text-3xl sm:text-4xl font-black text-[#14120F] tracking-widest uppercase">
+          <h2 className="font-display text-3xl sm:text-4xl font-black text-[#141110] tracking-widest uppercase">
             The Three Pillars
           </h2>
-          <p className="text-sm font-sans font-bold text-[#6B665C] mt-2 uppercase tracking-wider">
+          <p className="text-sm font-sans font-bold text-[#6B6560] mt-2 uppercase tracking-wider">
             Engineered with strict server authoritativeness and rich RPG progression.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-8 border-4 border-[#141210] bg-white shadow-[8px_8px_0_0_#141210]">
-            <div className="w-12 h-12 border-4 border-[#141210] bg-[#F3F1EC] flex items-center justify-center text-[#E85D25] mb-6">
+          <div className="p-8 border-4 border-[#141110] bg-white shadow-[8px_8px_0_0_#141110]">
+            <div className="w-12 h-12 border-4 border-[#141110] bg-[#F5F3EE] flex items-center justify-center text-[#E8552A] mb-6">
               <Brain className="w-6 h-6" />
             </div>
-            <h3 className="font-display text-lg font-black text-[#14120F] mb-3 uppercase tracking-widest">6-Attribute Mastery</h3>
+            <h3 className="font-display text-lg font-black text-[#141110] mb-3 uppercase tracking-widest">6-Attribute Mastery</h3>
             <p className="text-sm text-[#4A463F] leading-relaxed font-medium">
               Tasks map to Intellect, Strength, Vitality, Discipline, Creativity, or Charisma. Build a balanced, formidable character in real life.
             </p>
           </div>
 
-          <div className="p-8 border-4 border-[#141210] bg-white shadow-[8px_8px_0_0_#141210]">
-            <div className="w-12 h-12 border-4 border-[#141210] bg-[#F3F1EC] flex items-center justify-center text-[#E85D25] mb-6">
+          <div className="p-8 border-4 border-[#141110] bg-white shadow-[8px_8px_0_0_#141110]">
+            <div className="w-12 h-12 border-4 border-[#141110] bg-[#F5F3EE] flex items-center justify-center text-[#E8552A] mb-6">
               <Zap className="w-6 h-6" />
             </div>
-            <h3 className="font-display text-lg font-black text-[#14120F] mb-3 uppercase tracking-widest">Non-Linear Leveling</h3>
+            <h3 className="font-display text-lg font-black text-[#141110] mb-3 uppercase tracking-widest">Non-Linear Leveling</h3>
             <p className="text-sm text-[#4A463F] leading-relaxed font-medium">
-              Powered by <code className="text-[#E85D25] font-sans font-bold bg-[#F3F1EC] px-1 border border-[#141210]/20">XP(n) = 100 * n^1.5</code>. Early milestones provide fast momentum while high tiers demand relentless consistency.
+              Powered by <code className="text-[#E8552A] font-sans font-bold bg-[#F5F3EE] px-1 border border-[#141110]/20">XP(n) = 100 * n^1.5</code>. Early milestones provide fast momentum while high tiers demand relentless consistency.
             </p>
           </div>
 
-          <div className="p-8 border-4 border-[#141210] bg-white shadow-[8px_8px_0_0_#141210]">
-            <div className="w-12 h-12 border-4 border-[#141210] bg-[#F3F1EC] flex items-center justify-center text-[#E85D25] mb-6">
+          <div className="p-8 border-4 border-[#141110] bg-white shadow-[8px_8px_0_0_#141110]">
+            <div className="w-12 h-12 border-4 border-[#141110] bg-[#F5F3EE] flex items-center justify-center text-[#E8552A] mb-6">
               <Coins className="w-6 h-6" />
             </div>
-            <h3 className="font-display text-lg font-black text-[#14120F] mb-3 uppercase tracking-widest">Guild Shop Economy</h3>
+            <h3 className="font-display text-lg font-black text-[#141110] mb-3 uppercase tracking-widest">Guild Shop Economy</h3>
             <p className="text-sm text-[#4A463F] leading-relaxed font-medium">
               Earn in-game gold to purchase exclusive UI Themes, Crests, Titles, Avatar Frames, and Streak Freeze Relics from the market.
             </p>
@@ -189,10 +189,10 @@ export default function LandingPage() {
       {/* 4. ARCHETYPE SHOWCASE */}
       <section className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-10">
-          <h2 className="font-display text-3xl sm:text-4xl font-black text-[#14120F] tracking-widest uppercase">
+          <h2 className="font-display text-3xl sm:text-4xl font-black text-[#141110] tracking-widest uppercase">
             Choose Your Archetype
           </h2>
-          <p className="text-sm font-sans font-bold text-[#6B665C] mt-2 uppercase tracking-wider">
+          <p className="text-sm font-sans font-bold text-[#6B6560] mt-2 uppercase tracking-wider">
             Each class begins with tailored starter quests and distinct XP perks.
           </p>
         </div>
@@ -205,8 +205,8 @@ export default function LandingPage() {
               onClick={() => setActiveArchetypeTab(arch.id)}
               className={`px-4 py-2 font-display text-xs font-black uppercase tracking-widest transition-all border-2 ${
                 activeArchetypeTab === arch.id
-                  ? 'bg-[#141210] text-white border-[#141210] shadow-[4px_4px_0_0_#E85D25]'
-                  : 'bg-white text-[#6B665C] border-[#141210]/20 hover:border-[#141210]'
+                  ? 'bg-[#141110] text-white border-[#141110] shadow-[4px_4px_0_0_#E8552A]'
+                  : 'bg-white text-[#6B6560] border-[#141110]/20 hover:border-[#141110]'
               }`}
             >
               {arch.name}
@@ -215,27 +215,27 @@ export default function LandingPage() {
         </div>
 
         {/* Archetype Card */}
-        <div className="p-8 sm:p-10 bg-white border-4 border-[#141210] shadow-[8px_8px_0_0_#141210]">
+        <div className="p-8 sm:p-10 bg-white border-4 border-[#141110] shadow-[8px_8px_0_0_#141110]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div>
               <div
-                className="inline-block font-sans text-[10px] font-bold uppercase tracking-widest px-3 py-1 border-2 border-[#141210] bg-[#F3F1EC] mb-4"
+                className="inline-block font-sans text-[10px] font-bold uppercase tracking-widest px-3 py-1 border-2 border-[#141110] bg-[#F5F3EE] mb-4"
               >
                 {selectedArch.role}
               </div>
-              <h3 className="font-display text-4xl font-black text-[#14120F] mb-2 uppercase tracking-widest">{selectedArch.name}</h3>
-              <p className="text-sm text-[#E85D25] font-sans font-bold uppercase tracking-wider mb-4">{selectedArch.title}</p>
+              <h3 className="font-display text-4xl font-black text-[#141110] mb-2 uppercase tracking-widest">{selectedArch.name}</h3>
+              <p className="text-sm text-[#E8552A] font-sans font-bold uppercase tracking-wider mb-4">{selectedArch.title}</p>
               <p className="text-sm text-[#4A463F] leading-relaxed mb-6 font-medium">{selectedArch.lore}</p>
 
-              <div className="p-4 bg-[#F3F1EC] border-2 border-[#141210] mb-6">
-                <div className="text-xs font-sans font-bold text-[#6B665C] uppercase tracking-wider">Passive Perk</div>
-                <div className="text-sm font-bold text-[#14120F] mt-1">{selectedArch.perk}</div>
+              <div className="p-4 bg-[#F5F3EE] border-2 border-[#141110] mb-6">
+                <div className="text-xs font-sans font-bold text-[#6B6560] uppercase tracking-wider">Passive Perk</div>
+                <div className="text-sm font-bold text-[#141110] mt-1">{selectedArch.perk}</div>
               </div>
 
               <Link
                 href="/onboarding"
                 onClick={() => loginAsDemoUser(selectedArch.id)}
-                className="inline-flex items-center space-x-2 px-6 py-3 bg-[#E85D25] text-white font-display font-black text-sm uppercase tracking-widest border-2 border-[#141210] shadow-[4px_4px_0_0_#141210] hover:translate-y-0.5 hover:shadow-[2px_2px_0_0_#141210] transition-all cursor-pointer"
+                className="inline-flex items-center space-x-2 px-6 py-3 bg-[#E8552A] text-white font-display font-black text-sm uppercase tracking-widest border-2 border-[#141110] shadow-[4px_4px_0_0_#141110] hover:translate-y-0.5 hover:shadow-[2px_2px_0_0_#141110] transition-all cursor-pointer"
               >
                 <span>Select {selectedArch.name}</span>
                 <ArrowRight className="w-5 h-5 stroke-[3]" />
@@ -244,27 +244,27 @@ export default function LandingPage() {
 
             {/* Starter Quests Preview */}
             <div className="space-y-4">
-              <div className="font-display text-sm font-black text-[#14120F] uppercase tracking-widest mb-2 border-b-2 border-[#141210]/10 pb-2">
+              <div className="font-display text-sm font-black text-[#141110] uppercase tracking-widest mb-2 border-b-2 border-[#141110]/10 pb-2">
                 Starter Quests
               </div>
               {selectedArch.starterQuests.map((sq, i) => (
                 <div
                   key={i}
-                  className="p-4 bg-white border-2 border-[#141210] flex items-start justify-between shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]"
+                  className="p-4 bg-white border-2 border-[#141110] flex items-start justify-between shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]"
                 >
                   <div className="pr-4">
-                    <h5 className="text-sm font-bold text-[#14120F] font-sans">{sq.title}</h5>
-                    <p className="text-xs text-[#6B665C] mt-1 font-medium font-sans">{sq.description}</p>
+                    <h5 className="text-sm font-bold text-[#141110] font-sans">{sq.title}</h5>
+                    <p className="text-xs text-[#6B6560] mt-1 font-medium font-sans">{sq.description}</p>
                     <div className="flex items-center gap-2 mt-2">
-                      <span className="text-[10px] font-bold text-[#6B665C] border border-[#141210]/20 px-2 py-0.5 uppercase tracking-wider">
+                      <span className="text-[10px] font-bold text-[#6B6560] border border-[#141110]/20 px-2 py-0.5 uppercase tracking-wider">
                         {sq.category}
                       </span>
-                      <span className="text-[10px] font-bold text-[#E85D25] uppercase tracking-wider">
+                      <span className="text-[10px] font-bold text-[#E8552A] uppercase tracking-wider">
                         {sq.attribute}
                       </span>
                     </div>
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#14120F] border-2 border-[#141210] bg-[#F3F1EC] px-2 py-1 whitespace-nowrap">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#141110] border-2 border-[#141110] bg-[#F5F3EE] px-2 py-1 whitespace-nowrap">
                     {sq.difficulty}
                   </span>
                 </div>
@@ -275,10 +275,10 @@ export default function LandingPage() {
       </section>
 
       {/* 5. FOOTER */}
-      <footer className="border-t-4 border-[#141210] pt-12 pb-8 text-center mt-20 bg-white">
+      <footer className="border-t-4 border-[#141110] pt-12 pb-8 text-center mt-20 bg-white">
         <div className="flex flex-col items-center justify-center space-y-6">
-          <div className="font-display font-black text-3xl tracking-widest text-[#14120F]">ASCEND</div>
-          <p className="text-xs font-sans font-bold text-[#6B665C] uppercase tracking-widest">
+          <div className="font-display font-black text-3xl tracking-widest text-[#141110]">ASCEND</div>
+          <p className="text-xs font-sans font-bold text-[#6B6560] uppercase tracking-widest">
             ASCEND PROTOCOL • FULL-STACK LIFE RPG • LEVEL UP YOUR REALITY
           </p>
         </div>

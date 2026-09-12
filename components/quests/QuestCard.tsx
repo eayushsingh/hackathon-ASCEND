@@ -35,15 +35,15 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
   const getDifficultyBadge = (diff: QuestDifficulty) => {
     switch (diff) {
       case 'Easy':
-        return 'text-[#059669] border-[#059669]/20 bg-[#059669]/5';
+        return 'text-[#2F7A4D] border-[#2F7A4D]/20 bg-[#2F7A4D]/5';
       case 'Medium':
         return 'text-[#2563EB] border-[#2563EB]/20 bg-[#2563EB]/5';
       case 'Hard':
-        return 'text-[#D97706] border-[#D97706]/20 bg-[#D97706]/5';
+        return 'text-[#C9A227] border-[#C9A227]/20 bg-[#C9A227]/5';
       case 'Epic':
         return 'text-[#7C3AED] border-[#7C3AED]/20 bg-[#7C3AED]/5';
       case 'Legendary':
-        return 'text-[#DC2626] border-[#DC2626]/20 bg-[#DC2626]/5';
+        return 'text-[#C13F3F] border-[#C13F3F]/20 bg-[#C13F3F]/5';
     }
   };
 
@@ -84,7 +84,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
       }}
       exit={{ opacity: 0, height: 0, marginBottom: 0, overflow: 'hidden' }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className={`group relative rounded-none border border-[#141210]/10 p-4 transition-colors bg-white hover:border-[#141210]/30`}
+      className={`group relative rounded-none border border-[#141110]/10 p-4 transition-colors bg-white hover:border-[#141110]/30`}
     >
       <div className="flex items-start space-x-4">
         {/* SATISFYING SPRING CHECKBOX MICRO-INTERACTION */}
@@ -96,8 +96,8 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
           aria-label={isCompleted ? 'Quest Completed' : 'Complete Quest'}
           className={`w-6 h-6 rounded-none flex items-center justify-center shrink-0 border-2 transition-all mt-0.5 cursor-pointer ${
             isCompleted || justCompletedAnim
-              ? 'bg-[#E85D25] border-[#E85D25] text-white'
-              : 'border-[#141210]/20 hover:border-[#E85D25] bg-transparent text-transparent hover:text-[#E85D25]'
+              ? 'bg-[#E8552A] border-[#E8552A] text-white'
+              : 'border-[#141110]/20 hover:border-[#E8552A] bg-transparent text-transparent hover:text-[#E8552A]'
           }`}
         >
           <motion.div
@@ -121,7 +121,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
             </span>
 
             {/* Category Tag */}
-            <span className="text-[10px] text-[#57534E] uppercase px-1.5 py-0.5 border border-[#141210]/10">
+            <span className="text-[10px] text-[#6B6560] uppercase px-1.5 py-0.5 border border-[#141110]/10">
               {quest.category}
             </span>
 
@@ -138,30 +138,30 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
 
             {/* Recurring Tag */}
             {quest.is_recurring && (
-              <span className="text-[10px] text-[#57534E] uppercase flex items-center gap-0.5 px-1.5 py-0.5 border border-[#141210]/10">
-                <RotateCw className="w-2.5 h-2.5 text-[#E85D25]" />
+              <span className="text-[10px] text-[#6B6560] uppercase flex items-center gap-0.5 px-1.5 py-0.5 border border-[#141110]/10">
+                <RotateCw className="w-2.5 h-2.5 text-[#E8552A]" />
                 <span>Daily</span>
               </span>
             )}
           </div>
 
-          <h4 className={`text-base font-bold uppercase tracking-wide ${isCompleted ? 'line-through text-[#57534E]' : 'text-[#141210]'}`}>
+          <h4 className={`text-base font-bold uppercase tracking-wide ${isCompleted ? 'line-through text-[#6B6560]' : 'text-[#141110]'}`}>
             {quest.title}
           </h4>
 
           {quest.description && (
-            <p className="text-sm text-[#57534E] line-clamp-2 mt-1 leading-relaxed font-sans">
+            <p className="text-sm text-[#6B6560] line-clamp-2 mt-1 leading-relaxed font-sans">
               {quest.description}
             </p>
           )}
 
           {/* Subdued Rewards & Action Bar */}
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#141210]/10">
+          <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#141110]/10">
             <div className="flex items-center space-x-4 text-sm font-bold font-display tracking-widest">
-              <span className="flex items-center gap-1 text-[#E85D25]">
+              <span className="flex items-center gap-1 text-[#E8552A]">
                 <Zap className="w-3.5 h-3.5" /> +{quest.xp_reward} XP
               </span>
-              <span className="flex items-center gap-1 text-[#D97706]">
+              <span className="flex items-center gap-1 text-[#C9A227]">
                 <Coins className="w-3.5 h-3.5" /> +{quest.gold_reward} G
               </span>
             </div>
@@ -171,7 +171,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
                 onClick={handleDelete}
                 disabled={isDeleting}
                 aria-label="Delete quest"
-                className="p-1.5 text-[#A8A29E] hover:text-[#DC2626] transition-colors opacity-0 group-hover:opacity-100"
+                className="p-1.5 text-[#A8A29E] hover:text-[#C13F3F] transition-colors opacity-0 group-hover:opacity-100"
               >
                 <Trash2 className="w-4 h-4" />
               </button>

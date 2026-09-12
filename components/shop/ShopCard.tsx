@@ -75,15 +75,15 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
   const getRarityBadge = (rarity: ItemRarity) => {
     switch (rarity) {
       case 'Common':
-        return 'text-[#6B665C] bg-[#F3F1EC] border-[#141210]';
+        return 'text-[#6B6560] bg-[#F5F3EE] border-[#141110]';
       case 'Rare':
-        return 'text-[#E85D25] bg-white border-[#141210] shadow-[2px_2px_0_0_#141210]';
+        return 'text-[#E8552A] bg-white border-[#141110] shadow-[2px_2px_0_0_#141110]';
       case 'Epic':
-        return 'text-[#D97706] bg-white border-[#141210] shadow-[2px_2px_0_0_#141210]';
+        return 'text-[#C9A227] bg-white border-[#141110] shadow-[2px_2px_0_0_#141110]';
       case 'Legendary':
-        return 'text-white bg-[#141210] border-[#141210] shadow-[2px_2px_0_0_#D97706]';
+        return 'text-white bg-[#141110] border-[#141110] shadow-[2px_2px_0_0_#C9A227]';
       case 'Mythic':
-        return 'text-white bg-[#E85D25] border-[#141210] shadow-[2px_2px_0_0_#141210]';
+        return 'text-white bg-[#E8552A] border-[#141110] shadow-[2px_2px_0_0_#141110]';
     }
   };
 
@@ -108,28 +108,28 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
   };
 
   return (
-    <div className="p-6 bg-white border-4 border-[#141210] flex flex-col justify-between shadow-[8px_8px_0_0_rgba(20,18,16,0.1)] hover:shadow-[8px_8px_0_0_#141210] transition-all">
+    <div className="p-6 bg-white border-4 border-[#141110] flex flex-col justify-between shadow-[8px_8px_0_0_rgba(20,18,16,0.1)] hover:shadow-[8px_8px_0_0_#141110] transition-all">
       <div>
         {/* Top Tag Bar */}
         <div className="flex items-center justify-between mb-4">
           <span className={`font-sans text-[10px] font-bold uppercase tracking-widest px-2 py-1 border-2 ${getRarityBadge(item.rarity)}`}>
             {item.rarity}
           </span>
-          <span className="text-[10px] font-sans font-bold text-[#6B665C] uppercase tracking-widest">
+          <span className="text-[10px] font-sans font-bold text-[#6B6560] uppercase tracking-widest">
             {item.category}
           </span>
         </div>
 
         {/* Icon & Details */}
         <div className="flex items-start space-x-4 mb-4">
-          <div className="w-12 h-12 bg-[#F3F1EC] border-2 border-[#141210] flex items-center justify-center text-[#141210] shrink-0 shadow-[2px_2px_0_0_#141210]">
+          <div className="w-12 h-12 bg-[#F5F3EE] border-2 border-[#141110] flex items-center justify-center text-[#141110] shrink-0 shadow-[2px_2px_0_0_#141110]">
             <IconComponent className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="font-display text-lg font-black text-[#141210] uppercase tracking-widest leading-tight">
+            <h3 className="font-display text-lg font-black text-[#141110] uppercase tracking-widest leading-tight">
               {item.name}
             </h3>
-            <p className="text-xs font-sans font-medium text-[#6B665C] mt-1 line-clamp-2 leading-relaxed">
+            <p className="text-xs font-sans font-medium text-[#6B6560] mt-1 line-clamp-2 leading-relaxed">
               {item.description}
             </p>
           </div>
@@ -137,17 +137,17 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
       </div>
 
       {/* Price & Action Button */}
-      <div className="pt-4 border-t-2 border-[#141210]/10 mt-2">
+      <div className="pt-4 border-t-2 border-[#141110]/10 mt-2">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-xs font-sans font-bold text-[#6B665C] uppercase tracking-widest">Guild Price</span>
-          <span className="font-display text-lg font-black text-[#D97706] flex items-center gap-1.5">
+          <span className="text-xs font-sans font-bold text-[#6B6560] uppercase tracking-widest">Guild Price</span>
+          <span className="font-display text-lg font-black text-[#C9A227] flex items-center gap-1.5">
             <Coins className="w-4 h-4" />
             <AnimatedCounter value={item.price} /> G
           </span>
         </div>
 
         {feedback && (
-          <div className="text-[11px] text-[#141210] font-bold uppercase tracking-widest mb-3 text-center bg-[#F3F1EC] p-2 border-2 border-[#141210]">
+          <div className="text-[11px] text-[#141110] font-bold uppercase tracking-widest mb-3 text-center bg-[#F5F3EE] p-2 border-2 border-[#141110]">
             {feedback}
           </div>
         )}
@@ -157,8 +157,8 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
             onClick={handleEquip}
             className={`w-full py-3 font-sans text-xs font-bold uppercase tracking-widest flex items-center justify-center space-x-2 transition-all border-2 ${
               isEquipped
-                ? 'bg-[#141210] text-white border-[#141210]'
-                : 'bg-white text-[#141210] border-[#141210] hover:bg-[#F3F1EC]'
+                ? 'bg-[#141110] text-white border-[#141110]'
+                : 'bg-white text-[#141110] border-[#141110] hover:bg-[#F5F3EE]'
             }`}
           >
             {isEquipped ? (
@@ -176,8 +176,8 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
             disabled={!canAfford || isPurchasing}
             className={`w-full py-3 font-sans text-xs font-bold uppercase tracking-widest flex items-center justify-center space-x-2 transition-all border-2 ${
               canAfford
-                ? 'bg-[#E85D25] text-white border-[#141210] hover:bg-[#C54A18] shadow-[2px_2px_0_0_#141210] cursor-pointer'
-                : 'bg-[#F3F1EC] text-[#6B665C] border-[#6B665C] opacity-75 cursor-not-allowed'
+                ? 'bg-[#E8552A] text-white border-[#141110] hover:bg-[#C54A18] shadow-[2px_2px_0_0_#141110] cursor-pointer'
+                : 'bg-[#F5F3EE] text-[#6B6560] border-[#6B6560] opacity-75 cursor-not-allowed'
             }`}
           >
             {canAfford ? (
