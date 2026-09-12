@@ -103,7 +103,7 @@ export default function SignupPage() {
           </Link>
         </div>
 
-        <h1 className="text-2xl font-bold text-[#1D1D1F] tracking-tight">Forge Your Hero</h1>
+        <h1 className="text-2xl font-bold text-[#1D1D1F] tracking-tight">Create Your Hero</h1>
         <p className="text-sm font-medium text-[#86868B] mt-1.5">Begin your real-life RPG progression journey</p>
 
         {errorMsg && (

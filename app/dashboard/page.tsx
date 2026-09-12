@@ -62,10 +62,10 @@ export default function DashboardPage() {
             </div>
             <button
               onClick={() => setIsCreateModalOpen(true)}
-              className="px-5 py-2.5 btn-primary-gradient font-semibold text-xs rounded-full flex items-center space-x-2 cursor-pointer"
+              className="px-5 py-2.5 btn-primary-gradient font-semibold text-xs rounded-full flex items-center space-x-2 cursor-pointer shadow-sm"
             >
               <Plus className="w-4 h-4 stroke-[3]" />
-              <span>Forge Quest</span>
+              <span>New Quest</span>
             </button>
           </div>
 

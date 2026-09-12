@@ -110,10 +110,10 @@ export default function QuestsPage() {
 
             <button
               onClick={() => setIsCreateModalOpen(true)}
-              className="px-6 py-3 btn-primary-gradient font-semibold text-xs rounded-full flex items-center space-x-2 cursor-pointer shadow-md"
+              className="px-5 py-2.5 btn-primary-gradient font-semibold text-xs rounded-full flex items-center space-x-2 cursor-pointer shadow-md"
             >
               <Plus className="w-4 h-4 stroke-[3]" />
-              <span>Forge Quest</span>
+              <span>New Quest</span>
             </button>
           </div>
         </div>

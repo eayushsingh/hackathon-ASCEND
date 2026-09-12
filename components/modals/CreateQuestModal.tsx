@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - CREATE QUEST MODAL
-// Apple Bright Premium Quest Creation Modal
+// Apple Bright Premium Quest Creation Modal with Simple Language
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -15,7 +15,7 @@ import {
   QuestPriority,
 } from '@/types/rpg';
 import { ATTRIBUTE_LIST, getDefaultAttributeForCategory } from '@/lib/progression/attributes';
-import { DIFFICULTY_REWARDS, calculateAuthoritativeRewards } from '@/lib/progression/rewards';
+import { calculateAuthoritativeRewards } from '@/lib/progression/rewards';
 import {
   X,
   Zap,
@@ -65,7 +65,7 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
     setValidationError(null);
 
     if (!title.trim()) {
-      setValidationError('Please enter a quest title to proceed.');
+      setValidationError('Please enter a task or quest title.');
       return;
     }
 
@@ -88,7 +88,7 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
       setValidationError(null);
       onClose();
     } catch (err: unknown) {
-      setValidationError((err as Error).message || 'Failed to forge quest. Please try again.');
+      setValidationError((err as Error).message || 'Failed to create quest. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -109,8 +109,8 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
           {/* Header */}
           <div className="flex items-start justify-between pb-4 border-b border-[#E5E5EA]">
             <div>
-              <h3 className="text-2xl font-bold text-[#1D1D1F] tracking-tight">Forge New Quest</h3>
-              <p className="text-xs text-[#6E6E73] mt-0.5">Turn your real-world goals and habits into rewarding bounties.</p>
+              <h3 className="text-2xl font-bold text-[#1D1D1F] tracking-tight">Create New Quest</h3>
+              <p className="text-xs text-[#6E6E73] mt-0.5">Add your daily tasks, workouts, or habits to earn XP and level up.</p>
             </div>
             <button
               onClick={onClose}
@@ -131,7 +131,7 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
             {/* Title */}
             <div>
               <label className="block text-xs font-mono font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
-                Quest Title *
+                Task / Quest Title *
               </label>
               <input
                 type="text"
@@ -140,7 +140,7 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
                   setTitle(e.target.value);
                   if (validationError) setValidationError(null);
                 }}
-                placeholder="e.g., Deep Work Coding Session (90m)"
+                placeholder="e.g., Read for 30 minutes, Gym Workout, or Complete Project"
                 required
                 className="w-full px-4 py-3 bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl text-[#1D1D1F] placeholder-[#8E8E93] text-sm focus:outline-none focus:border-purple-500 font-medium transition-colors"
               />
@@ -149,12 +149,12 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
             {/* Description */}
             <div>
               <label className="block text-xs font-mono font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
-                Description & Criteria
+                Notes or Details (Optional)
               </label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Key outcomes or focus points..."
+                placeholder="Add checklist notes or goals..."
                 rows={2}
                 className="w-full px-4 py-3 bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl text-[#1D1D1F] placeholder-[#8E8E93] text-sm focus:outline-none focus:border-purple-500 font-medium resize-none transition-colors"
               />
@@ -186,7 +186,7 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
             {/* Difficulty selection */}
             <div>
               <label className="block text-xs font-mono font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
-                Difficulty Tier
+                Difficulty Level
               </label>
               <div className="grid grid-cols-5 gap-1.5">
                 {difficulties.map((diff) => (
@@ -209,7 +209,7 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
             {/* Attribute Target */}
             <div>
               <label className="block text-xs font-mono font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
-                Target Attribute
+                Skill Attribute Boosted
               </label>
               <select
                 value={attribute}
@@ -218,7 +218,7 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
               >
                 {ATTRIBUTE_LIST.map((attr) => (
                   <option key={attr.type} value={attr.type}>
-                    {attr.name} ({attr.shortName}) - {attr.primaryCategories.join(', ')}
+                    {attr.name} ({attr.shortName}) - Boosts {attr.primaryCategories.join(', ')}
                   </option>
                 ))}
               </select>
@@ -229,8 +229,8 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
               <div className="flex items-center space-x-3">
                 <RotateCw className="w-5 h-5 text-purple-600" />
                 <div>
-                  <div className="text-xs font-bold text-[#1D1D1F]">Daily Recurring Habit</div>
-                  <div className="text-[11px] text-[#6E6E73]">Resets automatically each day to build consistency</div>
+                  <div className="text-xs font-bold text-[#1D1D1F]">Repeat Daily (Habit)</div>
+                  <div className="text-[11px] text-[#6E6E73]">Resets every morning to build your daily streak</div>
                 </div>
               </div>
               <input
@@ -245,14 +245,14 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
             <div className="p-3.5 bg-purple-50/50 rounded-xl border border-purple-200/60">
               <div className="text-[11px] font-mono font-bold uppercase text-purple-900 tracking-wider flex items-center gap-1.5 mb-2">
                 <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-                <span>Estimated Quest Rewards</span>
+                <span>Rewards You&apos;ll Earn</span>
               </div>
               <div className="flex items-center justify-between text-xs font-mono font-bold">
                 <span className="text-purple-700 flex items-center gap-1">
                   <Zap className="w-3.5 h-3.5" /> +{rewardsPreview.xpEarned} XP
                 </span>
                 <span className="text-amber-700 flex items-center gap-1">
-                  <Coins className="w-3.5 h-3.5 text-amber-500" /> +{rewardsPreview.goldEarned} G
+                  <Coins className="w-3.5 h-3.5 text-amber-500" /> +{rewardsPreview.goldEarned} Gold
                 </span>
                 <span className="text-[#1D1D1F] flex items-center gap-1">
                   +{rewardsPreview.attributeXpEarned} {attribute}
@@ -274,7 +274,7 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
                 disabled={isSubmitting || !title.trim()}
                 className="w-2/3 py-2.5 btn-primary-gradient text-white rounded-xl font-semibold text-xs shadow-sm transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Forging Quest...' : 'Create Quest'}
+                {isSubmitting ? 'Creating Quest...' : 'Create Quest'}
               </button>
             </div>
           </form>
@@ -283,4 +283,3 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
     </AnimatePresence>
   );
 };
-
