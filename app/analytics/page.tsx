@@ -10,7 +10,7 @@ import { useGame } from '@/lib/context/game-context';
 import { HeatmapGrid } from '@/components/analytics/HeatmapGrid';
 import { ATTRIBUTE_LIST, getTotalAttributeXP } from '@/lib/progression/attributes';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
-import { AnimatedMascot } from '@/components/AnimatedMascot';
+import { PageMascot } from '@/components/PageMascot';
 import {
   Activity,
   TrendingUp,
@@ -55,12 +55,13 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-10 pb-16 pt-6 max-w-7xl mx-auto px-4 sm:px-6">
       {/* 1. TELEMETRY HEADER HUD */}
-      <div className="apple-card p-6 sm:p-8">
+      <div className="apple-card p-6 sm:p-8 relative">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-[#E5E5EA]">
           <div className="flex items-center space-x-5 text-center md:text-left">
-            <AnimatedMascot
+            <PageMascot
               animationType="studying"
-              size={84}
+              size={88}
+              showBadge={true}
               badgeText="Deep Tracking"
               className="shrink-0"
             />

@@ -21,6 +21,8 @@ import {
   WifiOff,
 } from 'lucide-react';
 
+import { PageMascot } from '@/components/PageMascot';
+
 // ─── Rank badge renderer ────────────────────────────────────────────────────
 function RankBadge({ rank }: { rank: number }) {
   if (rank === 1) {
@@ -245,7 +247,10 @@ export default function LeaderboardPage() {
   return (
     <div className="space-y-10 pb-16 pt-6 max-w-7xl mx-auto px-4 sm:px-6">
       {/* HEADER HUD */}
-      <div className="apple-card p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="apple-card p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 relative">
+        <div className="absolute -top-3 right-6 hidden sm:block">
+          <PageMascot animationType="hanging" size={88} position="top-edge" />
+        </div>
         <div className="flex items-center space-x-5 text-center md:text-left">
           <div className="w-14 h-14 bg-amber-50 border border-amber-200 rounded-2xl flex items-center justify-center text-amber-600 shrink-0 shadow-sm">
             <Trophy className="w-7 h-7" />

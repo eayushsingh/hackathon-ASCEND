@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
 import { Archetype } from '@/types/rpg';
+import { PageMascot } from '@/components/PageMascot';
 
 export default function SettingsPage() {
   const {
@@ -86,7 +87,10 @@ export default function SettingsPage() {
       </div>
 
       {/* 1. THEME SELECTION */}
-      <div className="apple-card p-6 sm:p-8">
+      <div className="apple-card p-6 sm:p-8 relative">
+        <div className="absolute -top-3 right-8 hidden sm:block">
+          <PageMascot animationType="hanging" size={88} position="top-edge" />
+        </div>
         <div className="flex items-center space-x-3 pb-4 border-b border-[#E5E5EA] mb-5">
           <Palette className="w-5 h-5 text-purple-600" />
           <div>
