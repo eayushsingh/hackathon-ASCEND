@@ -18,11 +18,22 @@ import {
   Coins,
   CheckCircle2,
   Layers,
+  Clock,
 } from 'lucide-react';
 
 export default function AnalyticsPage() {
   const { quests, profile, streak, attributes } = useGame();
   const [activeTimeframe, setActiveTimeframe] = useState<'30d' | 'all'>('30d');
+  const [todayFocusSeconds, setTodayFocusSeconds] = useState<number>(0);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const todayKey = `ascend_focus_screentime_${new Date().toISOString().split('T')[0]}`;
+    const saved = localStorage.getItem(todayKey);
+    if (saved) {
+      setTodayFocusSeconds(parseInt(saved, 10) || 0);
+    }
+  }, []);
 
   const completedQuests = quests.filter((q) => q.status === 'Completed');
   const activeQuests = quests.filter((q) => q.status === 'Active');
@@ -84,7 +95,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Velocity Metric Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-6">
           <div className="p-5 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA]">
             <div className="flex items-center justify-between text-[#6E6E73] mb-1.5">
               <span className="text-[11px] font-mono font-medium uppercase tracking-wider">Total XP</span>
@@ -127,6 +138,17 @@ export default function AnalyticsPage() {
               {completionRate}%
             </div>
             <div className="text-[11px] font-mono text-[#6E6E73] font-medium mt-1">{completedQuests.length} of {quests.length} cleared</div>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA]">
+            <div className="flex items-center justify-between text-[#6E6E73] mb-1.5">
+              <span className="text-[11px] font-mono font-medium uppercase tracking-wider">Screen Time</span>
+              <Clock className="w-4 h-4 text-sky-600" />
+            </div>
+            <div className="font-mono text-2xl font-bold text-sky-600">
+              {Math.floor(todayFocusSeconds / 3600) > 0 ? `${Math.floor(todayFocusSeconds / 3600)}h ` : ''}{Math.floor((todayFocusSeconds % 3600) / 60)}m
+            </div>
+            <div className="text-[11px] font-mono text-[#6E6E73] font-medium mt-1">Today&apos;s focus timer</div>
           </div>
         </div>
       </div>
