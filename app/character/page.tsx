@@ -12,6 +12,7 @@ import { ARCHETYPES } from '@/lib/progression/archetypes';
 import { ATTRIBUTE_LIST, calculateAttributeLevel, getAttributeMasteryTitle } from '@/lib/progression/attributes';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { HabitTransformationCard } from '@/components/character/HabitTransformationCard';
+import { ArchetypeAvatar } from '@/components/character/ArchetypeAvatar';
 import {
   Sparkles,
   CheckCircle2,
@@ -49,12 +50,8 @@ export default function CharacterPage() {
         <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 pb-8 border-b border-[#E5E5EA]">
           {/* Avatar Emblem Frame */}
           <div className="relative group shrink-0 text-center">
-            <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-3xl border border-[#E5E5EA] bg-gradient-to-br from-purple-500/10 via-sky-500/10 to-transparent flex items-center justify-center text-[#1D1D1F] shadow-sm relative overflow-hidden">
-              <div className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-sky-500">
-                {profile.archetype.charAt(0)}
-              </div>
-            </div>
-            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 btn-primary-gradient text-white px-4 py-1 rounded-full font-mono text-xs font-bold tracking-widest shadow-md">
+            <ArchetypeAvatar archetype={profile.archetype} size="2xl" showGlow={true} />
+            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 btn-primary-gradient text-white px-4 py-1 rounded-full font-mono text-xs font-bold tracking-widest shadow-md z-20">
               LVL <AnimatedCounter value={progress.currentLevel} />
             </div>
           </div>

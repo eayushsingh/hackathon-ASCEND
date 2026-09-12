@@ -10,6 +10,7 @@ import { useGame } from '@/lib/context/game-context';
 import { calculateLevelProgress } from '@/lib/progression/levels';
 import { ARCHETYPES } from '@/lib/progression/archetypes';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
+import { ArchetypeAvatar } from './ArchetypeAvatar';
 import { Shield, Flame, Coins, Trophy, Zap, ArrowUpRight, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
@@ -26,13 +27,9 @@ export const CharacterHUD: React.FC = () => {
         
         {/* Archetype Avatar Badge */}
         <div className="relative group shrink-0 text-center">
-          <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl btn-primary-gradient flex items-center justify-center text-white shadow-md relative overflow-hidden">
-            <span className="text-5xl font-bold drop-shadow-sm">
-              {profile.archetype.charAt(0)}
-            </span>
-          </div>
+          <ArchetypeAvatar archetype={profile.archetype} size="xl" showGlow={true} />
           
-          <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white px-3.5 py-0.5 rounded-full text-xs font-semibold tracking-wide border border-white/20 shadow-sm">
+          <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white px-3.5 py-0.5 rounded-full text-xs font-semibold tracking-wide border border-white/20 shadow-sm z-20">
             Level <AnimatedCounter value={progress.currentLevel} />
           </div>
         </div>

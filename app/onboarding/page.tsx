@@ -2,10 +2,10 @@
 
 // ==============================================================================
 // ASCEND - ONBOARDING & ARCHETYPE SELECTION SCREEN
-// Apple Bright Premium Onboarding
+// Apple Bright Premium Onboarding with Interactive Avatars & Auto-Scroll
 // ==============================================================================
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -17,8 +17,12 @@ import {
   ArrowRight,
   Zap,
   Check,
+  ChevronDown,
+  User,
+  ShieldAlert,
 } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
+import { ArchetypeAvatar } from '@/components/character/ArchetypeAvatar';
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -28,7 +32,34 @@ export default function OnboardingPage() {
   const [selectedArchetype, setSelectedArchetype] = useState<Archetype>('Cyber Mage');
   const [isInitializing, setIsInitializing] = useState(false);
 
+  const archetypesRef = useRef<HTMLDivElement>(null);
+  const initializeRef = useRef<HTMLDivElement>(null);
+
   const activeArch = ARCHETYPE_LIST.find((a) => a.id === selectedArchetype) || ARCHETYPE_LIST[0];
+
+  // Smooth scroll handler for moving to archetype selection
+  const scrollToArchetypes = () => {
+    archetypesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  // Smooth scroll handler for moving to initialize action
+  const scrollToInitialize = () => {
+    setTimeout(() => {
+      initializeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 120);
+  };
+
+  const handleSelectArchetype = (archId: Archetype) => {
+    setSelectedArchetype(archId);
+    scrollToInitialize();
+  };
+
+  const handleUsernameKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      scrollToArchetypes();
+    }
+  };
 
   const handleInitialize = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,17 +79,17 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto py-12 px-4">
+    <div className="max-w-5xl mx-auto py-10 px-4 sm:px-6">
       {/* Header */}
-      <div className="text-center max-w-2xl mx-auto mb-12">
+      <div className="text-center max-w-2xl mx-auto mb-10">
         <div className="flex justify-center mb-6">
           <Link href="/" className="inline-flex hover:opacity-90 transition-opacity">
             <Logo size="lg" />
           </Link>
         </div>
-        <div className="inline-flex items-center space-x-2 px-3.5 py-1 bg-purple-50 border border-purple-200 text-purple-700 text-xs font-mono font-bold uppercase tracking-wider rounded-full mb-3">
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1 bg-purple-50 border border-purple-200 text-purple-700 text-xs font-mono font-bold uppercase tracking-wider rounded-full mb-3 shadow-sm">
           <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-          <span>Character Setup</span>
+          <span>Character Setup & Calibration</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1D1D1F] tracking-tight mb-3">
           Choose Your Archetype
@@ -69,107 +100,174 @@ export default function OnboardingPage() {
       </div>
 
       <form onSubmit={handleInitialize} className="space-y-10">
-        {/* Username input */}
-        <div className="max-w-md mx-auto">
-          <label className="block text-xs font-mono font-bold text-[#1D1D1F] uppercase tracking-wider mb-2 text-center">
-            Your Hero Codename / Username
+        {/* Username input Section */}
+        <div className="max-w-md mx-auto text-center">
+          <label className="block text-xs font-mono font-bold text-[#1D1D1F] uppercase tracking-wider mb-2 text-center flex items-center justify-center gap-1.5">
+            <User className="w-3.5 h-3.5 text-purple-600" />
+            <span>Your Hero Codename / Username</span>
           </label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            className="w-full text-center px-4 py-3.5 bg-white border border-[#E5E5EA] text-[#1D1D1F] rounded-2xl font-bold text-lg focus:outline-none focus:border-purple-500 shadow-sm transition-colors"
-            placeholder="e.g., Kaelen Vance"
-          />
+          <div className="relative">
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              onKeyDown={handleUsernameKeyDown}
+              required
+              className="w-full text-center px-4 py-3.5 bg-white border border-[#E5E5EA] text-[#1D1D1F] rounded-2xl font-bold text-lg focus:outline-none focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 shadow-sm transition-all"
+              placeholder="e.g., Kaelen Vance"
+            />
+          </div>
+
+          {/* Interactive Guidance Banner */}
+          <motion.div
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-3.5 inline-flex items-center gap-1.5 px-4 py-1.5 bg-gradient-to-r from-purple-50 via-indigo-50 to-blue-50 border border-purple-200/80 rounded-full cursor-pointer hover:border-purple-400 transition-all shadow-sm group"
+            onClick={scrollToArchetypes}
+          >
+            <span className="text-xs font-medium text-purple-700 group-hover:text-purple-900 transition-colors">
+              Choose a character archetype below & scroll down to start your journey
+            </span>
+            <ChevronDown className="w-4 h-4 text-purple-600 group-hover:translate-y-0.5 transition-transform" />
+          </motion.div>
         </div>
 
         {/* Archetype Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {ARCHETYPE_LIST.map((arch) => {
-            const isSelected = selectedArchetype === arch.id;
+        <div ref={archetypesRef} id="archetypes-section" className="pt-2 scroll-mt-6">
+          <div className="flex items-center justify-between mb-5 px-1">
+            <div className="flex items-center space-x-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-purple-600 animate-pulse" />
+              <h2 className="text-sm font-mono font-bold uppercase tracking-wider text-[#1D1D1F]">
+                Select Archetype Class ({ARCHETYPE_LIST.length} Available)
+              </h2>
+            </div>
+            <span className="text-xs text-[#6E6E73] font-medium hidden sm:inline-block">
+              Click any card to select & proceed
+            </span>
+          </div>
 
-            return (
-              <motion.div
-                key={arch.id}
-                whileHover={{ y: -3 }}
-                onClick={() => setSelectedArchetype(arch.id)}
-                className={`cursor-pointer p-6 rounded-3xl border transition-all relative flex flex-col justify-between ${
-                  isSelected
-                    ? 'apple-card border-purple-400 ring-2 ring-purple-400/30'
-                    : 'bg-white border-[#E5E5EA] hover:border-[#C7C7CC]'
-                }`}
-              >
-                {isSelected && (
-                  <div className="absolute -top-3 -right-3 w-7 h-7 rounded-full btn-primary-gradient text-white flex items-center justify-center font-bold shadow-md">
-                    <Check className="w-4 h-4 stroke-[3]" />
-                  </div>
-                )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {ARCHETYPE_LIST.map((arch) => {
+              const isSelected = selectedArchetype === arch.id;
 
-                <div>
-                  <div
-                    className="inline-block text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border border-[#E5E5EA] mb-3 bg-[#F5F5F7] text-[#1D1D1F]"
-                  >
-                    {arch.role}
+              return (
+                <motion.div
+                  key={arch.id}
+                  whileHover={{ y: -4, scale: 1.01 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => handleSelectArchetype(arch.id)}
+                  className={`cursor-pointer p-6 rounded-3xl border transition-all relative flex flex-col justify-between ${
+                    isSelected
+                      ? 'apple-card border-purple-500 ring-2 ring-purple-500/30 bg-gradient-to-b from-white to-purple-50/30 shadow-lg'
+                      : 'bg-white border-[#E5E5EA] hover:border-purple-200 hover:shadow-md'
+                  }`}
+                >
+                  {isSelected && (
+                    <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full btn-primary-gradient text-white flex items-center justify-center font-bold shadow-md ring-4 ring-white z-20">
+                      <Check className="w-4 h-4 stroke-[3]" />
+                    </div>
+                  )}
+
+                  <div>
+                    {/* Header: Role Tag + Character Avatar Portrait */}
+                    <div className="flex items-start justify-between gap-4 mb-4">
+                      <div>
+                        <div className="inline-block text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border border-[#E5E5EA] mb-2 bg-[#F5F5F7] text-[#1D1D1F]">
+                          {arch.role}
+                        </div>
+                        <h3 className="text-xl font-extrabold text-[#1D1D1F] tracking-tight">{arch.name}</h3>
+                        <p className="text-[11px] text-purple-600 font-mono font-bold uppercase tracking-wide">
+                          {arch.title}
+                        </p>
+                      </div>
+
+                      {/* Prominent High-Fidelity Character Avatar Visual */}
+                      <div className="shrink-0">
+                        <ArchetypeAvatar
+                          archetype={arch.id}
+                          size="lg"
+                          showGlow={isSelected}
+                          animate={isSelected}
+                        />
+                      </div>
+                    </div>
+
+                    <p className="text-xs text-[#6E6E73] leading-relaxed mb-5 font-sans min-h-[48px]">
+                      {arch.description}
+                    </p>
                   </div>
 
-                  <h3 className="text-xl font-bold text-[#1D1D1F] mb-1">{arch.name}</h3>
-                  <p className="text-xs text-purple-600 font-mono font-semibold uppercase mb-2">{arch.title}</p>
-                  <p className="text-xs text-[#6E6E73] leading-relaxed mb-5 font-sans">{arch.description}</p>
-                </div>
-
-                <div className="pt-3 border-t border-[#E5E5EA] space-y-2">
-                  <div className="text-xs text-[#1D1D1F] font-medium flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-purple-600 shrink-0" />
-                    <span>{arch.perk}</span>
+                  <div className="pt-3 border-t border-[#E5E5EA] space-y-2">
+                    <div className="text-xs text-[#1D1D1F] font-semibold flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-purple-600 shrink-0" />
+                      <span>{arch.perk}</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-[11px] font-mono text-[#6E6E73]">
+                      <span>
+                        Primary: <strong className="text-[#1D1D1F]">{arch.primaryAttribute}</strong>
+                      </span>
+                      <span>•</span>
+                      <span>
+                        Secondary: <strong className="text-[#1D1D1F]">{arch.secondaryAttribute}</strong>
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2 text-[11px] font-mono text-[#6E6E73]">
-                    <span>Primary: <strong className="text-[#1D1D1F]">{arch.primaryAttribute}</strong></span>
-                    <span>•</span>
-                    <span>Secondary: <strong className="text-[#1D1D1F]">{arch.secondaryAttribute}</strong></span>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Selected Archetype Starter Quests Preview */}
-        <div className="apple-card p-6 sm:p-8 max-w-3xl mx-auto">
-          <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#E5E5EA]">
-            <h4 className="text-sm font-bold text-[#1D1D1F] flex items-center gap-2">
-              <Zap className="w-4 h-4 text-purple-600" />
-              <span>Starter Quests for {activeArch.name}</span>
-            </h4>
-            <span className="text-[11px] text-[#6E6E73] font-mono hidden sm:inline-block">Auto-Generated on Launch</span>
+        <div className="apple-card p-6 sm:p-8 max-w-3xl mx-auto relative overflow-hidden border border-purple-100 shadow-md">
+          <div className="flex items-center justify-between mb-5 pb-4 border-b border-[#E5E5EA]">
+            <div className="flex items-center space-x-3">
+              <ArchetypeAvatar archetype={selectedArchetype} size="md" showGlow={true} />
+              <div>
+                <h4 className="text-base font-bold text-[#1D1D1F] flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-purple-600" />
+                  <span>Starter Habit Quests: {activeArch.name}</span>
+                </h4>
+                <p className="text-xs text-[#6E6E73] font-sans">
+                  Custom-tailored quests auto-generated for your starting archetype
+                </p>
+              </div>
+            </div>
+            <span className="text-[11px] text-purple-700 bg-purple-50 border border-purple-200 px-3 py-1 rounded-full font-mono font-semibold hidden sm:inline-block">
+              Auto-Generated on Launch
+            </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {activeArch.starterQuests.map((q, idx) => (
-              <div key={idx} className="p-4 bg-[#F5F5F7] rounded-2xl border border-[#E5E5EA]">
+              <div key={idx} className="p-4 bg-[#F5F5F7] hover:bg-white rounded-2xl border border-[#E5E5EA] transition-colors">
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-700 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-md">
                   {q.difficulty}
                 </span>
                 <div className="text-xs font-bold text-[#1D1D1F] mt-2 leading-snug">{q.title}</div>
-                <div className="text-[11px] font-mono text-[#6E6E73] mt-1.5 font-medium">+{q.attribute} XP</div>
+                <div className="text-[11px] font-mono text-purple-600 mt-1.5 font-semibold">+{q.attribute} XP</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Submit button */}
-        <div className="text-center pt-4">
-          <button
+        {/* Submit button & Auto-Scroll Target */}
+        <div ref={initializeRef} id="initialize-section" className="text-center pt-2 pb-6 scroll-mt-8">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={isInitializing || !username.trim()}
-            className="px-10 py-4 btn-primary-gradient text-white font-bold text-sm uppercase font-mono tracking-wider rounded-2xl shadow-md transition-all inline-flex items-center space-x-2.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-10 py-4 btn-primary-gradient text-white font-bold text-sm uppercase font-mono tracking-wider rounded-2xl shadow-lg hover:shadow-xl transition-all inline-flex items-center space-x-3 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed group"
           >
-            <span>{isInitializing ? 'Starting Journey...' : 'Initialize Character & Begin'}</span>
-            <ArrowRight className="w-5 h-5 stroke-[2.5]" />
-          </button>
+            <span>{isInitializing ? 'Starting Journey...' : `Initialize as ${activeArch.name} & Begin`}</span>
+            <ArrowRight className="w-5 h-5 stroke-[2.5] group-hover:translate-x-1 transition-transform" />
+          </motion.button>
+          <p className="text-xs text-[#6E6E73] mt-2 font-mono">
+            Ready to ascend as <strong className="text-[#1D1D1F]">{username || 'Hero'}</strong> ({activeArch.name})
+          </p>
         </div>
       </form>
     </div>
   );
 }
-
