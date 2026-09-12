@@ -8,7 +8,7 @@ import { getDefaultAttributeForCategory } from '@/lib/progression/attributes';
 import { DIFFICULTY_REWARDS } from '@/lib/progression/rewards';
 import { QuestCategory, QuestDifficulty, AttributeType } from '@/types/rpg';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const supabase = await createServerSupabaseClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -56,6 +56,7 @@ export async function POST(request: NextRequest) {
       priority = 'Medium',
       reminder_time = null,
       reminder_enabled = false,
+      timer_minutes = null,
     } = body;
 
     if (!title || typeof title !== 'string' || title.trim().length === 0) {
@@ -88,6 +89,7 @@ export async function POST(request: NextRequest) {
         priority,
         reminder_time,
         reminder_enabled,
+        timer_minutes,
       })
       .select()
       .single();

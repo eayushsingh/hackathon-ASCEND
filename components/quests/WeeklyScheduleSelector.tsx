@@ -8,7 +8,7 @@
 import React from 'react';
 import { Weekday } from '@/types/rpg';
 import { WEEKDAYS, formatRecurringDaysSummary } from '@/lib/progression/schedule';
-import { RotateCw, Sparkles, Check } from 'lucide-react';
+import { RotateCw, Sparkles } from 'lucide-react';
 
 interface WeeklyScheduleSelectorProps {
   selectedDays: Weekday[];

@@ -174,6 +174,14 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit, isCompleted
                   <span>{quest.reminder_time}</span>
                 </span>
               )}
+
+              {/* Planned Focus Timer Badge */}
+              {quest.timer_minutes && (
+                <span className="text-xs font-semibold text-purple-700 uppercase flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-purple-200 bg-purple-50">
+                  <Clock className="w-3 h-3 text-purple-600" />
+                  <span>{quest.timer_minutes}m Focus</span>
+                </span>
+              )}
             </div>
 
             <h4 className={`text-base font-semibold ${isCompleted ? 'line-through text-[#8E8E93]' : 'text-[#1D1D1F]'}`}>
@@ -198,6 +206,18 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit, isCompleted
               </div>
 
               <div className="flex items-center space-x-1.5">
+                {/* Calendar & Schedule Button (Before Timer) */}
+                {!isCompleted && (
+                  <button
+                    onClick={() => setIsEditModalOpen(true)}
+                    className="px-2.5 py-1.5 rounded-full bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-700 hover:text-sky-900 text-xs font-semibold flex items-center space-x-1 transition-all cursor-pointer shadow-xs"
+                    title="Edit Calendar & Schedule for this quest"
+                  >
+                    <Calendar className="w-3.5 h-3.5 text-sky-600" />
+                    <span>Schedule</span>
+                  </button>
+                )}
+
                 {/* Focus Timer Trigger Button */}
                 {!isCompleted && (
                   <button
@@ -206,7 +226,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit, isCompleted
                     title="Start Focus Timer & Screen-Time for this task"
                   >
                     <Clock className="w-3.5 h-3.5 text-purple-600" />
-                    <span>Timer</span>
+                    <span>{quest.timer_minutes ? `${quest.timer_minutes}m Timer` : 'Timer'}</span>
                   </button>
                 )}
 

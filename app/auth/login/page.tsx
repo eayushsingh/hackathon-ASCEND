@@ -164,7 +164,7 @@ export default function LoginPage() {
         </div>
 
         <div className="mt-6 text-xs text-[#86868B]">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link href="/auth/signup" className="text-[#FF5E3A] font-semibold hover:underline">
             Create Hero
           </Link>

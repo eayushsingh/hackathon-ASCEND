@@ -14,19 +14,12 @@ import confetti from 'canvas-confetti';
 import {
   Play,
   Pause,
-  RotateCcw,
   CheckCircle2,
   X,
   Minimize2,
   Maximize2,
   Volume2,
-  VolumeX,
-  Sparkles,
-  Zap,
-  Coins,
   Clock,
-  Flame,
-  Shield,
 } from 'lucide-react';
 
 interface TaskTimerModalProps {
@@ -36,39 +29,52 @@ interface TaskTimerModalProps {
   onCompleteQuest?: (questId: string) => Promise<void>;
 }
 
-type TimerPreset = 15 | 25 | 45 | 90 | 0; // 0 is stopwatch count-up
+type TimerPreset = number; // minutes or 0 for stopwatch
 
-export const TaskTimerModal: React.FC<TaskTimerModalProps> = ({
+interface TaskTimerContentProps {
+  quest: Quest;
+  onClose: () => void;
+  onCompleteQuest?: (questId: string) => Promise<void>;
+}
+
+const TaskTimerContent: React.FC<TaskTimerContentProps> = ({
   quest,
-  isOpen,
   onClose,
   onCompleteQuest,
 }) => {
-  const { completeQuest, streak } = useGame();
+  const { completeQuest } = useGame();
 
-  const [preset, setPreset] = useState<TimerPreset>(25);
-  const [timeLeft, setTimeLeft] = useState<number>(25 * 60);
+  const [preset, setPreset] = useState<TimerPreset>(() => {
+    return quest.timer_minutes && quest.timer_minutes > 0 ? quest.timer_minutes : 25;
+  });
+  const [timeLeft, setTimeLeft] = useState<number>(() => {
+    const initialPreset = quest.timer_minutes && quest.timer_minutes > 0 ? quest.timer_minutes : 25;
+    return initialPreset * 60;
+  });
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [isMinimized, setIsMinimized] = useState<boolean>(false);
   const [ambientSound, setAmbientSound] = useState<'none' | 'rain' | 'alpha' | 'waves'>('none');
   const [isCompleting, setIsCompleting] = useState<boolean>(false);
   const [secondsFocused, setSecondsFocused] = useState<number>(0);
-  const [dailyScreenTimeSeconds, setDailyScreenTimeSeconds] = useState<number>(0);
+  const [dailyScreenTimeSeconds, setDailyScreenTimeSeconds] = useState<number>(() => {
+    if (typeof window === 'undefined') return 0;
+    const todayKey = `ascend_focus_screentime_${new Date().toISOString().split('T')[0]}`;
+    const saved = localStorage.getItem(todayKey);
+    return saved ? parseInt(saved, 10) || 0 : 0;
+  });
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const ambientNodeRef = useRef<GainNode | null>(null);
   const oscillatorRefs = useRef<OscillatorNode[]>([]);
   const noiseSourceRef = useRef<AudioBufferSourceNode | null>(null);
 
-  // Load today's total focus screen time
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const todayKey = `ascend_focus_screentime_${new Date().toISOString().split('T')[0]}`;
-    const saved = localStorage.getItem(todayKey);
-    if (saved) {
-      setDailyScreenTimeSeconds(parseInt(saved, 10) || 0);
-    }
-  }, []);
+  // Preset switch handler
+  const handleSelectPreset = (newPreset: TimerPreset) => {
+    setPreset(newPreset);
+    setTimeLeft(newPreset === 0 ? 0 : newPreset * 60);
+    setIsRunning(false);
+    setSecondsFocused(0);
+  };
 
   // Save screen time to localStorage
   const recordScreenTime = useCallback((addedSeconds: number) => {
@@ -80,17 +86,6 @@ export const TaskTimerModal: React.FC<TaskTimerModalProps> = ({
       return updated;
     });
   }, []);
-
-  // Reset timer whenever quest or preset changes
-  useEffect(() => {
-    if (preset === 0) {
-      setTimeLeft(0);
-    } else {
-      setTimeLeft(preset * 60);
-    }
-    setIsRunning(false);
-    setSecondsFocused(0);
-  }, [preset, quest?.id]);
 
   // Main Timer Interval Loop
   useEffect(() => {
@@ -161,10 +156,9 @@ export const TaskTimerModal: React.FC<TaskTimerModalProps> = ({
 
         const pan1 = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
         const pan2 = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
-
         if (pan1 && pan2) {
-          pan1.pan.setValueAtTime(-0.8, ctx.currentTime);
-          pan2.pan.setValueAtTime(0.8, ctx.currentTime);
+          pan1.pan.setValueAtTime(-1, ctx.currentTime);
+          pan2.pan.setValueAtTime(1, ctx.currentTime);
           osc1.connect(pan1).connect(masterGain);
           osc2.connect(pan2).connect(masterGain);
         } else {
@@ -175,54 +169,100 @@ export const TaskTimerModal: React.FC<TaskTimerModalProps> = ({
         osc1.start();
         osc2.start();
         oscillatorRefs.current = [osc1, osc2];
-      } else if (ambientSound === 'rain' || ambientSound === 'waves') {
-        // Pink / Brown noise buffer
-        const bufferSize = ctx.sampleRate * 2;
-        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        let lastOut = 0.0;
+      } else if (ambientSound === 'rain') {
+        // Pink-filtered noise for rainfall
+        const bufferSize = 2 * ctx.sampleRate;
+        const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
         for (let i = 0; i < bufferSize; i++) {
           const white = Math.random() * 2 - 1;
-          data[i] = (lastOut + 0.02 * white) / 1.02;
-          lastOut = data[i];
-          data[i] *= 3.5;
+          b0 = 0.99886 * b0 + white * 0.0555179;
+          b1 = 0.99332 * b1 + white * 0.0750759;
+          b2 = 0.96900 * b2 + white * 0.1538520;
+          b3 = 0.86650 * b3 + white * 0.3104856;
+          b4 = 0.55000 * b4 + white * 0.5329522;
+          b5 = -0.7616 * b5 - white * 0.0168980;
+          output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+          output[i] *= 0.11;
+          b6 = white * 0.115926;
         }
 
-        const noise = ctx.createBufferSource();
-        noise.buffer = buffer;
-        noise.loop = true;
+        const whiteNoise = ctx.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+        whiteNoise.loop = true;
 
         const filter = ctx.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(ambientSound === 'rain' ? 800 : 400, ctx.currentTime);
+        filter.frequency.setValueAtTime(800, ctx.currentTime);
 
-        noise.connect(filter).connect(masterGain);
-        noise.start();
-        noiseSourceRef.current = noise;
+        whiteNoise.connect(filter).connect(masterGain);
+        whiteNoise.start();
+        noiseSourceRef.current = whiteNoise;
+      } else if (ambientSound === 'waves') {
+        // Ocean swell: modulated lowpass brown noise
+        const bufferSize = 2 * ctx.sampleRate;
+        const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let lastOut = 0.0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          output[i] = (lastOut + 0.02 * white) / 1.02;
+          lastOut = output[i];
+          output[i] *= 3.5;
+        }
+
+        const brownNoise = ctx.createBufferSource();
+        brownNoise.buffer = noiseBuffer;
+        brownNoise.loop = true;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(350, ctx.currentTime);
+
+        const lfo = ctx.createOscillator();
+        lfo.frequency.setValueAtTime(0.12, ctx.currentTime);
+        const lfoGain = ctx.createGain();
+        lfoGain.gain.setValueAtTime(250, ctx.currentTime);
+        lfo.connect(lfoGain).connect(filter.frequency);
+        lfo.start();
+        oscillatorRefs.current = [lfo];
+
+        brownNoise.connect(filter).connect(masterGain);
+        brownNoise.start();
+        noiseSourceRef.current = brownNoise;
       }
-    } catch {
-      // Audio context error or not supported
+    } catch (e) {
+      console.warn('Ambient audio init failed:', e);
     }
 
     return () => {
-      if (audioContextRef.current) {
-        audioContextRef.current.close().catch(() => {});
-        audioContextRef.current = null;
-      }
+      try {
+        oscillatorRefs.current.forEach((osc) => {
+          try { osc.stop(); osc.disconnect(); } catch {}
+        });
+        oscillatorRefs.current = [];
+        if (noiseSourceRef.current) {
+          try { noiseSourceRef.current.stop(); noiseSourceRef.current.disconnect(); } catch {}
+          noiseSourceRef.current = null;
+        }
+        if (audioContextRef.current) {
+          audioContextRef.current.close().catch(() => {});
+          audioContextRef.current = null;
+        }
+      } catch {}
     };
   }, [ambientSound]);
 
-  if (!isOpen || !quest) return null;
-
-  const totalDuration = preset === 0 ? Math.max(secondsFocused, 1) : preset * 60;
-  const progressPercent =
-    preset === 0 ? 100 : Math.min(100, Math.max(0, ((totalDuration - timeLeft) / totalDuration) * 100));
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  // Clean formatted time
+  const formatTime = (secs: number) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
+
+  const totalDuration = preset * 60;
+  const progressPercent = preset === 0 ? 100 : Math.min(100, Math.max(0, ((totalDuration - timeLeft) / totalDuration) * 100));
 
   const formatScreenTimeMinutes = (totalSecs: number) => {
     const hours = Math.floor(totalSecs / 3600);
@@ -362,8 +402,11 @@ export const TaskTimerModal: React.FC<TaskTimerModalProps> = ({
           </div>
 
           {/* Preset Buttons */}
-          <div className="grid grid-cols-4 gap-2 mt-5">
+          <div className="flex items-center gap-2 mt-5 flex-wrap">
             {[
+              ...(quest.timer_minutes && ![25, 45, 90, 0].includes(quest.timer_minutes)
+                ? [{ label: `🎯 ${quest.timer_minutes}m Goal`, val: quest.timer_minutes }]
+                : []),
               { label: '25m Focus', val: 25 },
               { label: '45m Sprint', val: 45 },
               { label: '90m Flow', val: 90 },
@@ -372,8 +415,8 @@ export const TaskTimerModal: React.FC<TaskTimerModalProps> = ({
               <button
                 key={p.val}
                 type="button"
-                onClick={() => setPreset(p.val as TimerPreset)}
-                className={`py-2 px-1 text-xs font-semibold rounded-xl border transition-all cursor-pointer text-center ${
+                onClick={() => handleSelectPreset(p.val)}
+                className={`flex-1 min-w-[75px] py-2 px-1 text-xs font-semibold rounded-xl border transition-all cursor-pointer text-center ${
                   preset === p.val
                     ? 'btn-primary-gradient text-white border-transparent shadow-sm'
                     : 'bg-white text-[#6E6E73] border-[#E5E5EA] hover:border-purple-300 hover:text-[#1D1D1F]'
@@ -397,7 +440,7 @@ export const TaskTimerModal: React.FC<TaskTimerModalProps> = ({
                   strokeWidth="10"
                   fill="none"
                 />
-                <motion.circle
+                <circle
                   cx="112"
                   cy="112"
                   r="96"
@@ -407,7 +450,7 @@ export const TaskTimerModal: React.FC<TaskTimerModalProps> = ({
                   strokeDasharray={2 * Math.PI * 96}
                   strokeDashoffset={2 * Math.PI * 96 * (1 - progressPercent / 100)}
                   strokeLinecap="round"
-                  transition={{ duration: 0.5 }}
+                  className="transition-all duration-300 ease-out"
                 />
                 <defs>
                   <linearGradient id="timer-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -417,36 +460,24 @@ export const TaskTimerModal: React.FC<TaskTimerModalProps> = ({
                 </defs>
               </svg>
 
-              {/* Time Numbers & Pulse */}
-              <div className="absolute flex flex-col items-center justify-center text-center">
-                <span className="text-4xl font-extrabold text-[#1D1D1F] font-mono tracking-tight">
+              {/* Centered Timer Readout */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span className="text-4xl sm:text-5xl font-mono font-bold tracking-tight text-[#1D1D1F]">
                   {formatTime(timeLeft)}
                 </span>
-                <span className="text-xs font-mono font-semibold text-purple-600 uppercase mt-1">
-                  {isRunning ? '🔥 Focus In Progress' : 'Paused / Ready'}
+                <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#6E6E73] mt-1">
+                  {preset === 0 ? 'Count-up Elapsed' : isRunning ? 'Remaining Focus' : 'Target Time'}
                 </span>
-                <span className="text-[11px] text-[#8E8E93] font-mono mt-0.5">
-                  Screen-time: {Math.floor(secondsFocused / 60)}m {secondsFocused % 60}s
-                </span>
+                {secondsFocused > 0 && (
+                  <span className="text-[11px] font-mono text-emerald-600 font-semibold mt-1">
+                    +{Math.floor(secondsFocused / 60)}m focus gained
+                  </span>
+                )}
               </div>
             </div>
 
-            {/* Play / Pause / Reset Controls */}
-            <div className="flex items-center space-x-4 mt-3">
-              <button
-                type="button"
-                onClick={() => {
-                  soundManager.playClick();
-                  if (preset === 0) setTimeLeft(0);
-                  else setTimeLeft(preset * 60);
-                  setIsRunning(false);
-                }}
-                className="p-3.5 rounded-2xl bg-[#F5F5F7] hover:bg-[#E5E5EA] text-[#1D1D1F] transition-all cursor-pointer shadow-sm"
-                title="Reset Timer"
-              >
-                <RotateCcw className="w-5 h-5" />
-              </button>
-
+            {/* Play/Pause Control Action */}
+            <div className="flex items-center space-x-3 mt-6">
               <button
                 type="button"
                 onClick={() => {
@@ -530,5 +561,23 @@ export const TaskTimerModal: React.FC<TaskTimerModalProps> = ({
         </motion.div>
       </div>
     </AnimatePresence>
+  );
+};
+
+export const TaskTimerModal: React.FC<TaskTimerModalProps> = ({
+  quest,
+  isOpen,
+  onClose,
+  onCompleteQuest,
+}) => {
+  if (!isOpen || !quest) return null;
+
+  return (
+    <TaskTimerContent
+      key={`${quest.id}-${quest.timer_minutes || 25}`}
+      quest={quest}
+      onClose={onClose}
+      onCompleteQuest={onCompleteQuest}
+    />
   );
 };
