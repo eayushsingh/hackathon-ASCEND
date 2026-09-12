@@ -6,6 +6,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { LevelUpModal } from '@/components/modals/LevelUpModal';
 import { AchievementUnlockBanner } from '@/components/modals/AchievementUnlockBanner';
 import { AlarmWatcher } from '@/components/layout/AlarmWatcher';
+import { AmbientBackground } from '@/components/ui/AmbientBackground';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -32,6 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen bg-[#FAFAF8] font-sans text-[#1D1D1F] antialiased selection:bg-[#7C3AED] selection:text-white relative">
+        <AmbientBackground variant="global" />
         <GameProvider>
           <div className="relative min-h-screen flex flex-col">
             <Navbar />

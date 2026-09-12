@@ -28,6 +28,7 @@ import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
 import { useGame } from '@/lib/context/game-context';
 import HeroCharacter from '@/components/HeroCharacter';
 import { PageMascot, PageMascotType } from '@/components/PageMascot';
+import { AmbientBackground } from '@/components/ui/AmbientBackground';
 
 export default function LandingPage() {
   const { loginAsDemoUser } = useGame();
@@ -39,6 +40,7 @@ export default function LandingPage() {
 
   return (
     <div className="space-y-24 py-8 pb-20 relative">
+      <AmbientBackground variant="section" />
       {/* 1. HERO SECTION (12-COL SPLIT GRID) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">

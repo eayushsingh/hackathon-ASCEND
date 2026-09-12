@@ -25,6 +25,7 @@ import {
   BarChart3,
 } from 'lucide-react';
 import { isQuestScheduledForDate, isQuestCompletedOnDate, getTodayDateString } from '@/lib/progression/schedule';
+import { AmbientBackground } from '@/components/ui/AmbientBackground';
 
 export default function DashboardPage() {
   const { quests, streak, profile } = useGame();
@@ -106,9 +107,10 @@ export default function DashboardPage() {
           {/* Quest Cards List */}
           <div className="space-y-3">
             {displayedQuests.length === 0 ? (
-              <div className="py-16 text-center text-[#6E6E73] apple-card bg-white">
-                <p className="font-semibold text-base text-[#1D1D1F]">No {filterType.toLowerCase()} quests</p>
-                <p className="text-xs mt-1 text-[#8E8E93]">Click &quot;+ New Quest&quot; to add your first task.</p>
+              <div className="py-16 text-center text-[#6E6E73] apple-card bg-white relative overflow-hidden">
+                <AmbientBackground variant="card" />
+                <p className="font-semibold text-base text-[#1D1D1F] relative z-10">No {filterType.toLowerCase()} quests</p>
+                <p className="text-xs mt-1 text-[#8E8E93] relative z-10">Click &quot;+ New Quest&quot; to add your first task.</p>
               </div>
             ) : (
               <div className="space-y-3">

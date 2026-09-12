@@ -113,10 +113,95 @@ body {
   transform-origin: 50% 12px;
 }
 
+/* Ambient Background Motion (GPU-accelerated transforms) */
+@keyframes ambient-drift-1 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(30px, -40px, 0) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-25px, 20px, 0) scale(0.94);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes ambient-drift-2 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(-35px, 25px, 0) scale(0.92);
+  }
+  66% {
+    transform: translate3d(20px, -30px, 0) scale(1.06);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes ambient-drift-3 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(20px, 35px, 0) scale(1.1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes ambient-particle-float {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.55;
+  }
+  75% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate3d(var(--particle-drift-x, 15px), -100px, 0);
+    opacity: 0;
+  }
+}
+
+.animate-ambient-orb-1 {
+  animation: ambient-drift-1 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-ambient-orb-2 {
+  animation: ambient-drift-2 22s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-ambient-orb-3 {
+  animation: ambient-drift-3 26s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-ambient-particle {
+  animation: ambient-particle-float var(--particle-duration, 14s) ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-mascot-swing {
+  .animate-mascot-swing,
+  .animate-ambient-orb-1,
+  .animate-ambient-orb-2,
+  .animate-ambient-orb-3,
+  .animate-ambient-particle {
     animation: none !important;
     transform: none !important;
   }
 }
+
 
