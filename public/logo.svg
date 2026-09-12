@@ -1,27 +1,25 @@
-<svg width="240" height="64" viewBox="0 0 240 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="200" height="56" viewBox="0 0 200 56" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7C3AED"/>
+    <linearGradient id="ascendGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6D28D9"/>
+      <stop offset="45%" stop-color="#7C3AED"/>
       <stop offset="100%" stop-color="#38BDF8"/>
     </linearGradient>
-    <filter id="logoShadow" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse">
+    <filter id="badgeShadow" x="-20%" y="-20%" width="140%" height="140%" filterUnits="userSpaceOnUse">
       <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#7C3AED" flood-opacity="0.25"/>
     </filter>
   </defs>
 
-  <!-- Left Icon Emblem (38x38 inside 64px height) -->
-  <g transform="translate(4, 13)">
-    <rect width="38" height="38" rx="10" fill="url(#logoGrad)" filter="url(#logoShadow)"/>
-    <rect x="0.5" y="0.5" width="37" height="37" rx="9.5" stroke="#FFFFFF" stroke-opacity="0.25" stroke-width="1"/>
-    <!-- Ascending Peak -->
-    <path d="M11 27L19 11L27 27" stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M15 21H23" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-opacity="0.9"/>
-    <circle cx="19" cy="11" r="2.2" fill="#FFFFFF"/>
-  </g>
+  <!-- Left Icon Squircle Badge -->
+  <rect x="2" y="4" width="48" height="48" rx="14" fill="url(#ascendGrad)" filter="url(#badgeShadow)"/>
+  
+  <!-- Crisp White "A" Emblem with Rounded Caps -->
+  <path d="M19 36L26 18L33 36" stroke="#FFFFFF" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M21.5 30H30.5" stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="round"/>
 
-  <!-- ASCEND Wordmark in bold, crisp dark text -->
-  <text x="54" y="39" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif" font-weight="900" font-size="22" letter-spacing="2.5" fill="#1D1D1F">ASCEND</text>
+  <!-- Bold ASCEND Wordmark in Dark Charcoal / Black -->
+  <text x="64" y="37" font-family="Inter, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif" font-weight="900" font-size="26" letter-spacing="2" fill="#18181B">ASCEND</text>
 
-  <!-- Small accent badge dot -->
-  <circle cx="188" cy="27" r="3" fill="url(#logoGrad)"/>
+  <!-- Blue-Purple Gradient Accent Dot -->
+  <circle cx="186" cy="22" r="4.5" fill="url(#ascendGrad)"/>
 </svg>
