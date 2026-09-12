@@ -15,6 +15,7 @@ import { Archetype } from '@/types/rpg';
 import {
   Sparkles,
   ArrowRight,
+  ArrowLeft,
   Zap,
   Check,
   ChevronDown,
@@ -79,14 +80,35 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto py-10 px-4 sm:px-6">
+    <div className="max-w-5xl mx-auto py-8 sm:py-10 px-4 sm:px-6">
+      {/* Top Navigation Bar with Back Button */}
+      <div className="flex items-center justify-between mb-8">
+        <button
+          type="button"
+          onClick={() => {
+            if (typeof window !== 'undefined' && window.history.length > 1) {
+              router.back();
+            } else {
+              router.push('/');
+            }
+          }}
+          className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-2xl bg-white border border-[#E5E5EA] text-[#1D1D1F] hover:bg-[#F5F5F7] hover:border-purple-300 text-xs font-mono font-bold shadow-sm transition-all cursor-pointer group"
+          aria-label="Go Back"
+        >
+          <ArrowLeft className="w-4 h-4 text-purple-600 group-hover:-translate-x-1 transition-transform" />
+          <span>BACK</span>
+        </button>
+
+        <Link href="/" className="inline-flex hover:opacity-90 transition-opacity">
+          <Logo size="lg" />
+        </Link>
+
+        {/* Spacer to keep logo perfectly centered */}
+        <div className="w-20 hidden sm:block" />
+      </div>
+
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-10">
-        <div className="flex justify-center mb-6">
-          <Link href="/" className="inline-flex hover:opacity-90 transition-opacity">
-            <Logo size="lg" />
-          </Link>
-        </div>
         <div className="inline-flex items-center space-x-2 px-3.5 py-1 bg-purple-50 border border-purple-200 text-purple-700 text-xs font-mono font-bold uppercase tracking-wider rounded-full mb-3 shadow-sm">
           <Sparkles className="w-3.5 h-3.5 text-purple-600" />
           <span>Character Setup & Calibration</span>

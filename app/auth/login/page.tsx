@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import { useGame } from '@/lib/context/game-context';
-import { ArrowRight, Lock, Mail, Play, AlertCircle } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Lock, Mail, Play, AlertCircle } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 
 export default function LoginPage() {
@@ -68,7 +68,26 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto py-16 px-4">
+    <div className="max-w-md mx-auto py-12 px-4">
+      {/* Top Back Navigation */}
+      <div className="mb-4">
+        <button
+          type="button"
+          onClick={() => {
+            if (typeof window !== 'undefined' && window.history.length > 1) {
+              router.back();
+            } else {
+              router.push('/');
+            }
+          }}
+          className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-white border border-[#E5E5EA] text-[#1D1D1F] hover:bg-[#F5F5F7] text-xs font-mono font-bold shadow-sm transition-all cursor-pointer group"
+          aria-label="Go Back"
+        >
+          <ArrowLeft className="w-4 h-4 text-purple-600 group-hover:-translate-x-1 transition-transform" />
+          <span>BACK</span>
+        </button>
+      </div>
+
       <div className="p-8 sm:p-10 bg-white border border-[#E5E5E7] rounded-3xl shadow-sm text-center relative">
         {/* Top Logo */}
         <div className="flex justify-center mb-6">
