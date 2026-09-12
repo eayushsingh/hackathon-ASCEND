@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+:root {
+  --bg-base: #080B11;
+  --bg-surface: #0F1420;
+  --bg-surface-elevated: #161D2E;
+  --bg-card: rgba(15, 20, 32, 0.75);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(6, 182, 212, 0.4);
+
+  --accent-primary: #06B6D4;
+  --accent-secondary: #A855F7;
+  --accent-gold: #F59E0B;
+  --accent-success: #10B981;
+  --accent-danger: #EF4444;
+
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --text-faint: #64748B;
+  --glow-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+}
+
+/* THEMES OVERRIDES */
+html.theme-void {
+  --bg-base: #030712;
+  --bg-surface: #0B0F1E;
+  --bg-surface-elevated: #11172D;
+  --bg-card: rgba(11, 15, 30, 0.8);
+  --border-glow: rgba(168, 85, 247, 0.5);
+  --accent-primary: #A855F7;
+  --accent-secondary: #EC4899;
+  --glow-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+}
+
+html.theme-solar {
+  --bg-base: #0C0A07;
+  --bg-surface: #17130D;
+  --bg-surface-elevated: #241D14;
+  --bg-card: rgba(23, 19, 13, 0.8);
+  --border-glow: rgba(245, 158, 11, 0.5);
+  --accent-primary: #F59E0B;
+  --accent-secondary: #EF4444;
+  --glow-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+html.theme-matrix {
+  --bg-base: #030B07;
+  --bg-surface: #07170E;
+  --bg-surface-elevated: #0C2317;
+  --bg-card: rgba(7, 23, 14, 0.8);
+  --border-glow: rgba(16, 185, 129, 0.5);
+  --accent-primary: #10B981;
+  --accent-secondary: #06B6D4;
+  --glow-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+html.theme-crimson {
+  --bg-base: #0E0708;
+  --bg-surface: #1A0C0E;
+  --bg-surface-elevated: #291216;
+  --bg-card: rgba(26, 12, 14, 0.8);
+  --border-glow: rgba(239, 68, 68, 0.5);
+  --accent-primary: #EF4444;
+  --accent-secondary: #F59E0B;
+  --glow-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* CYBER HUD ACCENTS */
+.cyber-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  position: relative;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cyber-panel:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.cyber-panel-glow {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glow);
+  box-shadow: var(--glow-shadow);
+  border-radius: 12px;
+}
+
+.cyber-grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.cyber-dots-bg {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* GLOW TEXT */
+.text-glow-cyan {
+  text-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
+}
+
+.text-glow-amber {
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+}
+
+.text-glow-purple {
+  text-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
+}
+
+.text-glow-emerald {
+  text-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+}
+
+/* CUSTOM SCROLLBAR */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #080B11;
+}
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* ANIMATIONS */
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}
+
+.scanline {
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, transparent, var(--accent-primary), transparent);
+  opacity: 0.4;
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+}
