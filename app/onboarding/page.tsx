@@ -25,6 +25,8 @@ import { Logo } from '@/components/ui/Logo';
 import { ArchetypeAvatar } from '@/components/character/ArchetypeAvatar';
 import { PageMascot } from '@/components/PageMascot';
 
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
+
 export default function OnboardingPage() {
   const router = useRouter();
   const { loginAsDemoUser, updateUserProfile } = useGame();
@@ -32,6 +34,25 @@ export default function OnboardingPage() {
   const [username, setUsername] = useState('Kaelen Vance');
   const [selectedArchetype, setSelectedArchetype] = useState<Archetype>('Cyber Mage');
   const [isInitializing, setIsInitializing] = useState(false);
+
+  // Prepopulate username from authenticated user if available
+  React.useEffect(() => {
+    if (isSupabaseConfigured()) {
+      const supabase = createClient();
+      supabase.auth.getUser().then(({ data: { user } }) => {
+        if (user) {
+          const defaultName =
+            user.user_metadata?.full_name ||
+            user.user_metadata?.name ||
+            user.user_metadata?.username ||
+            user.email?.split('@')[0];
+          if (defaultName) {
+            setUsername(defaultName);
+          }
+        }
+      });
+    }
+  }, []);
 
   const archetypesRef = useRef<HTMLDivElement>(null);
   const initializeRef = useRef<HTMLDivElement>(null);
@@ -68,6 +89,30 @@ export default function OnboardingPage() {
 
     setIsInitializing(true);
     try {
+      if (isSupabaseConfigured()) {
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
+        if (user) {
+          await supabase.auth.updateUser({
+            data: {
+              username: username.trim(),
+              archetype: selectedArchetype,
+            },
+          });
+
+          await supabase
+            .from('profiles')
+            .update({
+              username: username.trim(),
+              archetype: selectedArchetype,
+            })
+            .eq('user_id', user.id);
+        }
+      }
+
       loginAsDemoUser(selectedArchetype);
       await updateUserProfile({
         username: username.trim(),
