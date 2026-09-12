@@ -60,9 +60,9 @@ export const Navbar: React.FC = () => {
             <Image
               src="/logo.svg"
               alt="ASCEND"
-              width={140}
-              height={36}
-              className="h-8 w-auto object-contain transition-transform group-hover:scale-105"
+              width={155}
+              height={40}
+              className="h-9 w-auto object-contain transition-transform group-hover:scale-105"
               priority
             />
           </Link>
