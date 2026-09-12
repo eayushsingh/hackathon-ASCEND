@@ -164,9 +164,26 @@ const unlockedAchs = evaluateNewAchievements({
 });
 assert(unlockedAchs.some((a) => a.code === 'FIRST_QUEST'), 'Unlocks FIRST_QUEST achievement on first completion');
 assert(unlockedAchs.some((a) => a.code === 'INTELLECT_100'), 'Unlocks INTELLECT_100 when intellect XP exceeds threshold');
-
-// 6. LEADERBOARD RANKING & PRIVACY TESTS
+// 6. LEADERBOARD RANKING & PRIVACY TESTS (live data only, zero fake names)
 console.log('\n--- 6. LEADERBOARD RANKING & PRIVACY TESTS ---');
+
+// 6a. Empty database produces empty leaderboard
+const emptyProfiles: { user_id: string; username: string; level: number; xp: number }[] = [];
+const emptyRanked = [...emptyProfiles].sort((a, b) => {
+  if (b.level !== a.level) return b.level - a.level;
+  return b.xp - a.xp;
+});
+assert(emptyRanked.length === 0, '0 users yields empty leaderboard array');
+
+// 6b. Single user is always rank #1
+const soloProfiles = [
+  { user_id: 'solo-1', username: 'OnlyPlayer', archetype: 'Cyber Mage', level: 1, xp: 0 },
+];
+const soloRanked = soloProfiles.map((r, i) => ({ ...r, rank: i + 1 }));
+assert(soloRanked.length === 1, 'Single user leaderboard has exactly 1 entry');
+assert(soloRanked[0].rank === 1, 'Single user is rank #1');
+
+// 6c. Multi-user ranking correctness
 interface RawTestProfile {
   user_id: string;
   username: string;
@@ -192,7 +209,7 @@ assert(ranked[0].username === 'MasterPlayer', 'Rank 1 is user with highest level
 assert(ranked[1].username === 'EqualLevelLowerXP', 'Rank 2 tiebreaks on XP when levels are identical');
 assert(ranked[2].username === 'NovicePlayer', 'Rank 3 is lowest level user');
 
-// Sanitize public projection
+// 6d. Public projection strips private fields
 const publicProjection = ranked.map((r, i) => ({
   rank: i + 1,
   user_id: r.user_id,
@@ -206,3 +223,4 @@ assert(!('email' in publicProjection[0]), 'Leaderboard public projection does NO
 assert(!('gold' in publicProjection[0]), 'Leaderboard public projection does NOT contain gold balance');
 
 console.log(`\n🎉 SUITE SUMMARY: ${passedTests}/${totalTests} TESTS PASSED! 🎉\n`);
+
