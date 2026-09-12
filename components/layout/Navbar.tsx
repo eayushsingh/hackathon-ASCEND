@@ -45,14 +45,14 @@ export const Navbar: React.FC = () => {
     { href: '/quests', label: 'Quests' },
     { href: '/calendar', label: 'Calendar' },
     { href: '/character', label: 'Character' },
-    { href: '/leaderboard', label: 'Leaderboard' },
     { href: '/shop', label: 'Shop' },
+    { href: '/leaderboard', label: 'Leaderboard' },
   ];
 
   const secondaryNavLinks = [
     { href: '/inventory', label: 'Inventory', icon: Package },
     { href: '/analytics', label: 'Analytics', icon: BarChart3 },
-    { href: '/achievements', label: 'Trophies', icon: Trophy },
+    { href: '/achievements', label: 'Trophies & Badges', icon: Trophy },
   ];
 
   const allNavLinks = [
@@ -126,7 +126,7 @@ export const Navbar: React.FC = () => {
                     : 'hover:text-[#1D1D1F]'
                 }`}
               >
-                <span>More</span>
+                <span>Progress</span>
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${moreMenuOpen ? 'rotate-180 text-[#7C3AED]' : ''}`} />
               </button>
 

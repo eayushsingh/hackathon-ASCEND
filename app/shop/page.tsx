@@ -41,10 +41,10 @@ export default function ShopPage() {
           </div>
           <div>
             <h1 className="text-3xl md:text-4xl font-extrabold text-[#1D1D1F] tracking-tight">
-              Guild Market
+              Rewards Shop
             </h1>
             <p className="text-xs sm:text-sm font-sans text-[#6E6E73] mt-1 max-w-xl">
-              Exchange your earned gold coins for cosmetic themes, badges, titles, and boost items.
+              Spend your earned gold on new themes, titles, streak freezes, and cosmetic badges.
             </p>
           </div>
         </div>
@@ -67,7 +67,7 @@ export default function ShopPage() {
             <div className="space-y-3 text-center md:text-left">
               <div className="inline-flex items-center space-x-2 px-3 py-1 bg-amber-100/80 border border-amber-200 rounded-full text-amber-800 font-mono text-xs font-bold uppercase">
                 <Crown className="w-3.5 h-3.5 text-amber-600" />
-                <span>Spotlight Item</span>
+                <span>Featured Reward</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1D1D1F] tracking-tight">{featuredItem.name}</h2>
               <p className="text-xs sm:text-sm font-sans text-[#6E6E73] max-w-xl leading-relaxed">
@@ -90,7 +90,7 @@ export default function ShopPage() {
                   disabled={profile.gold < featuredItem.price}
                   className="px-6 py-3 btn-primary-gradient text-white font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow-sm transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Acquire Now
+                  Buy Item
                 </button>
               )}
             </div>

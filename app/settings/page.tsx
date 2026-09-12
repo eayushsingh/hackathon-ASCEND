@@ -80,8 +80,8 @@ export default function SettingsPage() {
           <Settings className="w-6 h-6" />
         </div>
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1D1D1F] tracking-tight">System Settings</h1>
-          <p className="text-xs sm:text-sm text-[#6E6E73] mt-0.5">Customize preferences, audio effects, and hero profile.</p>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1D1D1F] tracking-tight">Settings</h1>
+          <p className="text-xs sm:text-sm text-[#6E6E73] mt-0.5">Manage your profile, themes, sound preferences, and account data.</p>
         </div>
       </div>
 

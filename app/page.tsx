@@ -45,27 +45,27 @@ export default function LandingPage() {
           <div className="lg:col-span-7 space-y-6 text-left">
             <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 bg-[#F2F2F7] border border-[#E5E5EA] rounded-full text-[#7C3AED] text-xs font-semibold tracking-wide">
               <Sparkles className="w-3.5 h-3.5 text-[#7C3AED]" />
-              <span>THE ULTIMATE LIFE GAMIFICATION SYSTEM</span>
+              <span>Turn your to-do list into a game</span>
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#1D1D1F] leading-[1.05]">
-              Transform Reality <br />
+              Turn Your Daily Tasks <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7C3AED] to-[#38BDF8]">
-                Into an Epic RPG
+                Into a Rewarding RPG
               </span>
             </h1>
 
             <p className="text-lg sm:text-xl text-[#6E6E73] max-w-2xl font-normal leading-relaxed">
-              Turn your everyday tasks, workouts, study sessions, and habits into rewarding quests. Earn XP, level up your 6 core attributes, build streaks, and master your life.
+              Turn your everyday tasks, workouts, study sessions, and habits into fun quests. Earn XP, level up your character, build streaks, and stay motivated every day.
             </p>
 
             {/* Verb-led Action Buttons */}
             <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
               <Link
                 href="/onboarding"
-                className="px-8 py-4 btn-primary-gradient font-semibold text-base rounded-full flex items-center justify-center space-x-2 group cursor-pointer"
+                className="px-8 py-4 btn-primary-gradient font-semibold text-base rounded-full flex items-center justify-center space-x-2 group cursor-pointer shadow-md hover:shadow-lg transition-all"
               >
-                <span>Start Your Journey</span>
+                <span>Get Started</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
 
@@ -75,23 +75,23 @@ export default function LandingPage() {
                 className="px-8 py-4 bg-white hover:bg-[#FAF9F5] text-[#1D1D1F] border border-[#E5E5EA] shadow-sm font-semibold text-base rounded-full transition-all flex items-center justify-center space-x-2 group cursor-pointer"
               >
                 <Play className="w-4 h-4 text-[#7C3AED] fill-[#7C3AED]" />
-                <span>Instant Demo Mode</span>
+                <span>Try Instant Demo</span>
               </Link>
             </div>
 
             {/* Quick Feature Pills */}
             <div className="pt-6 grid grid-cols-3 gap-4 border-t border-[#E5E5EA]">
               <div className="p-3 bg-white rounded-2xl border border-[#E5E5EA] shadow-sm">
-                <div className="text-xs text-[#8E8E93] font-medium">Progression</div>
-                <div className="text-sm font-semibold text-[#1D1D1F] mt-0.5">6 Attributes</div>
+                <div className="text-xs text-[#8E8E93] font-medium">Growth</div>
+                <div className="text-sm font-semibold text-[#1D1D1F] mt-0.5">6 Life Skills</div>
               </div>
               <div className="p-3 bg-white rounded-2xl border border-[#E5E5EA] shadow-sm">
                 <div className="text-xs text-[#8E8E93] font-medium">Consistency</div>
-                <div className="text-sm font-semibold text-[#7C3AED] mt-0.5">Streak Engine</div>
+                <div className="text-sm font-semibold text-[#7C3AED] mt-0.5">Daily Streaks</div>
               </div>
               <div className="p-3 bg-white rounded-2xl border border-[#E5E5EA] shadow-sm">
-                <div className="text-xs text-[#8E8E93] font-medium">Economy</div>
-                <div className="text-sm font-semibold text-[#C9A227] mt-0.5">Guild Market</div>
+                <div className="text-xs text-[#8E8E93] font-medium">Rewards</div>
+                <div className="text-sm font-semibold text-[#C9A227] mt-0.5">Shop & Badges</div>
               </div>
             </div>
           </div>
@@ -104,11 +104,11 @@ export default function LandingPage() {
                 <div className="flex items-center space-x-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-[#7C3AED] animate-pulse" />
                   <span className="text-xs font-semibold text-[#1D1D1F] tracking-wide">
-                    CYBER MAGE • LEVEL 14
+                    Cyber Mage • Level 14
                   </span>
                 </div>
                 <span className="text-xs font-semibold bg-[#F2F2F7] px-2.5 py-0.5 rounded-full text-[#6E6E73]">
-                  Active Character
+                  Your Character
                 </span>
               </div>
 
@@ -153,10 +153,10 @@ export default function LandingPage() {
             <div className="flex items-center space-x-2.5">
               <Sparkles className="w-4 h-4 text-[#7C3AED]" />
               <span className="text-xs font-semibold text-[#1D1D1F] tracking-wide uppercase">
-                Interactive Quest Demo
+                Try a Sample Quest
               </span>
             </div>
-            <span className="text-xs text-[#8E8E93]">Click checkbox to complete</span>
+            <span className="text-xs text-[#8E8E93]">Click the checkbox to try it</span>
           </div>
 
           <div
@@ -179,21 +179,21 @@ export default function LandingPage() {
               </div>
               <div>
                 <h4 className={`text-base font-semibold ${demoQuestCompleted ? 'line-through text-[#8E8E93]' : 'text-[#1D1D1F]'}`}>
-                  Complete Deep Work Focus Session
+                  Complete 25-minute deep focus session
                 </h4>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-xs font-semibold text-[#7C3AED] bg-[#F2F2F7] px-2.5 py-0.5 rounded-full">
-                    Hard
+                    Medium
                   </span>
                   <span className="text-xs font-semibold text-[#38BDF8] bg-[#F2F2F7] px-2.5 py-0.5 rounded-full">
-                    +120 Intellect XP
+                    +60 Intellect XP
                   </span>
                 </div>
               </div>
             </div>
 
             <span className="text-sm font-semibold text-[#C9A227] flex items-center gap-1.5 bg-[#FAF9F5] px-3.5 py-1.5 rounded-full border border-[#E5E5EA]">
-              <Coins className="w-4 h-4 text-[#C9A227]" /> +60 Gold
+              <Coins className="w-4 h-4 text-[#C9A227]" /> +30 Gold
             </span>
           </div>
 
@@ -205,7 +205,7 @@ export default function LandingPage() {
             >
               <span className="flex items-center gap-2 font-semibold">
                 <Zap className="w-4 h-4 text-[#7C3AED] fill-[#7C3AED]" />
-                <span>Quest Completed! +120 XP Added to Intellect</span>
+                <span>Quest Completed! +60 XP added to Intellect</span>
               </span>
               <span className="text-[#1D1D1F] font-bold flex items-center gap-1">
                 <Flame className="w-4 h-4 text-[#7C3AED]" /> 1 Day Streak
@@ -215,14 +215,14 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 3. CORE RPG PILLARS */}
+      {/* 3. CORE PILLARS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14 space-y-3">
           <h2 className="text-3xl sm:text-4xl font-bold text-[#1D1D1F] tracking-tight font-sans">
-            Built for Real Life Progress
+            How ASCEND Works
           </h2>
           <p className="text-[#6E6E73] text-base max-w-2xl mx-auto">
-            Designed with thoughtful game mechanics to build momentum, consistency, and daily motivation.
+            Simple habit mechanics designed to build momentum, consistency, and daily focus.
           </p>
         </div>
 
@@ -231,9 +231,9 @@ export default function LandingPage() {
             <div className="w-12 h-12 rounded-2xl bg-[#F2F2F7] flex items-center justify-center text-[#7C3AED] mb-6">
               <Brain className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-semibold text-[#1D1D1F] mb-3">6 Core Attributes</h3>
+            <h3 className="text-xl font-semibold text-[#1D1D1F] mb-3">6 Life Skills</h3>
             <p className="text-sm text-[#6E6E73] leading-relaxed">
-              Tasks map directly to Intellect, Strength, Vitality, Discipline, Creativity, or Charisma. Build a well-rounded character.
+              Tag tasks to Intellect, Strength, Vitality, Discipline, Creativity, or Social to level up your real-life skills.
             </p>
           </div>
 
@@ -241,9 +241,9 @@ export default function LandingPage() {
             <div className="w-12 h-12 rounded-2xl bg-[#F2F2F7] flex items-center justify-center text-[#38BDF8] mb-6">
               <Zap className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-semibold text-[#1D1D1F] mb-3">Rewarding Levels</h3>
+            <h3 className="text-xl font-semibold text-[#1D1D1F] mb-3">Level Up</h3>
             <p className="text-sm text-[#6E6E73] leading-relaxed">
-              Level up as you accomplish real-world goals. Early wins build momentum while higher levels challenge your growth.
+              Earn XP as you complete daily goals. Watch your level grow from Initiate to Master.
             </p>
           </div>
 
@@ -251,9 +251,9 @@ export default function LandingPage() {
             <div className="w-12 h-12 rounded-2xl bg-[#F2F2F7] flex items-center justify-center text-[#C9A227] mb-6">
               <Coins className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-semibold text-[#1D1D1F] mb-3">Guild Market</h3>
+            <h3 className="text-xl font-semibold text-[#1D1D1F] mb-3">Rewards Shop</h3>
             <p className="text-sm text-[#6E6E73] leading-relaxed">
-              Earn gold from completed quests to unlock custom UI themes, avatar frames, titles, and streak freeze protections.
+              Earn gold coins to unlock fun visual themes, profile badges, custom titles, and streak protection items.
             </p>
           </div>
         </div>

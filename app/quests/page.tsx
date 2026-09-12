@@ -54,8 +54,27 @@ export default function QuestsPage() {
   const categories = ['All', 'Work', 'Fitness', 'Learning', 'Habit', 'Creative', 'Social'];
 
   return (
-    <div className="space-y-10 pb-16 pt-4">
-      {/* 1. TOP STATS BAR */}
+    <div className="space-y-8 pb-16 pt-2">
+      {/* 1. HEADER */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E5E5EA] pb-5">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#1D1D1F] tracking-tight">
+            Your Quests
+          </h1>
+          <p className="text-xs sm:text-sm text-[#6E6E73] mt-0.5">
+            Track and complete your daily habits, projects, and goals.
+          </p>
+        </div>
+        <button
+          onClick={() => setIsCreateModalOpen(true)}
+          className="px-5 py-2.5 btn-primary-gradient font-semibold text-xs rounded-full flex items-center space-x-1.5 cursor-pointer shadow-sm hover:shadow-md transition-all self-start sm:self-auto"
+        >
+          <Plus className="w-4 h-4 stroke-[3]" />
+          <span>New Quest</span>
+        </button>
+      </div>
+
+      {/* 2. TOP STATS BAR */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="apple-card p-6 text-center sm:text-left">
           <div className="text-3xl font-bold text-[#1D1D1F]">{quests.length}</div>

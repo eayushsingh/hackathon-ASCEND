@@ -25,14 +25,16 @@ import {
   AlertCircle,
   Bell,
   Clock,
+  Calendar,
 } from 'lucide-react';
 
 interface CreateQuestModalProps {
   isOpen: boolean;
   onClose: () => void;
+  defaultDueDate?: string;
 }
 
-export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onClose }) => {
+export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onClose, defaultDueDate }) => {
   const { createQuest, profile, streak } = useGame();
 
   const [title, setTitle] = useState('');
@@ -40,6 +42,7 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
   const [category, setCategory] = useState<QuestCategory>('Work');
   const [difficulty, setDifficulty] = useState<QuestDifficulty>('Medium');
   const [attribute, setAttribute] = useState<AttributeType>('Intellect');
+  const [dueDate, setDueDate] = useState<string>(defaultDueDate || '');
   const [isRecurring, setIsRecurring] = useState(false);
   const [recurrenceInterval, setRecurrenceInterval] = useState<'Daily' | 'Weekly'>('Daily');
   const [priority, setPriority] = useState<QuestPriority>('Medium');
@@ -47,6 +50,12 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
   const [reminderTime, setReminderTime] = useState('08:00');
   const [validationError, setValidationError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  React.useEffect(() => {
+    if (defaultDueDate) {
+      setDueDate(defaultDueDate);
+    }
+  }, [defaultDueDate]);
 
   if (!isOpen) return null;
 
@@ -69,7 +78,7 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
     setValidationError(null);
 
     if (!title.trim()) {
-      setValidationError('Please enter a task or quest title.');
+      setValidationError('Please enter a quest title.');
       return;
     }
 
@@ -83,6 +92,7 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
         category,
         difficulty,
         attribute,
+        due_date: dueDate ? dueDate : null,
         is_recurring: isRecurring,
         recurrence_interval: isRecurring ? recurrenceInterval : undefined,
         priority,
@@ -91,7 +101,9 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
       });
       setTitle('');
       setDescription('');
+      setDueDate('');
       setIsAlarmEnabled(false);
+      setIsRecurring(false);
       setValidationError(null);
       onClose();
     } catch (err: unknown) {
@@ -134,11 +146,11 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5 mt-5">
+          <form onSubmit={handleSubmit} className="space-y-4 mt-5">
             {/* Title */}
             <div>
-              <label className="block text-xs font-mono font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
-                Task / Quest Title *
+              <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
+                Quest Title *
               </label>
               <input
                 type="text"
@@ -147,29 +159,62 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
                   setTitle(e.target.value);
                   if (validationError) setValidationError(null);
                 }}
-                placeholder="e.g., Read for 30 minutes, Gym Workout, or Complete Project"
+                placeholder="e.g., Read for 20 minutes, Morning Workout, or Complete Homework"
                 required
                 className="w-full px-4 py-3 bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl text-[#1D1D1F] placeholder-[#8E8E93] text-sm focus:outline-none focus:border-purple-500 font-medium transition-colors"
               />
             </div>
 
+            {/* Due Date & Schedule (Optional) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-purple-600" />
+                  <span>Due Date (Optional)</span>
+                </label>
+                <input
+                  type="date"
+                  value={dueDate}
+                  onChange={(e) => setDueDate(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl text-[#1D1D1F] text-xs font-medium focus:outline-none focus:border-purple-500 transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
+                  Skill Boosted
+                </label>
+                <select
+                  value={attribute}
+                  onChange={(e) => setAttribute(e.target.value as AttributeType)}
+                  className="w-full px-4 py-2.5 bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl text-[#1D1D1F] text-xs font-semibold focus:outline-none focus:border-purple-500 cursor-pointer"
+                >
+                  {ATTRIBUTE_LIST.map((attr) => (
+                    <option key={attr.type} value={attr.type}>
+                      {attr.name} (+{attr.primaryCategories.join(', ')})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             {/* Description */}
             <div>
-              <label className="block text-xs font-mono font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
-                Notes or Details (Optional)
+              <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
+                Notes (Optional)
               </label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Add checklist notes or goals..."
+                placeholder="Add checklist notes or details..."
                 rows={2}
-                className="w-full px-4 py-3 bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl text-[#1D1D1F] placeholder-[#8E8E93] text-sm focus:outline-none focus:border-purple-500 font-medium resize-none transition-colors"
+                className="w-full px-4 py-2.5 bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl text-[#1D1D1F] placeholder-[#8E8E93] text-sm focus:outline-none focus:border-purple-500 font-medium resize-none transition-colors"
               />
             </div>
 
             {/* Category selection */}
             <div>
-              <label className="block text-xs font-mono font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
                 Category
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -192,8 +237,8 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
 
             {/* Difficulty selection */}
             <div>
-              <label className="block text-xs font-mono font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
-                Difficulty Level
+              <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
+                Difficulty
               </label>
               <div className="grid grid-cols-5 gap-1.5">
                 {difficulties.map((diff) => (
@@ -211,24 +256,6 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
                   </button>
                 ))}
               </div>
-            </div>
-
-            {/* Attribute Target */}
-            <div>
-              <label className="block text-xs font-mono font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
-                Skill Attribute Boosted
-              </label>
-              <select
-                value={attribute}
-                onChange={(e) => setAttribute(e.target.value as AttributeType)}
-                className="w-full px-4 py-2.5 bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl text-[#1D1D1F] text-xs font-semibold focus:outline-none focus:border-purple-500 cursor-pointer"
-              >
-                {ATTRIBUTE_LIST.map((attr) => (
-                  <option key={attr.type} value={attr.type}>
-                    {attr.name} ({attr.shortName}) - Boosts {attr.primaryCategories.join(', ')}
-                  </option>
-                ))}
-              </select>
             </div>
 
             {/* Recurring Toggle */}

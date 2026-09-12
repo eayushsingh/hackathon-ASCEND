@@ -40,10 +40,10 @@ export default function InventoryPage() {
             </div>
             <div>
               <h1 className="text-3xl md:text-4xl font-extrabold text-[#1D1D1F] tracking-tight">
-                Loadout & Inventory
+                Inventory & Items
               </h1>
               <p className="text-xs sm:text-sm font-sans text-[#6E6E73] mt-1 max-w-xl">
-                Active cosmetic equipment, titles, and consumables stored in your personal vault.
+                Manage your equipped themes, badges, titles, and items.
               </p>
             </div>
           </div>
@@ -53,7 +53,7 @@ export default function InventoryPage() {
             className="px-6 py-3 btn-primary-gradient text-white font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow-sm transition-all flex items-center space-x-2 shrink-0 cursor-pointer"
           >
             <ShoppingBag className="w-4 h-4" />
-            <span>Open Guild Market</span>
+            <span>Visit Rewards Shop</span>
           </Link>
         </div>
 
@@ -114,16 +114,16 @@ export default function InventoryPage() {
       {filteredInventory.length === 0 ? (
         <div className="py-20 text-center apple-card">
           <Package className="w-12 h-12 text-[#8E8E93] mx-auto mb-4" />
-          <h3 className="font-mono text-base font-bold text-[#1D1D1F] uppercase">No acquired items</h3>
+          <h3 className="font-mono text-base font-bold text-[#1D1D1F] uppercase">No items yet</h3>
           <p className="text-xs font-sans text-[#6E6E73] mt-2 max-w-md mx-auto">
-            Complete quests to earn gold, then acquire themes, badges, and titles from the Guild Market.
+            Complete quests to earn gold, then unlock themes, badges, and titles in the Rewards Shop.
           </p>
           <Link
             href="/shop"
             className="mt-6 inline-flex items-center space-x-2 px-6 py-3 btn-primary-gradient text-white font-mono font-bold text-xs uppercase tracking-wider rounded-xl shadow-sm transition-all cursor-pointer"
           >
             <ShoppingBag className="w-4 h-4" />
-            <span>Visit Guild Market</span>
+            <span>Visit Rewards Shop</span>
           </Link>
         </div>
       ) : (

@@ -253,13 +253,13 @@ export default function LeaderboardPage() {
           <div>
             <div className="flex items-center justify-center md:justify-start space-x-2 text-xs font-mono font-bold uppercase tracking-wider text-amber-700">
               <Crown className="w-3.5 h-3.5" />
-              <span>GLOBAL HALL OF FAME</span>
+              <span>Top Rankings</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-extrabold text-[#1D1D1F] tracking-tight mt-1">
-              Global Leaderboard
+              Community Leaderboard
             </h1>
             <p className="text-xs sm:text-sm font-sans text-[#6E6E73] mt-1 max-w-xl">
-              Real-time rankings for active ASCEND productivity players worldwide.
+              See rankings, compare progress, and celebrate milestones with other players.
             </p>
           </div>
         </div>
@@ -267,7 +267,7 @@ export default function LeaderboardPage() {
         <div className="flex items-center space-x-4 font-mono text-xs text-[#6E6E73]">
           <div className="px-4 py-2 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] flex items-center space-x-2">
             <Users className="w-4 h-4 text-purple-600" />
-            <span className="font-semibold text-[#1D1D1F]">{totalCount} Players Ranked</span>
+            <span className="font-semibold text-[#1D1D1F]">{totalCount} Active Players</span>
           </div>
         </div>
       </div>

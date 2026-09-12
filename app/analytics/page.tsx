@@ -61,11 +61,11 @@ export default function AnalyticsPage() {
               <Activity className="w-7 h-7" />
             </div>
             <div>
-              <h1 className="text-3xl md:text-4xl font-extrabold text-[#1D1D1F] tracking-tight">
-                Activity Analytics
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#1D1D1F] tracking-tight">
+                Activity & Stats
               </h1>
-              <p className="text-xs sm:text-sm font-sans text-[#6E6E73] mt-1 max-w-xl">
-                Comprehensive telemetry tracking consistency, task velocity, and attribute progression.
+              <p className="text-xs sm:text-sm text-[#6E6E73] mt-0.5 max-w-xl">
+                Track your daily consistency, completed quests, and skill progress over time.
               </p>
             </div>
           </div>

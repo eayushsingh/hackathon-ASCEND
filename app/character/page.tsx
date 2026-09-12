@@ -86,23 +86,23 @@ export default function CharacterPage() {
             <div className="mt-4 flex items-center space-x-3 text-xs font-sans">
               <Sparkles className="w-4 h-4 text-purple-600 shrink-0" />
               <div>
-                <span className="font-bold text-purple-600 uppercase mr-2 font-mono">PASSIVE ABILITY:</span>
+                <span className="font-bold text-purple-600 uppercase mr-2 font-mono">BONUS PERK:</span>
                 <span className="text-[#6E6E73] font-medium">{archetypeInfo.perk}</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* 2. MATHEMATICAL PROGRESSION BLUEPRINT */}
+        {/* 2. LEVEL PROGRESS CALCULATOR */}
         <div className="pt-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
-              <h2 className="text-lg font-bold text-[#1D1D1F]">Leveling System Calculator</h2>
-              <p className="text-xs font-mono text-[#6E6E73] mt-0.5">Exponential curve: XP(n) = 100 * n^1.5</p>
+              <h2 className="text-lg font-bold text-[#1D1D1F]">Level Calculator</h2>
+              <p className="text-xs text-[#6E6E73] mt-0.5">See how much XP is needed to reach any future level.</p>
             </div>
 
             <div className="flex items-center space-x-3">
-              <span className="text-xs font-mono text-[#6E6E73] uppercase font-medium">Inspect Level:</span>
+              <span className="text-xs text-[#6E6E73] uppercase font-semibold">Check Level:</span>
               <input
                 type="number"
                 min={1}
@@ -130,20 +130,20 @@ export default function CharacterPage() {
             <div className="p-4 rounded-2xl bg-[#F5F5F7] border border-dashed border-[#C7C7CC]">
               <div className="text-[11px] font-mono text-[#6E6E73] uppercase font-medium">Inspected Level {previewFormulaLevel}</div>
               <div className="font-mono text-2xl font-bold text-[#1D1D1F] mt-1">{formatNumber(previewXpRequired)} XP</div>
-              <div className="text-xs font-mono text-[#6E6E73] mt-1">Cumulative Requirement</div>
+              <div className="text-xs font-mono text-[#6E6E73] mt-1">Total Requirement</div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 2. FLASHY 21-DAY HABIT TRANSFORMATION & MOTIVATION SURGE CARD */}
+      {/* 2. 21-DAY HABIT MOTIVATION CARD */}
       <HabitTransformationCard />
 
-      {/* 3. ASCENSION RANK ROADMAP */}
+      {/* 3. RANK ROADMAP */}
       <div className="apple-card p-6 sm:p-8">
         <div className="mb-6 pb-3 border-b border-[#E5E5EA]">
-          <h2 className="text-xl font-bold text-[#1D1D1F]">Ascension Rank Roadmap</h2>
-          <p className="text-sm text-[#6E6E73] mt-0.5">Unlock prestige perks as you level up your real-life productivity.</p>
+          <h2 className="text-xl font-bold text-[#1D1D1F]">Rank Milestones</h2>
+          <p className="text-sm text-[#6E6E73] mt-0.5">Unlock perks as you level up your daily productivity.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -185,11 +185,11 @@ export default function CharacterPage() {
         </div>
       </div>
 
-      {/* 4. ATTRIBUTE MASTERY MATRIX */}
+      {/* 4. ATTRIBUTE SPECIALIZATIONS */}
       <div className="apple-card p-6 sm:p-8">
         <div className="mb-6 pb-3 border-b border-[#E5E5EA]">
-          <h2 className="text-xl font-bold text-[#1D1D1F]">Attribute Specializations</h2>
-          <p className="text-sm text-[#6E6E73] mt-0.5">Focus on specific areas of self-growth to unlock passive bonuses.</p>
+          <h2 className="text-xl font-bold text-[#1D1D1F]">Your Skills & Attributes</h2>
+          <p className="text-sm text-[#6E6E73] mt-0.5">Focus on specific areas of daily growth to unlock passive perks.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

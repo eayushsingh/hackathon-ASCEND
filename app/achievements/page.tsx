@@ -40,10 +40,10 @@ export default function AchievementsPage() {
             </div>
             <div>
               <h1 className="text-3xl md:text-4xl font-extrabold text-[#1D1D1F] tracking-tight">
-                Trophy Hall
+                Achievements & Trophies
               </h1>
               <p className="text-xs sm:text-sm font-sans text-[#6E6E73] mt-1 max-w-lg">
-                Permanent milestones earned by completing quests, habit streaks, and leveling up.
+                Track your achievements, streaks, and milestone badges.
               </p>
             </div>
           </div>
@@ -51,7 +51,7 @@ export default function AchievementsPage() {
           <div className="px-5 py-3 rounded-2xl bg-[#F5F5F7] border border-[#E5E5EA] flex items-center space-x-4 shrink-0">
             <Crown className="w-6 h-6 text-amber-500" />
             <div>
-              <div className="text-[11px] font-mono text-[#6E6E73] uppercase font-medium">Unlocked Trophies</div>
+              <div className="text-[11px] font-mono text-[#6E6E73] uppercase font-medium">Unlocked Badges</div>
               <div className="font-mono text-xl font-bold text-[#1D1D1F] mt-0.5">
                 <AnimatedCounter value={unlockedCount} /> / {totalCount} ({progressPercent}%)
               </div>
@@ -62,7 +62,7 @@ export default function AchievementsPage() {
         {/* Global Trophy Progress Bar */}
         <div className="mt-6">
           <div className="flex items-center justify-between text-xs font-mono text-[#6E6E73] uppercase font-medium mb-2">
-            <span>Overall Trophy Completion</span>
+            <span>Overall Progress</span>
             <span className="text-amber-600 font-bold">{progressPercent}%</span>
           </div>
           <div className="w-full bg-[#E5E5EA] rounded-full h-3 overflow-hidden p-0.5">
