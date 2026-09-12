@@ -111,6 +111,16 @@ Zero-latency procedural sound synthesizer built using the **Web Audio API** (no 
 
 ---
 
+### 🌐 Global Leaderboard (Hall of Ascension)
+- **Global Competitor Rankings**: Real-time hierarchy ranked primarily by Level, tiebroken by Total XP.
+- **Privacy-Guaranteed Public Read-Only View**: Backed by a secure PostgreSQL view (`leaderboard_view`) and RPC (`get_leaderboard`) joining `profiles` + `user_achievements`. Only exposes `rank`, `username`, `archetype`, `avatar_url`, `level`, `total_xp`, `title`, and `achievement_count`.
+- **Zero Privacy Leaks**: Emails, gold balances, inventory, quest notes, and private transactions are strictly blocked by RLS.
+- **Top 50 Pagination + User Standing Card**: Dedicated "Your Rank" card shows the current player's exact standing even if outside the top 50.
+- **Podium Accents**: Custom Gold, Silver, and Bronze cyber-crest badges with Orbitron typography.
+- **Filter & Search**: Instant filter by Archetype and search by username.
+
+---
+
 ### 🎨 Themes & Customization
 - **5 Dynamic Cyberpunk Themes**:
   - `Cyberpunk Neon` (Cyan & Electric Violet)
@@ -130,6 +140,7 @@ Zero-latency procedural sound synthesizer built using the **Web Audio API** (no 
 | **Onboarding** | `/onboarding` | Character creation, archetype selection, and starter quest generation. |
 | **Command Center** | `/dashboard` | Character HUD, non-linear XP bar, active quests, and 4-week heatmap. |
 | **Quest Matrix** | `/quests` | Full quest CRUD, filters, search bar, and bounty sorting. |
+| **Global Leaderboard** | `/leaderboard` | Top 50 global ranking, live podium, archetype filters, and player standing. |
 | **Character Sheet** | `/character` | Rank milestone tree, non-linear math stats, and attribute deep dive. |
 | **Analytics** | `/analytics` | Productivity velocity, category share, and consistency metrics. |
 | **Guild Shop** | `/shop` | Item marketplace for themes, badges, titles, and consumables. |

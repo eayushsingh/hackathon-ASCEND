@@ -23,6 +23,7 @@ import {
   Flame,
   CheckCircle2,
   Filter,
+  Crown,
 } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 
@@ -135,7 +136,16 @@ export default function DashboardPage() {
           <HeatmapGrid />
 
           {/* Quick Shortcuts */}
-          <div className="grid grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <Link
+              href="/leaderboard"
+              className="p-3 rounded-xl bg-[#0D111A] border border-cyan-500/20 hover:border-cyan-500/40 text-center transition-all group"
+            >
+              <Crown className="w-4 h-4 text-cyan-400 mx-auto mb-1 group-hover:scale-110 transition-transform" />
+              <div className="font-display text-xs font-bold text-cyan-300">Rankings</div>
+              <div className="text-[10px] text-slate-400">Leaderboard</div>
+            </Link>
+
             <Link
               href="/shop"
               className="p-3 rounded-xl bg-[#0D111A] border border-amber-500/20 hover:border-amber-500/40 text-center transition-all group"
@@ -160,7 +170,7 @@ export default function DashboardPage() {
             >
               <Trophy className="w-4 h-4 text-cyan-400 mx-auto mb-1 group-hover:scale-110 transition-transform" />
               <div className="font-display text-xs font-bold text-cyan-300">Trophies</div>
-              <div className="text-[10px] text-slate-400">Claim Rewards</div>
+              <div className="text-[10px] text-slate-400">Rewards</div>
             </Link>
           </div>
         </div>

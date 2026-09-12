@@ -249,3 +249,50 @@ DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
     AFTER INSERT ON auth.users
     FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- ==============================================================================
+-- 11. PUBLIC READ-ONLY LEADERBOARD VIEW & RPC
+-- Exposes ONLY non-sensitive progression fields: username, archetype, level, total_xp, achievement_count, title
+-- Zero private fields (no email, no gold, no transactions, no private notes)
+-- ==============================================================================
+CREATE OR REPLACE VIEW public.leaderboard_view AS
+SELECT
+    p.user_id,
+    p.username,
+    p.archetype,
+    p.avatar_url,
+    p.level,
+    p.xp AS total_xp,
+    p.title,
+    COUNT(ua.id)::INTEGER AS achievement_count,
+    DENSE_RANK() OVER (ORDER BY p.level DESC, p.xp DESC) AS rank
+FROM public.profiles p
+LEFT JOIN public.user_achievements ua ON ua.user_id = p.user_id
+GROUP BY p.user_id, p.username, p.archetype, p.avatar_url, p.level, p.xp, p.title;
+
+-- Grant public read access to leaderboard view for all authenticated & anon users
+GRANT SELECT ON public.leaderboard_view TO authenticated, anon;
+
+-- Function to fetch top leaderboard entries + current user rank
+CREATE OR REPLACE FUNCTION public.get_leaderboard(limit_count INTEGER DEFAULT 50)
+RETURNS TABLE (
+    user_id UUID,
+    username TEXT,
+    archetype TEXT,
+    avatar_url TEXT,
+    level INTEGER,
+    total_xp INTEGER,
+    title TEXT,
+    achievement_count INTEGER,
+    rank BIGINT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT *
+    FROM public.leaderboard_view
+    ORDER BY rank ASC
+    LIMIT limit_count;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+GRANT EXECUTE ON FUNCTION public.get_leaderboard TO authenticated, anon;

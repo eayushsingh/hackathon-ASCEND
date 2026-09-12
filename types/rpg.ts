@@ -229,3 +229,22 @@ export interface QuestCompletionResult {
   unlockedAchievements: Achievement[];
   message: string;
 }
+
+export interface LeaderboardEntry {
+  rank: number;
+  user_id: string;
+  username: string;
+  archetype: Archetype;
+  avatar_url?: string;
+  level: number;
+  total_xp: number;
+  title: string;
+  achievement_count: number;
+  is_current_user?: boolean;
+}
+
+export interface LeaderboardResponse {
+  leaderboard: LeaderboardEntry[];
+  currentUserEntry?: LeaderboardEntry | null;
+  totalParticipants: number;
+}

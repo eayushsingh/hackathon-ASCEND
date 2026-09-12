@@ -26,6 +26,7 @@ import {
   ShoppingBag,
   Package,
   Trophy,
+  Crown,
   Settings,
 } from 'lucide-react';
 import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
@@ -42,6 +43,7 @@ export const Navbar: React.FC = () => {
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/quests', label: 'Quests', icon: Swords },
     { href: '/character', label: 'Character', icon: User },
+    { href: '/leaderboard', label: 'Leaderboard', icon: Crown },
     { href: '/analytics', label: 'Analytics', icon: BarChart3 },
     { href: '/shop', label: 'Guild Shop', icon: ShoppingBag },
     { href: '/inventory', label: 'Inventory', icon: Package },

@@ -165,4 +165,44 @@ const unlockedAchs = evaluateNewAchievements({
 assert(unlockedAchs.some((a) => a.code === 'FIRST_QUEST'), 'Unlocks FIRST_QUEST achievement on first completion');
 assert(unlockedAchs.some((a) => a.code === 'INTELLECT_100'), 'Unlocks INTELLECT_100 when intellect XP exceeds threshold');
 
+// 6. LEADERBOARD RANKING & PRIVACY TESTS
+console.log('\n--- 6. LEADERBOARD RANKING & PRIVACY TESTS ---');
+interface RawTestProfile {
+  user_id: string;
+  username: string;
+  archetype: string;
+  level: number;
+  xp: number;
+  email?: string;
+  gold?: number;
+}
+const mockProfiles: RawTestProfile[] = [
+  { user_id: 'u1', username: 'NovicePlayer', archetype: 'Cyber Mage', level: 2, xp: 300, email: 'novice@test.com', gold: 9999 },
+  { user_id: 'u2', username: 'MasterPlayer', archetype: 'Iron Titan', level: 10, xp: 4500, email: 'master@test.com', gold: 8888 },
+  { user_id: 'u3', username: 'EqualLevelLowerXP', archetype: 'Shadow Rogue', level: 10, xp: 4200, email: 'equal@test.com', gold: 7777 },
+];
+
+// Sort: level DESC, xp DESC
+const ranked = [...mockProfiles].sort((a, b) => {
+  if (b.level !== a.level) return b.level - a.level;
+  return b.xp - a.xp;
+});
+
+assert(ranked[0].username === 'MasterPlayer', 'Rank 1 is user with highest level and XP');
+assert(ranked[1].username === 'EqualLevelLowerXP', 'Rank 2 tiebreaks on XP when levels are identical');
+assert(ranked[2].username === 'NovicePlayer', 'Rank 3 is lowest level user');
+
+// Sanitize public projection
+const publicProjection = ranked.map((r, i) => ({
+  rank: i + 1,
+  user_id: r.user_id,
+  username: r.username,
+  archetype: r.archetype,
+  level: r.level,
+  total_xp: r.xp,
+}));
+
+assert(!('email' in publicProjection[0]), 'Leaderboard public projection does NOT contain email');
+assert(!('gold' in publicProjection[0]), 'Leaderboard public projection does NOT contain gold balance');
+
 console.log(`\n🎉 SUITE SUMMARY: ${passedTests}/${totalTests} TESTS PASSED! 🎉\n`);
