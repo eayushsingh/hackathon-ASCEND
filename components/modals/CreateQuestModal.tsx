@@ -1,21 +1,24 @@
 'use client';
 
 // ==============================================================================
-// ASCEND - CREATE QUEST MODAL
-// Apple Bright Premium Quest Creation Modal with Simple Language
+// ASCEND - CREATE & EDIT QUEST MODAL
+// Apple Bright Premium Quest Creation & Weekly Routine Schedule Builder
 // ==============================================================================
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGame } from '@/lib/context/game-context';
 import {
+  Quest,
   QuestCategory,
   QuestDifficulty,
   AttributeType,
   QuestPriority,
+  Weekday,
 } from '@/types/rpg';
 import { ATTRIBUTE_LIST, getDefaultAttributeForCategory } from '@/lib/progression/attributes';
 import { calculateAuthoritativeRewards } from '@/lib/progression/rewards';
+import { WeeklyScheduleSelector } from '@/components/quests/WeeklyScheduleSelector';
 import {
   X,
   Zap,
@@ -24,7 +27,6 @@ import {
   RotateCw,
   AlertCircle,
   Bell,
-  Clock,
   Calendar,
 } from 'lucide-react';
 
@@ -32,30 +34,63 @@ interface CreateQuestModalProps {
   isOpen: boolean;
   onClose: () => void;
   defaultDueDate?: string;
+  editQuest?: Quest | null;
 }
 
-export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onClose, defaultDueDate }) => {
-  const { createQuest, profile, streak } = useGame();
+export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({
+  isOpen,
+  onClose,
+  defaultDueDate,
+  editQuest,
+}) => {
+  const { createQuest, updateQuest, profile, streak } = useGame();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<QuestCategory>('Work');
   const [difficulty, setDifficulty] = useState<QuestDifficulty>('Medium');
   const [attribute, setAttribute] = useState<AttributeType>('Intellect');
-  const [dueDate, setDueDate] = useState<string>(defaultDueDate || '');
+  const [dueDate, setDueDate] = useState<string>('');
   const [isRecurring, setIsRecurring] = useState(false);
-  const [recurrenceInterval, setRecurrenceInterval] = useState<'Daily' | 'Weekly'>('Daily');
+  const [recurringDays, setRecurringDays] = useState<Weekday[]>(['mon', 'tue', 'wed', 'thu', 'fri']);
   const [priority, setPriority] = useState<QuestPriority>('Medium');
   const [isAlarmEnabled, setIsAlarmEnabled] = useState(false);
   const [reminderTime, setReminderTime] = useState('08:00');
   const [validationError, setValidationError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  React.useEffect(() => {
-    if (defaultDueDate) {
-      setDueDate(defaultDueDate);
+  // Synchronize state when editQuest or defaultDueDate changes
+  useEffect(() => {
+    if (editQuest) {
+      setTitle(editQuest.title || '');
+      setDescription(editQuest.description || '');
+      setCategory(editQuest.category || 'Work');
+      setDifficulty(editQuest.difficulty || 'Medium');
+      setAttribute(editQuest.attribute || 'Intellect');
+      setDueDate(editQuest.due_date ? (editQuest.due_date.includes('T') ? editQuest.due_date.split('T')[0] : editQuest.due_date) : '');
+      setIsRecurring(Boolean(editQuest.is_recurring));
+      if (editQuest.recurring_days && Array.isArray(editQuest.recurring_days) && editQuest.recurring_days.length > 0) {
+        setRecurringDays(editQuest.recurring_days as Weekday[]);
+      } else {
+        setRecurringDays(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']);
+      }
+      setPriority(editQuest.priority || 'Medium');
+      setIsAlarmEnabled(Boolean(editQuest.reminder_enabled || editQuest.reminder_time));
+      setReminderTime(editQuest.reminder_time || '08:00');
+    } else {
+      setTitle('');
+      setDescription('');
+      setCategory('Work');
+      setDifficulty('Medium');
+      setAttribute('Intellect');
+      setDueDate(defaultDueDate || '');
+      setIsRecurring(false);
+      setRecurringDays(['mon', 'tue', 'wed', 'thu', 'fri']);
+      setPriority('Medium');
+      setIsAlarmEnabled(false);
+      setReminderTime('08:00');
     }
-  }, [defaultDueDate]);
+  }, [editQuest, defaultDueDate, isOpen]);
 
   if (!isOpen) return null;
 
@@ -86,28 +121,44 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
 
     setIsSubmitting(true);
     try {
-      await createQuest({
-        title: title.trim(),
-        description: description.trim(),
-        category,
-        difficulty,
-        attribute,
-        due_date: dueDate ? dueDate : null,
-        is_recurring: isRecurring,
-        recurrence_interval: isRecurring ? recurrenceInterval : undefined,
-        priority,
-        reminder_time: isAlarmEnabled ? reminderTime : null,
-        reminder_enabled: isAlarmEnabled,
-      });
-      setTitle('');
-      setDescription('');
-      setDueDate('');
-      setIsAlarmEnabled(false);
-      setIsRecurring(false);
+      if (editQuest) {
+        // Edit existing quest
+        await updateQuest(editQuest.id, {
+          title: title.trim(),
+          description: description.trim(),
+          category,
+          difficulty,
+          attribute,
+          due_date: isRecurring ? null : dueDate ? dueDate : null,
+          is_recurring: isRecurring,
+          recurrence_interval: isRecurring ? (recurringDays.length === 7 ? 'Daily' : 'Weekly') : 'None',
+          recurring_days: isRecurring ? recurringDays : null,
+          priority,
+          reminder_time: isAlarmEnabled ? reminderTime : null,
+          reminder_enabled: isAlarmEnabled,
+        });
+      } else {
+        // Create new quest
+        await createQuest({
+          title: title.trim(),
+          description: description.trim(),
+          category,
+          difficulty,
+          attribute,
+          due_date: isRecurring ? null : dueDate ? dueDate : null,
+          is_recurring: isRecurring,
+          recurrence_interval: isRecurring ? (recurringDays.length === 7 ? 'Daily' : 'Weekly') : undefined,
+          recurring_days: isRecurring ? recurringDays : null,
+          priority,
+          reminder_time: isAlarmEnabled ? reminderTime : null,
+          reminder_enabled: isAlarmEnabled,
+        });
+      }
+
       setValidationError(null);
       onClose();
     } catch (err: unknown) {
-      setValidationError((err as Error).message || 'Failed to create quest. Please try again.');
+      setValidationError((err as Error).message || 'Failed to save quest. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -128,8 +179,14 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
           {/* Header */}
           <div className="flex items-start justify-between pb-4 border-b border-[#E5E5EA]">
             <div>
-              <h3 className="text-2xl font-bold text-[#1D1D1F] tracking-tight">Create New Quest</h3>
-              <p className="text-xs text-[#6E6E73] mt-0.5">Add your daily tasks, workouts, or habits to earn XP and level up.</p>
+              <h3 className="text-2xl font-bold text-[#1D1D1F] tracking-tight">
+                {editQuest ? 'Edit Quest' : 'Create New Quest'}
+              </h3>
+              <p className="text-xs text-[#6E6E73] mt-0.5">
+                {editQuest
+                  ? 'Update your quest details, schedule, or reminder settings.'
+                  : 'Add your daily tasks, workouts, or habits to earn XP and level up.'}
+              </p>
             </div>
             <button
               onClick={onClose}
@@ -159,24 +216,27 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
                   setTitle(e.target.value);
                   if (validationError) setValidationError(null);
                 }}
-                placeholder="e.g., Read for 20 minutes, Morning Workout, or Complete Homework"
+                placeholder="e.g., Read for 20 minutes, Morning Workout, or Complete Project"
                 required
                 className="w-full px-4 py-3 bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl text-[#1D1D1F] placeholder-[#8E8E93] text-sm focus:outline-none focus:border-purple-500 font-medium transition-colors"
               />
             </div>
 
-            {/* Due Date & Schedule (Optional) */}
+            {/* Schedule Type / Due Date & Skill */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5 text-purple-600" />
-                  <span>Due Date (Optional)</span>
+                  <span>Due Date (One-off)</span>
                 </label>
                 <input
                   type="date"
                   value={dueDate}
+                  disabled={isRecurring}
                   onChange={(e) => setDueDate(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl text-[#1D1D1F] text-xs font-medium focus:outline-none focus:border-purple-500 transition-colors"
+                  className={`w-full px-4 py-2.5 bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl text-[#1D1D1F] text-xs font-medium focus:outline-none focus:border-purple-500 transition-colors ${
+                    isRecurring ? 'opacity-40 cursor-not-allowed' : ''
+                  }`}
                 />
               </div>
 
@@ -198,7 +258,7 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
               </div>
             </div>
 
-            {/* Description */}
+            {/* Description / Notes */}
             <div>
               <label className="block text-xs font-bold text-[#1D1D1F] uppercase tracking-wider mb-1.5">
                 Notes (Optional)
@@ -258,21 +318,45 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
               </div>
             </div>
 
-            {/* Recurring Toggle */}
-            <div className="flex items-center justify-between p-3.5 bg-[#F5F5F7] rounded-xl border border-[#E5E5EA]">
-              <div className="flex items-center space-x-3">
-                <RotateCw className="w-5 h-5 text-purple-600" />
-                <div>
-                  <div className="text-xs font-bold text-[#1D1D1F]">Repeat Daily (Habit)</div>
-                  <div className="text-[11px] text-[#6E6E73]">Resets every morning to build your daily streak</div>
+            {/* RECURRING WEEKLY SCHEDULE CONTROLS */}
+            <div className="space-y-3">
+              {/* Recurring Toggle Switch */}
+              <div className="flex items-center justify-between p-3.5 bg-[#F5F5F7] rounded-xl border border-[#E5E5EA]">
+                <div className="flex items-center space-x-3">
+                  <RotateCw className="w-5 h-5 text-purple-600" />
+                  <div>
+                    <div className="text-xs font-bold text-[#1D1D1F]">Recurring Weekly Schedule</div>
+                    <div className="text-[11px] text-[#6E6E73]">
+                      Repeat this quest on specific days of the week
+                    </div>
+                  </div>
                 </div>
+                <input
+                  type="checkbox"
+                  checked={isRecurring}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    setIsRecurring(checked);
+                    if (checked && recurringDays.length === 0) {
+                      setRecurringDays(['mon', 'tue', 'wed', 'thu', 'fri']);
+                    }
+                  }}
+                  className="w-5 h-5 accent-purple-600 rounded cursor-pointer"
+                />
               </div>
-              <input
-                type="checkbox"
-                checked={isRecurring}
-                onChange={(e) => setIsRecurring(e.target.checked)}
-                className="w-5 h-5 accent-purple-600 rounded cursor-pointer"
-              />
+
+              {/* 7-Day Selector (visible when recurring is active) */}
+              {isRecurring && (
+                <WeeklyScheduleSelector
+                  selectedDays={recurringDays}
+                  onChange={(days) => {
+                    setRecurringDays(days);
+                    if (days.length === 0) {
+                      setIsRecurring(false);
+                    }
+                  }}
+                />
+              )}
             </div>
 
             {/* Scheduled Alarm Reminder Toggle */}
@@ -358,7 +442,13 @@ export const CreateQuestModal: React.FC<CreateQuestModalProps> = ({ isOpen, onCl
                 disabled={isSubmitting || !title.trim()}
                 className="w-2/3 py-2.5 btn-primary-gradient text-white rounded-xl font-semibold text-xs shadow-sm transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Creating Quest...' : 'Create Quest'}
+                {isSubmitting
+                  ? editQuest
+                    ? 'Saving Changes...'
+                    : 'Creating Quest...'
+                  : editQuest
+                  ? 'Save Changes'
+                  : 'Create Quest'}
               </button>
             </div>
           </form>

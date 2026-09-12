@@ -19,6 +19,7 @@ import {
   AttributeType,
   QuestCompletionResult,
   Archetype,
+  Weekday,
 } from '@/types/rpg';
 import { ARCHETYPES } from '@/lib/progression/archetypes';
 import { calculateLevelFromXP, calculateLevelProgress } from '@/lib/progression/levels';
@@ -28,7 +29,7 @@ import { STATIC_ACHIEVEMENTS, evaluateNewAchievements } from '@/lib/progression/
 import { STATIC_SHOP_ITEMS, validatePurchase } from '@/lib/progression/economy';
 import { soundManager } from '@/lib/sound/sfx';
 import confetti from 'canvas-confetti';
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
+import { isSupabaseConfigured, createClient } from '@/lib/supabase/client';
 
 export interface LevelUpModalData {
   isOpen: boolean;
@@ -62,10 +63,12 @@ interface GameContextType {
     attribute?: AttributeType;
     is_recurring?: boolean;
     recurrence_interval?: 'Daily' | 'Weekly' | 'None';
+    recurring_days?: Weekday[] | string[] | null;
     due_date?: string | null;
     priority?: 'Low' | 'Medium' | 'High';
     reminder_time?: string | null;
     reminder_enabled?: boolean;
+    timer_minutes?: number | null;
   }) => Promise<Quest>;
   updateQuest: (id: string, updates: Partial<Quest>) => Promise<Quest | null>;
   deleteQuest: (id: string) => Promise<boolean>;
@@ -126,7 +129,7 @@ const DEFAULT_QUESTS: Quest[] = [
   {
     id: 'quest-starter-1',
     user_id: 'ascendant-hero',
-    title: 'Initialize Neural Calibration (90m Deep Work)',
+    title: 'Deep Focus Sprint (45 mins)',
     description: 'Execute uninterrupted focus on primary technical or learning milestone.',
     category: 'Work',
     difficulty: 'Hard',
@@ -136,6 +139,7 @@ const DEFAULT_QUESTS: Quest[] = [
     status: 'Active',
     is_recurring: true,
     recurrence_interval: 'Daily',
+    recurring_days: ['mon', 'tue', 'wed', 'thu', 'fri'],
     due_date: null,
     priority: 'High',
     created_at: new Date().toISOString(),
@@ -153,6 +157,7 @@ const DEFAULT_QUESTS: Quest[] = [
     status: 'Active',
     is_recurring: true,
     recurrence_interval: 'Daily',
+    recurring_days: ['mon', 'wed', 'fri', 'sat'],
     due_date: null,
     priority: 'Medium',
     created_at: new Date().toISOString(),
@@ -170,6 +175,7 @@ const DEFAULT_QUESTS: Quest[] = [
     status: 'Active',
     is_recurring: true,
     recurrence_interval: 'Daily',
+    recurring_days: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
     due_date: null,
     priority: 'Low',
     created_at: new Date().toISOString(),
@@ -187,6 +193,7 @@ const DEFAULT_QUESTS: Quest[] = [
     status: 'Active',
     is_recurring: false,
     recurrence_interval: 'None',
+    recurring_days: null,
     due_date: null,
     priority: 'High',
     created_at: new Date().toISOString(),
@@ -310,10 +317,12 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     attribute?: AttributeType;
     is_recurring?: boolean;
     recurrence_interval?: 'Daily' | 'Weekly' | 'None';
+    recurring_days?: Weekday[] | string[] | null;
     due_date?: string | null;
     priority?: 'Low' | 'Medium' | 'High';
     reminder_time?: string | null;
     reminder_enabled?: boolean;
+    timer_minutes?: number | null;
   }): Promise<Quest> => {
     soundManager.playClick();
 
@@ -354,10 +363,12 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       status: 'Active',
       is_recurring: Boolean(questData.is_recurring),
       recurrence_interval: questData.recurrence_interval || 'Daily',
+      recurring_days: questData.recurring_days || null,
       due_date: questData.due_date || null,
       priority: questData.priority || 'Medium',
       reminder_time: questData.reminder_time || null,
       reminder_enabled: questData.reminder_enabled ?? Boolean(questData.reminder_time),
+      timer_minutes: questData.timer_minutes || null,
       created_at: new Date().toISOString(),
     };
 

@@ -61,8 +61,11 @@ export async function PATCH(
     if (body.attribute !== undefined) updateData.attribute = body.attribute as AttributeType;
     if (body.is_recurring !== undefined) updateData.is_recurring = Boolean(body.is_recurring);
     if (body.recurrence_interval !== undefined) updateData.recurrence_interval = body.recurrence_interval;
+    if (body.recurring_days !== undefined) updateData.recurring_days = body.recurring_days;
     if (body.due_date !== undefined) updateData.due_date = body.due_date;
     if (body.priority !== undefined) updateData.priority = body.priority;
+    if (body.reminder_time !== undefined) updateData.reminder_time = body.reminder_time;
+    if (body.reminder_enabled !== undefined) updateData.reminder_enabled = Boolean(body.reminder_enabled);
     if (body.status !== undefined) updateData.status = body.status;
 
     if (body.difficulty !== undefined) {

@@ -23,20 +23,37 @@ import {
   Brain,
   BarChart3,
 } from 'lucide-react';
+import { isQuestScheduledForDate, isQuestCompletedOnDate, getTodayDateString } from '@/lib/progression/schedule';
 
 export default function DashboardPage() {
   const { quests, streak, profile } = useGame();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [filterType, setFilterType] = useState<'Active' | 'Daily' | 'All' | 'Completed'>('Active');
 
-  const activeQuests = quests.filter((q) => q.status === 'Active');
-  const completedQuests = quests.filter((q) => q.status === 'Completed');
-  const dailyQuests = quests.filter((q) => q.is_recurring && q.status === 'Active');
+  const todayIso = getTodayDateString();
 
-  let displayedQuests = activeQuests;
-  if (filterType === 'All') displayedQuests = quests;
+  // Quests relevant to today:
+  // 1. Recurring quests scheduled for today's weekday
+  // 2. One-off quests with today's due date OR unscheduled active/completed today
+  const todayQuests = quests.filter((q) => {
+    if (q.is_recurring) {
+      return isQuestScheduledForDate(q, todayIso);
+    }
+    if (q.due_date) {
+      const due = q.due_date.includes('T') ? q.due_date.split('T')[0] : q.due_date;
+      return due === todayIso;
+    }
+    return q.status === 'Active' || isQuestCompletedOnDate(q, todayIso);
+  });
+
+  const activeToday = todayQuests.filter((q) => !isQuestCompletedOnDate(q, todayIso));
+  const completedToday = todayQuests.filter((q) => isQuestCompletedOnDate(q, todayIso));
+  const dailyQuests = todayQuests.filter((q) => q.is_recurring);
+
+  let displayedQuests = activeToday;
+  if (filterType === 'All') displayedQuests = todayQuests;
   if (filterType === 'Daily') displayedQuests = dailyQuests;
-  if (filterType === 'Completed') displayedQuests = completedQuests;
+  if (filterType === 'Completed') displayedQuests = completedToday;
 
   return (
     <div className="space-y-8 pb-16">
@@ -95,7 +112,11 @@ export default function DashboardPage() {
             ) : (
               <div className="space-y-3">
                 {displayedQuests.map((quest) => (
-                  <QuestCard key={quest.id} quest={quest} />
+                  <QuestCard
+                    key={quest.id}
+                    quest={quest}
+                    isCompletedOverride={isQuestCompletedOnDate(quest, todayIso)}
+                  />
                 ))}
               </div>
             )}
@@ -115,24 +136,23 @@ export default function DashboardPage() {
               <div className="p-3.5 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] flex justify-between items-center">
                 <div>
                   <div className="font-semibold text-[#1D1D1F]">Daily Habits</div>
-                  <div className="text-[11px] text-[#6E6E73] mt-0.5">Recurring routine</div>
+                  <div className="text-[11px] text-[#6E6E73] mt-0.5">Recurring routine today</div>
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-[#7C3AED] text-sm">
-                    {quests.filter((q) => q.is_recurring && q.status === 'Completed').length} /{' '}
-                    {dailyQuests.length + quests.filter((q) => q.is_recurring && q.status === 'Completed').length}
+                    {dailyQuests.filter((q) => isQuestCompletedOnDate(q, todayIso)).length} / {dailyQuests.length}
                   </div>
                 </div>
               </div>
 
               <div className="p-3.5 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] flex justify-between items-center">
                 <div>
-                  <div className="font-semibold text-[#1D1D1F]">Total Completed</div>
-                  <div className="text-[11px] text-[#6E6E73] mt-0.5">All-time cleared</div>
+                  <div className="font-semibold text-[#1D1D1F]">Today&apos;s Progress</div>
+                  <div className="text-[11px] text-[#6E6E73] mt-0.5">Tasks cleared today</div>
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-[#2E7D32] text-sm">
-                    {completedQuests.length} / {quests.length}
+                    {completedToday.length} / {todayQuests.length}
                   </div>
                 </div>
               </div>

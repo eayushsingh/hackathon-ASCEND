@@ -28,6 +28,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { isQuestScheduledForDate, isQuestCompletedOnDate } from '@/lib/progression/schedule';
 
 export default function CalendarPage() {
   const { quests, completeQuest, createQuest } = useGame();
@@ -56,17 +57,9 @@ export default function CalendarPage() {
 
   const todayIso = formatDateIso(new Date());
 
-  // Match quests for a specific date
+  // Match quests for a specific date using recurring weekday & due date schedule logic
   const getQuestsForDate = (dateStr: string) => {
-    return quests.filter((q) => {
-      if (q.due_date) {
-        const due = q.due_date.includes('T') ? q.due_date.split('T')[0] : q.due_date;
-        return due === dateStr;
-      }
-      if (q.is_recurring && (q.recurrence_interval === 'Daily' || !q.recurrence_interval)) return true;
-      const created = q.created_at ? (q.created_at.includes('T') ? q.created_at.split('T')[0] : q.created_at) : '';
-      return created === dateStr;
-    });
+    return quests.filter((q) => isQuestScheduledForDate(q, dateStr));
   };
 
   // Month navigation
@@ -360,7 +353,7 @@ export default function CalendarPage() {
                 const isToday = dateIso === todayIso;
                 const dayQuests = getQuestsForDate(dateIso);
                 const hasQuests = dayQuests.length > 0;
-                const completedCount = dayQuests.filter((q) => q.status === 'Completed').length;
+                const completedCount = dayQuests.filter((q) => isQuestCompletedOnDate(q, dateIso)).length;
                 const isAllDone = hasQuests && completedCount === dayQuests.length;
 
                 return (
@@ -452,7 +445,7 @@ export default function CalendarPage() {
                   </div>
                 ) : (
                   selectedDayQuests.map((quest) => {
-                    const isCompleted = quest.status === 'Completed';
+                    const isCompleted = isQuestCompletedOnDate(quest, selectedDateIso);
 
                     return (
                       <div
@@ -553,7 +546,7 @@ export default function CalendarPage() {
                       </div>
                     ) : (
                       dayQuests.map((q) => {
-                        const isCompleted = q.status === 'Completed';
+                        const isCompleted = isQuestCompletedOnDate(q, dateIso);
                         return (
                           <div
                             key={q.id}

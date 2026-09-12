@@ -87,6 +87,8 @@ export interface Streak {
   updated_at: string;
 }
 
+export type Weekday = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
+
 export interface Quest {
   id: string;
   user_id: string;
@@ -100,10 +102,12 @@ export interface Quest {
   status: QuestStatus;
   is_recurring: boolean;
   recurrence_interval?: 'Daily' | 'Weekly' | 'None';
+  recurring_days?: Weekday[] | string[] | null;
   due_date?: string | null;
   priority?: QuestPriority;
   reminder_time?: string | null; // e.g. "08:30" (24h format HH:MM)
   reminder_enabled?: boolean;
+  timer_minutes?: number | null;
   created_at: string;
   completed_at?: string | null;
   updated_at?: string;

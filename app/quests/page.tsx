@@ -17,7 +17,7 @@ import {
   Trophy,
   Zap,
 } from 'lucide-react';
-import { AnimatePresence } from 'framer-motion';
+import { isQuestCompletedOnDate, getTodayDateString } from '@/lib/progression/schedule';
 
 export default function QuestsPage() {
   const { quests } = useGame();
@@ -27,10 +27,13 @@ export default function QuestsPage() {
   const [selectedStatus, setSelectedStatus] = useState<'All' | 'Active' | 'Completed'>('Active');
   const [sortBy, setSortBy] = useState<'newest' | 'xp' | 'gold'>('newest');
 
+  const todayIso = getTodayDateString();
+
   const filteredQuests = quests
     .filter((q) => {
-      if (selectedStatus === 'Active' && q.status !== 'Active') return false;
-      if (selectedStatus === 'Completed' && q.status !== 'Completed') return false;
+      const isDone = isQuestCompletedOnDate(q, todayIso);
+      if (selectedStatus === 'Active' && isDone) return false;
+      if (selectedStatus === 'Completed' && !isDone) return false;
       if (selectedCategory !== 'All' && q.category !== selectedCategory) return false;
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
@@ -160,12 +163,16 @@ export default function QuestsPage() {
         {filteredQuests.length === 0 ? (
           <div className="py-20 text-center text-[#6E6E73] apple-card bg-white">
             <p className="font-semibold text-base text-[#1D1D1F]">No quests found</p>
-            <p className="text-xs mt-1 text-[#8E8E93]">Adjust your filters or forge a new quest to get started.</p>
+            <p className="text-xs mt-1 text-[#8E8E93]">Adjust your filters or create a new quest to get started.</p>
           </div>
         ) : (
           <div className="space-y-3">
             {filteredQuests.map((quest) => (
-              <QuestCard key={quest.id} quest={quest} />
+              <QuestCard
+                key={quest.id}
+                quest={quest}
+                isCompletedOverride={isQuestCompletedOnDate(quest, todayIso)}
+              />
             ))}
           </div>
         )}

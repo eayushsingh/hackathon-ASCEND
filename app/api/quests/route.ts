@@ -51,8 +51,11 @@ export async function POST(request: NextRequest) {
       attribute,
       is_recurring = false,
       recurrence_interval = 'Daily',
+      recurring_days = null,
       due_date = null,
       priority = 'Medium',
+      reminder_time = null,
+      reminder_enabled = false,
     } = body;
 
     if (!title || typeof title !== 'string' || title.trim().length === 0) {
@@ -80,8 +83,11 @@ export async function POST(request: NextRequest) {
         status: 'Active',
         is_recurring,
         recurrence_interval: is_recurring ? recurrence_interval : null,
+        recurring_days: is_recurring ? recurring_days : null,
         due_date,
         priority,
+        reminder_time,
+        reminder_enabled,
       })
       .select()
       .single();
