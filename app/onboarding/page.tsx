@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - ONBOARDING & ARCHETYPE SELECTION SCREEN
-// Apple Bright Premium Onboarding with Interactive Avatars & Auto-Scroll
+// Apple Bright Premium Onboarding with Interactive Avatars, Simple Language & Auto-Scroll
 // ==============================================================================
 
 import React, { useState, useRef } from 'react';
@@ -20,7 +20,6 @@ import {
   Check,
   ChevronDown,
   User,
-  ShieldAlert,
 } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { ArchetypeAvatar } from '@/components/character/ArchetypeAvatar';
@@ -111,13 +110,13 @@ export default function OnboardingPage() {
       <div className="text-center max-w-2xl mx-auto mb-10">
         <div className="inline-flex items-center space-x-2 px-3.5 py-1 bg-purple-50 border border-purple-200 text-purple-700 text-xs font-mono font-bold uppercase tracking-wider rounded-full mb-3 shadow-sm">
           <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-          <span>Character Setup & Calibration</span>
+          <span>Quick Setup</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1D1D1F] tracking-tight mb-3">
-          Choose Your Archetype
+          Choose Your Character Style
         </h1>
         <p className="text-sm text-[#6E6E73] font-sans leading-relaxed">
-          Select your starting character class. Your archetype boosts specific productivity attributes and generates custom starter habits.
+          Pick a playstyle that matches your daily habits and goals. Each class gives you bonus XP and 3 starter habits to help you succeed.
         </p>
       </div>
 
@@ -126,7 +125,7 @@ export default function OnboardingPage() {
         <div className="max-w-md mx-auto text-center">
           <label className="block text-xs font-mono font-bold text-[#1D1D1F] uppercase tracking-wider mb-2 text-center flex items-center justify-center gap-1.5">
             <User className="w-3.5 h-3.5 text-purple-600" />
-            <span>Your Hero Codename / Username</span>
+            <span>Choose Your Username / Hero Name</span>
           </label>
           <div className="relative">
             <input
@@ -148,7 +147,7 @@ export default function OnboardingPage() {
             onClick={scrollToArchetypes}
           >
             <span className="text-xs font-medium text-purple-700 group-hover:text-purple-900 transition-colors">
-              Choose a character archetype below & scroll down to start your journey
+              👇 Choose your character class below to get started
             </span>
             <ChevronDown className="w-4 h-4 text-purple-600 group-hover:translate-y-0.5 transition-transform" />
           </motion.div>
@@ -160,11 +159,11 @@ export default function OnboardingPage() {
             <div className="flex items-center space-x-2">
               <span className="w-2.5 h-2.5 rounded-full bg-purple-600 animate-pulse" />
               <h2 className="text-sm font-mono font-bold uppercase tracking-wider text-[#1D1D1F]">
-                Select Archetype Class ({ARCHETYPE_LIST.length} Available)
+                Select Your Class ({ARCHETYPE_LIST.length} Available)
               </h2>
             </div>
             <span className="text-xs text-[#6E6E73] font-medium hidden sm:inline-block">
-              Click any card to select & proceed
+              Tap any card to select
             </span>
           </div>
 
@@ -248,15 +247,15 @@ export default function OnboardingPage() {
               <div>
                 <h4 className="text-base font-bold text-[#1D1D1F] flex items-center gap-2">
                   <Zap className="w-4 h-4 text-purple-600" />
-                  <span>Starter Habit Quests: {activeArch.name}</span>
+                  <span>Starter Habits: {activeArch.name}</span>
                 </h4>
                 <p className="text-xs text-[#6E6E73] font-sans">
-                  Custom-tailored quests auto-generated for your starting archetype
+                  These 3 starter habits will be added to your quest board immediately
                 </p>
               </div>
             </div>
             <span className="text-[11px] text-purple-700 bg-purple-50 border border-purple-200 px-3 py-1 rounded-full font-mono font-semibold hidden sm:inline-block">
-              Auto-Generated on Launch
+              Starter Pack
             </span>
           </div>
 
@@ -282,11 +281,11 @@ export default function OnboardingPage() {
             disabled={isInitializing || !username.trim()}
             className="px-10 py-4 btn-primary-gradient text-white font-bold text-sm uppercase font-mono tracking-wider rounded-2xl shadow-lg hover:shadow-xl transition-all inline-flex items-center space-x-3 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed group"
           >
-            <span>{isInitializing ? 'Starting Journey...' : `Initialize as ${activeArch.name} & Begin`}</span>
+            <span>{isInitializing ? 'Starting Journey...' : `Start Journey as ${activeArch.name}`}</span>
             <ArrowRight className="w-5 h-5 stroke-[2.5] group-hover:translate-x-1 transition-transform" />
           </motion.button>
           <p className="text-xs text-[#6E6E73] mt-2 font-mono">
-            Ready to ascend as <strong className="text-[#1D1D1F]">{username || 'Hero'}</strong> ({activeArch.name})
+            You&apos;re all set to begin as <strong className="text-[#1D1D1F]">{username || 'Hero'}</strong> ({activeArch.name})
           </p>
         </div>
       </form>
