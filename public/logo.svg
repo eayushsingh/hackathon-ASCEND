@@ -1,37 +1,27 @@
-<svg width="620" height="160" viewBox="0 0 620 160" xmlns="http://www.w3.org/2000/svg">
+<svg width="240" height="64" viewBox="0 0 240 64" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="hexFill" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#141110"/>
-      <stop offset="100%" stop-color="#2A2421"/>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
     </linearGradient>
-    <linearGradient id="ascentLine" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#E8552A"/>
-      <stop offset="100%" stop-color="#FF7A50"/>
-    </linearGradient>
-    <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#FFFFFF"/>
-      <stop offset="60%" stop-color="#C9A227"/>
-      <stop offset="100%" stop-color="#C9A227" stop-opacity="0"/>
-    </radialGradient>
+    <filter id="logoShadow" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#7C3AED" flood-opacity="0.25"/>
+    </filter>
   </defs>
 
-  <g transform="translate(10,5)">
-    <!-- Outer Hexagon Frame -->
-    <polygon points="80,10 140,45 140,115 80,150 20,115 20,45"
-             fill="url(#hexFill)" stroke="#141110" stroke-width="4"/>
-    <polygon points="80,22 129,50 129,110 80,138 31,110 31,50"
-             fill="none" stroke="#E8552A" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="4 2"/>
-    
-    <!-- Ascending Peak Chevron -->
-    <path d="M46 112 L80 46 L114 112" fill="none" stroke="url(#ascentLine)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M62 84 L98 84" fill="none" stroke="#E8552A" stroke-width="6" stroke-linecap="round" opacity="0.9"/>
-    
-    <!-- Golden Apex Glow Node -->
-    <circle cx="80" cy="46" r="12" fill="url(#nodeGlow)"/>
-    <circle cx="80" cy="46" r="5" fill="#C9A227"/>
+  <!-- Left Icon Emblem (38x38 inside 64px height) -->
+  <g transform="translate(4, 13)">
+    <rect width="38" height="38" rx="10" fill="url(#logoGrad)" filter="url(#logoShadow)"/>
+    <rect x="0.5" y="0.5" width="37" height="37" rx="9.5" stroke="#FFFFFF" stroke-opacity="0.25" stroke-width="1"/>
+    <!-- Ascending Peak -->
+    <path d="M11 27L19 11L27 27" stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M15 21H23" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-opacity="0.9"/>
+    <circle cx="19" cy="11" r="2.2" fill="#FFFFFF"/>
   </g>
 
-  <!-- High-contrast Brand Text (#141110 near-black) -->
-  <text x="175" y="102" font-family="Oswald, 'Chakra Petch', -apple-system, sans-serif" font-weight="900" font-size="58" letter-spacing="6" fill="#141110">ASCEND</text>
-  <rect x="177" y="116" width="380" height="5" rx="2.5" fill="#E8552A"/>
+  <!-- ASCEND Wordmark in bold, crisp dark text -->
+  <text x="54" y="39" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif" font-weight="900" font-size="22" letter-spacing="2.5" fill="#1D1D1F">ASCEND</text>
+
+  <!-- Small accent badge dot -->
+  <circle cx="188" cy="27" r="3" fill="url(#logoGrad)"/>
 </svg>

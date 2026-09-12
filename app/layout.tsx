@@ -17,9 +17,9 @@ export const metadata: Metadata = {
   title: 'ASCEND | Turn Your Life Into an RPG',
   description: 'Transform daily tasks, workouts, learning, and habits into a rewarding life game. Earn XP, level up core attributes, maintain daily streaks, and conquer your goals.',
   icons: {
-    icon: '/logo.svg',
-    shortcut: '/logo.svg',
-    apple: '/logo.svg',
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
   },
 };
 

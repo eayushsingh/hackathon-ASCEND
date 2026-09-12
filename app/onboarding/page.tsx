@@ -18,6 +18,7 @@ import {
   Zap,
   Check,
 } from 'lucide-react';
+import { Logo } from '@/components/ui/Logo';
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -51,10 +52,8 @@ export default function OnboardingPage() {
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-12">
         <div className="flex justify-center mb-6">
-          <Link href="/">
-            <div className="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-sky-500">
-              ASCEND
-            </div>
+          <Link href="/" className="inline-flex hover:opacity-90 transition-opacity">
+            <Logo size="lg" />
           </Link>
         </div>
         <div className="inline-flex items-center space-x-2 px-3.5 py-1 bg-purple-50 border border-purple-200 text-purple-700 text-xs font-mono font-bold uppercase tracking-wider rounded-full mb-3">

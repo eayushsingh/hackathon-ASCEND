@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import { useGame } from '@/lib/context/game-context';
 import { ArrowRight, UserPlus, Mail, Lock, User, AlertCircle } from 'lucide-react';
+import { Logo } from '@/components/ui/Logo';
 import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
 import { Archetype } from '@/types/rpg';
 
@@ -78,8 +79,8 @@ export default function SignupPage() {
       <div className="p-8 sm:p-10 bg-white border border-[#E5E5E7] rounded-3xl shadow-sm text-center relative">
         {/* Top Logo */}
         <div className="flex justify-center mb-6">
-          <Link href="/">
-            <div className="font-sans font-black text-3xl tracking-tight text-[#1D1D1F]">ASCEND</div>
+          <Link href="/" className="inline-flex hover:opacity-90 transition-opacity">
+            <Logo size="lg" />
           </Link>
         </div>
 
