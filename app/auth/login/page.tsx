@@ -6,6 +6,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import { useGame } from '@/lib/context/game-context';
@@ -62,9 +63,18 @@ export default function LoginPage() {
   return (
     <div className="max-w-md mx-auto py-12 px-4">
       <div className="cyber-panel p-8 rounded-3xl border-cyan-500/40 shadow-[0_0_40px_rgba(6,182,212,0.2)] text-center relative overflow-hidden">
-        {/* Top Glow Icon */}
-        <div className="mx-auto w-14 h-14 rounded-2xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 mb-4 shadow-[0_0_20px_rgba(6,182,212,0.4)]">
-          <Lock className="w-7 h-7" />
+        {/* Top Logo */}
+        <div className="flex justify-center mb-6">
+          <Link href="/">
+            <Image
+              src="/logo.svg"
+              alt="ASCEND"
+              width={180}
+              height={46}
+              className="h-9 w-auto object-contain drop-shadow-[0_0_16px_rgba(34,211,238,0.4)]"
+              priority
+            />
+          </Link>
         </div>
 
         <h1 className="text-2xl font-black text-white">ACCESS THE MATRIX</h1>

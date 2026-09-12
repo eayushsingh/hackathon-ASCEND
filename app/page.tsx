@@ -6,6 +6,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
   Sparkles,
@@ -37,7 +38,18 @@ export default function LandingPage() {
   return (
     <div className="space-y-20 py-6 pb-16">
       {/* 1. HERO SECTION */}
-      <section className="relative text-center max-w-4xl mx-auto pt-8 pb-4 px-4">
+      <section className="relative text-center max-w-4xl mx-auto pt-4 pb-4 px-4">
+        <div className="flex justify-center mb-6">
+          <Image
+            src="/logo.svg"
+            alt="ASCEND"
+            width={260}
+            height={68}
+            className="h-14 sm:h-16 w-auto object-contain drop-shadow-[0_0_25px_rgba(34,211,238,0.5)]"
+            priority
+          />
+        </div>
+
         <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-display text-xs font-bold uppercase tracking-widest mb-6">
           <Sparkles className="w-3.5 h-3.5" />
           <span>LIFE RPG PRODUCTIVITY PROTOCOL</span>
@@ -278,6 +290,24 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* 5. FOOTER */}
+      <footer className="border-t border-white/10 pt-10 pb-6 text-center">
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <Link href="/">
+            <Image
+              src="/logo.svg"
+              alt="ASCEND"
+              width={160}
+              height={40}
+              className="h-8 w-auto object-contain drop-shadow-[0_0_15px_rgba(34,211,238,0.3)] opacity-90 hover:opacity-100 transition-opacity"
+            />
+          </Link>
+          <p className="text-xs text-slate-500 font-mono">
+            ASCEND PROTOCOL • FULL-STACK LIFE RPG • LEVEL UP YOUR REALITY
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -5,6 +5,8 @@
 // ==============================================================================
 
 import React, { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
@@ -54,6 +56,18 @@ export default function OnboardingPage() {
     <div className="max-w-5xl mx-auto py-8 px-4">
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-10">
+        <div className="flex justify-center mb-5">
+          <Link href="/">
+            <Image
+              src="/logo.svg"
+              alt="ASCEND"
+              width={180}
+              height={46}
+              className="h-9 w-auto object-contain drop-shadow-[0_0_16px_rgba(34,211,238,0.4)]"
+              priority
+            />
+          </Link>
+        </div>
         <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-3">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Character Initialization</span>

@@ -6,6 +6,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useGame } from '@/lib/context/game-context';
 import { calculateLevelProgress } from '@/lib/progression/levels';
@@ -53,15 +54,17 @@ export const Navbar: React.FC = () => {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-[#07090E]/95 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Left: Brand Logo with Orbitron Display Font */}
+        {/* Left: Brand Logo */}
         <div className="flex items-center space-x-6">
-          <Link href="/" className="flex items-center space-x-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 group-hover:border-cyan-400 transition-colors">
-              <Sparkles className="w-4 h-4" />
-            </div>
-            <span className="font-display text-lg font-black tracking-widest text-white group-hover:text-cyan-400 transition-colors">
-              ASCEND
-            </span>
+          <Link href="/" className="flex items-center group py-1" title="ASCEND Home">
+            <Image
+              src="/logo.svg"
+              alt="ASCEND"
+              width={140}
+              height={36}
+              className="h-8 w-auto object-contain transition-transform group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]"
+              priority
+            />
           </Link>
 
           {/* Desktop Nav Links */}

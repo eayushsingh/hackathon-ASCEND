@@ -23,6 +23,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'ASCEND | Life RPG & Productivity Protocol',
   description: 'Transform your daily tasks, workouts, learning, and habits into an immersive full-stack Life RPG. Earn authoritative XP, level up attributes, forge streaks, and conquer reality.',
+  icons: {
+    icon: '/logo.svg',
+    shortcut: '/logo.svg',
+    apple: '/logo.svg',
+  },
 };
 
 export default function RootLayout({
