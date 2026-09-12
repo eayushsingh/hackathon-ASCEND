@@ -8,14 +8,16 @@ class AlarmSynth {
   private isRinging: boolean = false;
   private intervalId: NodeJS.Timeout | null = null;
 
-  private getContext(): AudioContext {
+  private getContext(): AudioContext | null {
+    if (typeof window === 'undefined') return null;
     if (!this.audioCtx) {
       const AudioContextClass =
         window.AudioContext ||
         (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!AudioContextClass) return null;
       this.audioCtx = new AudioContextClass();
     }
-    if (this.audioCtx.state === 'suspended') {
+    if (this.audioCtx && this.audioCtx.state === 'suspended') {
       this.audioCtx.resume().catch(() => {});
     }
     return this.audioCtx;
@@ -25,6 +27,7 @@ class AlarmSynth {
   public playAlarmBeep() {
     try {
       const ctx = this.getContext();
+      if (!ctx) return;
       const now = ctx.currentTime;
 
       // Beep 1
