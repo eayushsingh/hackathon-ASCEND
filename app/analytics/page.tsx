@@ -10,6 +10,7 @@ import { useGame } from '@/lib/context/game-context';
 import { HeatmapGrid } from '@/components/analytics/HeatmapGrid';
 import { ATTRIBUTE_LIST, getTotalAttributeXP } from '@/lib/progression/attributes';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
+import { AnimatedMascot } from '@/components/AnimatedMascot';
 import {
   Activity,
   TrendingUp,
@@ -57,7 +58,13 @@ export default function AnalyticsPage() {
       <div className="apple-card p-6 sm:p-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-[#E5E5EA]">
           <div className="flex items-center space-x-5 text-center md:text-left">
-            <div className="w-14 h-14 bg-purple-50 border border-purple-200 rounded-2xl flex items-center justify-center text-purple-600 shrink-0 shadow-sm">
+            <AnimatedMascot
+              animationType="studying"
+              size={76}
+              badgeText="Deep Tracking"
+              className="hidden sm:inline-flex shrink-0"
+            />
+            <div className="w-14 h-14 bg-purple-50 border border-purple-200 rounded-2xl flex items-center justify-center text-purple-600 shrink-0 shadow-sm sm:hidden">
               <Activity className="w-7 h-7" />
             </div>
             <div>

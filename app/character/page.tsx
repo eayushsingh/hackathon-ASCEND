@@ -13,6 +13,7 @@ import { ATTRIBUTE_LIST, calculateAttributeLevel, getAttributeMasteryTitle } fro
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { HabitTransformationCard } from '@/components/character/HabitTransformationCard';
 import { ArchetypeAvatar } from '@/components/character/ArchetypeAvatar';
+import { AnimatedMascot } from '@/components/AnimatedMascot';
 import {
   Sparkles,
   CheckCircle2,
@@ -57,11 +58,21 @@ export default function CharacterPage() {
           </div>
 
           <div className="flex-1 w-full text-center lg:text-left pt-1">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1D1D1F] tracking-tight">
-              {profile.username}
-            </h1>
-            <div className="text-xs font-mono tracking-wider text-purple-600 uppercase font-semibold mt-1 mb-4">
-              {profile.title} • {profile.archetype}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1D1D1F] tracking-tight">
+                  {profile.username}
+                </h1>
+                <div className="text-xs font-mono tracking-wider text-purple-600 uppercase font-semibold mt-1 mb-4">
+                  {profile.title} • {profile.archetype}
+                </div>
+              </div>
+              <AnimatedMascot
+                animationType="gaming"
+                size={80}
+                badgeText="RPG Mastery"
+                className="hidden sm:inline-flex shrink-0 self-start"
+              />
             </div>
             
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-4 border-y border-[#E5E5EA]">
