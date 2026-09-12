@@ -60,13 +60,10 @@ export default function AnalyticsPage() {
           <div className="flex items-center space-x-5 text-center md:text-left">
             <AnimatedMascot
               animationType="studying"
-              size={76}
+              size={84}
               badgeText="Deep Tracking"
-              className="hidden sm:inline-flex shrink-0"
+              className="shrink-0"
             />
-            <div className="w-14 h-14 bg-purple-50 border border-purple-200 rounded-2xl flex items-center justify-center text-purple-600 shrink-0 shadow-sm sm:hidden">
-              <Activity className="w-7 h-7" />
-            </div>
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-[#1D1D1F] tracking-tight">
                 Activity & Stats

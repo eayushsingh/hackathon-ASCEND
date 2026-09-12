@@ -27,11 +27,13 @@ import {
 import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
 import { useGame } from '@/lib/context/game-context';
 import HeroCharacter from '@/components/HeroCharacter';
+import { AnimatedMascot, MascotAnimationType } from '@/components/AnimatedMascot';
 
 export default function LandingPage() {
   const { loginAsDemoUser } = useGame();
   const [demoQuestCompleted, setDemoQuestCompleted] = useState(false);
   const [activeArchetypeTab, setActiveArchetypeTab] = useState(ARCHETYPE_LIST[0].id);
+  const [heroMascotMode, setHeroMascotMode] = useState<'avatar' | MascotAnimationType>('avatar');
 
   const selectedArch = ARCHETYPE_LIST.find((a) => a.id === activeArchetypeTab) || ARCHETYPE_LIST[0];
 
@@ -96,25 +98,54 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* RIGHT: DEDICATED CHARACTER FRAME (5 COLS) */}
+          {/* RIGHT: DEDICATED CHARACTER & MASCOT FRAME (5 COLS) */}
           <div className="lg:col-span-5 relative">
             <div className="apple-card p-6 sm:p-8 relative overflow-hidden group">
-              {/* Header */}
-              <div className="flex items-center justify-between border-b border-[#E5E5EA] pb-4 mb-4">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#7C3AED] animate-pulse" />
-                  <span className="text-xs font-semibold text-[#1D1D1F] tracking-wide">
-                    Cyber Mage • Level 14
+              {/* Header with Mascot Activity Switcher */}
+              <div className="flex flex-col gap-2 border-b border-[#E5E5EA] pb-3 mb-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#7C3AED] animate-pulse" />
+                    <span className="text-xs font-semibold text-[#1D1D1F] tracking-wide">
+                      {heroMascotMode === 'avatar' ? 'Cyber Mage • Level 14' : `Mascot • ${heroMascotMode.toUpperCase()}`}
+                    </span>
+                  </div>
+                  <span className="text-xs font-semibold bg-[#F2F2F7] px-2.5 py-0.5 rounded-full text-[#6E6E73]">
+                    Interactive Preview
                   </span>
                 </div>
-                <span className="text-xs font-semibold bg-[#F2F2F7] px-2.5 py-0.5 rounded-full text-[#6E6E73]">
-                  Your Character
-                </span>
+
+                {/* Mode Selector Tabs */}
+                <div className="flex items-center space-x-1 overflow-x-auto py-1">
+                  {(['avatar', 'running', 'cycling', 'gaming', 'studying'] as const).map((mode) => (
+                    <button
+                      key={mode}
+                      onClick={() => setHeroMascotMode(mode)}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all capitalize cursor-pointer border ${
+                        heroMascotMode === mode
+                          ? 'bg-[#7C3AED] text-white border-[#7C3AED] shadow-xs'
+                          : 'bg-[#FAF9F5] text-[#6E6E73] border-[#E5E5EA] hover:text-[#1D1D1F]'
+                      }`}
+                    >
+                      {mode === 'avatar' ? 'Avatar' : mode}
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              {/* Character Illustration */}
+              {/* Illustration / Lottie Animation Canvas */}
               <div className="relative h-72 sm:h-80 w-full flex items-center justify-center my-2">
-                <HeroCharacter className="w-full h-full" />
+                {heroMascotMode === 'avatar' ? (
+                  <HeroCharacter className="w-full h-full" />
+                ) : (
+                  <div className="flex flex-col items-center justify-center">
+                    <AnimatedMascot
+                      animationType={heroMascotMode}
+                      size={200}
+                      showBadge={true}
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Telemetry Bar */}
@@ -259,7 +290,85 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 4. ARCHETYPE SHOWCASE */}
+      {/* 4. CONTEXTUAL ACTIVITY MASCOT SYSTEM */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12 space-y-3">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 bg-[#F2F2F7] border border-[#E5E5EA] rounded-full text-[#7C3AED] text-xs font-semibold tracking-wide">
+            <Sparkles className="w-3.5 h-3.5 text-[#7C3AED]" />
+            <span>Animated Activity System</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#1D1D1F] tracking-tight font-sans">
+            Real-Life Activities Become Quests
+          </h2>
+          <p className="text-[#6E6E73] text-base max-w-2xl mx-auto">
+            Dynamic vector mascots reinforce your real-world habit momentum across every page in ASCEND.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Link href="/dashboard" className="apple-card apple-card-hover p-6 text-center group cursor-pointer block">
+            <div className="h-36 flex items-center justify-center mb-3">
+              <AnimatedMascot animationType="running" size={110} showBadge={false} />
+            </div>
+            <h3 className="text-base font-bold text-[#1D1D1F] group-hover:text-[#7C3AED] transition-colors">
+              Running / Momentum
+            </h3>
+            <p className="text-xs text-[#6E6E73] mt-1">
+              Drives the <strong>Dashboard</strong> with daily habit tracking & streak energy.
+            </p>
+            <span className="inline-block mt-3 text-[11px] font-mono font-bold text-[#7C3AED] bg-purple-50 px-2.5 py-1 rounded-full border border-purple-100">
+              Dashboard →
+            </span>
+          </Link>
+
+          <Link href="/quests" className="apple-card apple-card-hover p-6 text-center group cursor-pointer block">
+            <div className="h-36 flex items-center justify-center mb-3">
+              <AnimatedMascot animationType="cycling" size={110} showBadge={false} />
+            </div>
+            <h3 className="text-base font-bold text-[#1D1D1F] group-hover:text-[#7C3AED] transition-colors">
+              Cycling / Pacing
+            </h3>
+            <p className="text-xs text-[#6E6E73] mt-1">
+              Powers the <strong>Quests Page</strong> to keep tasks and routines in continuous motion.
+            </p>
+            <span className="inline-block mt-3 text-[11px] font-mono font-bold text-[#38BDF8] bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100">
+              Quests Board →
+            </span>
+          </Link>
+
+          <Link href="/character" className="apple-card apple-card-hover p-6 text-center group cursor-pointer block">
+            <div className="h-36 flex items-center justify-center mb-3">
+              <AnimatedMascot animationType="gaming" size={110} showBadge={false} />
+            </div>
+            <h3 className="text-base font-bold text-[#1D1D1F] group-hover:text-[#7C3AED] transition-colors">
+              Gaming / RPG Mastery
+            </h3>
+            <p className="text-xs text-[#6E6E73] mt-1">
+              Anchors the <strong>Character Page</strong> to celebrate levels, perks, and RPG progression.
+            </p>
+            <span className="inline-block mt-3 text-[11px] font-mono font-bold text-[#7C3AED] bg-purple-50 px-2.5 py-1 rounded-full border border-purple-100">
+              Character Dossier →
+            </span>
+          </Link>
+
+          <Link href="/analytics" className="apple-card apple-card-hover p-6 text-center group cursor-pointer block">
+            <div className="h-36 flex items-center justify-center mb-3">
+              <AnimatedMascot animationType="studying" size={110} showBadge={false} />
+            </div>
+            <h3 className="text-base font-bold text-[#1D1D1F] group-hover:text-[#7C3AED] transition-colors">
+              Studying / Deep Focus
+            </h3>
+            <p className="text-xs text-[#6E6E73] mt-1">
+              Elevates the <strong>Analytics Page</strong> for telemetry, consistency, and reflection.
+            </p>
+            <span className="inline-block mt-3 text-[11px] font-mono font-bold text-[#2E7D32] bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+              Telemetry & Stats →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      {/* 5. ARCHETYPE SHOWCASE */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 space-y-3">
           <h2 className="text-3xl sm:text-4xl font-bold text-[#1D1D1F] tracking-tight font-sans">

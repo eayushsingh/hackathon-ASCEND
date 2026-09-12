@@ -3,6 +3,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Lottie, type LottieHandle } from 'lottie-react';
 
+import runningAnimation from '@/public/animations/running.json';
+import cyclingAnimation from '@/public/animations/cycling.json';
+import gamingAnimation from '@/public/animations/gaming.json';
+import studyingAnimation from '@/public/animations/studying.json';
+
 export type MascotAnimationType = 'running' | 'cycling' | 'gaming' | 'studying';
 
 interface AnimatedMascotProps {
@@ -11,27 +16,31 @@ interface AnimatedMascotProps {
   className?: string;
   badgeText?: string;
   tooltipText?: string;
+  showBadge?: boolean;
   onClick?: () => void;
 }
 
-const ANIMATION_MAP: Record<MascotAnimationType, { path: string; defaultBadge: string; description: string }> = {
+const ANIMATION_MAP: Record<
+  MascotAnimationType,
+  { data: object; defaultBadge: string; description: string }
+> = {
   running: {
-    path: '/animations/running.json',
+    data: runningAnimation,
     defaultBadge: 'Daily Momentum',
     description: 'Active daily progress in motion',
   },
   cycling: {
-    path: '/animations/cycling.json',
+    data: cyclingAnimation,
     defaultBadge: 'Quests in Motion',
     description: 'Pedaling through active quests and habits',
   },
   gaming: {
-    path: '/animations/gaming.json',
+    data: gamingAnimation,
     defaultBadge: 'RPG Mastery',
     description: 'Leveling up stats and unlocking perks',
   },
   studying: {
-    path: '/animations/studying.json',
+    data: studyingAnimation,
     defaultBadge: 'Deep Analytics',
     description: 'Reflecting on telemetry and metrics',
   },
@@ -43,16 +52,19 @@ export function AnimatedMascot({
   className = '',
   badgeText,
   tooltipText,
+  showBadge = true,
   onClick,
 }: AnimatedMascotProps) {
+  const [isMounted, setIsMounted] = useState(false);
   const [isReducedMotion, setIsReducedMotion] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const lottieRef = useRef<LottieHandle | null>(null);
 
   const meta = ANIMATION_MAP[animationType] || ANIMATION_MAP.running;
 
-  // 1. Detect prefers-reduced-motion
+  // Mount on client
   useEffect(() => {
+    setIsMounted(true);
     if (typeof window === 'undefined') return;
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setIsReducedMotion(mediaQuery.matches);
@@ -64,7 +76,7 @@ export function AnimatedMascot({
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
 
-  // 2. Handle reduced motion freezing
+  // Handle reduced motion
   useEffect(() => {
     if (lottieRef.current) {
       if (isReducedMotion) {
@@ -90,24 +102,32 @@ export function AnimatedMascot({
       role="img"
       aria-label={`${animationType} mascot animation: ${meta.description}`}
     >
-      {/* Animation Canvas Wrapper with fixed dimensions to prevent Layout Shift */}
+      {/* Animation Canvas Wrapper with explicit size */}
       <div
-        className="relative flex items-center justify-center overflow-hidden"
+        className="relative flex items-center justify-center overflow-hidden shrink-0"
         style={{ width: size, height: size }}
       >
-        <Lottie
-          lottieRef={lottieRef}
-          src={meta.path}
-          loop={!isReducedMotion}
-          autoplay={!isReducedMotion}
-          style={{ width: size, height: size, pointerEvents: 'none' }}
-        />
+        {!isMounted ? (
+          <div
+            className="w-full h-full rounded-2xl bg-purple-500/5 animate-pulse flex items-center justify-center"
+            style={{ width: size, height: size }}
+          />
+        ) : (
+          <Lottie
+            lottieRef={lottieRef}
+            src={meta.data}
+            loop={!isReducedMotion}
+            autoplay={!isReducedMotion}
+            style={{ width: size, height: size }}
+            className="w-full h-full flex items-center justify-center pointer-events-none"
+          />
+        )}
       </div>
 
       {/* Optional micro badge pill */}
-      {displayBadge && (
+      {showBadge && displayBadge && (
         <span
-          className={`mt-1 text-[10px] font-mono tracking-wider font-semibold uppercase px-2 py-0.5 rounded-full transition-all duration-200 ${
+          className={`mt-1 text-[10px] font-mono tracking-wider font-semibold uppercase px-2 py-0.5 rounded-full transition-all duration-200 shrink-0 ${
             isHovered
               ? 'bg-purple-100 text-purple-700 border border-purple-200'
               : 'bg-[#F2F2F7] text-[#6E6E73] border border-[#E5E5EA]'
@@ -119,3 +139,5 @@ export function AnimatedMascot({
     </div>
   );
 }
+
+export default AnimatedMascot;

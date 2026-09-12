@@ -64,9 +64,9 @@ export default function QuestsPage() {
         <div className="flex items-center gap-4">
           <AnimatedMascot
             animationType="cycling"
-            size={76}
+            size={80}
             badgeText="Quests in Motion"
-            className="hidden sm:inline-flex shrink-0"
+            className="shrink-0"
           />
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-[#1D1D1F] tracking-tight">

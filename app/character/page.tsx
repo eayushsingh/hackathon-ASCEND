@@ -69,9 +69,9 @@ export default function CharacterPage() {
               </div>
               <AnimatedMascot
                 animationType="gaming"
-                size={80}
+                size={84}
                 badgeText="RPG Mastery"
-                className="hidden sm:inline-flex shrink-0 self-start"
+                className="shrink-0 self-center sm:self-start"
               />
             </div>
             
