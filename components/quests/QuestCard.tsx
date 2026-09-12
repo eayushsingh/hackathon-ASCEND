@@ -164,7 +164,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit }) => {
                 onClick={handleDelete}
                 disabled={isDeleting}
                 aria-label="Delete quest"
-                className="p-1.5 text-[#8E8E93] hover:text-[#D32F2F] transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
+                className="p-2 -mr-1.5 text-[#8E8E93] hover:text-[#D32F2F] hover:bg-red-50 active:bg-red-100 rounded-lg transition-all opacity-80 sm:opacity-0 sm:group-hover:opacity-100 cursor-pointer flex items-center justify-center min-w-[36px] min-h-[36px]"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
