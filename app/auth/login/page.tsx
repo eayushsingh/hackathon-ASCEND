@@ -2,15 +2,15 @@
 
 // ==============================================================================
 // ASCEND - LOGIN AUTHENTICATION
+// Minimalist Editorial Theme
 // ==============================================================================
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import { useGame } from '@/lib/context/game-context';
-import { Sparkles, ArrowRight, Lock, Mail, Play, Shield } from 'lucide-react';
+import { ArrowRight, Lock, Mail, Play } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -62,61 +62,54 @@ export default function LoginPage() {
 
   return (
     <div className="max-w-md mx-auto py-12 px-4">
-      <div className="cyber-panel p-8 rounded-3xl border-cyan-500/40 shadow-[0_0_40px_rgba(6,182,212,0.2)] text-center relative overflow-hidden">
+      <div className="p-8 bg-white border-4 border-[#141210] shadow-[8px_8px_0_0_#141210] text-center relative">
         {/* Top Logo */}
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-8">
           <Link href="/">
-            <Image
-              src="/logo.svg"
-              alt="ASCEND"
-              width={180}
-              height={46}
-              className="h-9 w-auto object-contain drop-shadow-[0_0_16px_rgba(34,211,238,0.4)]"
-              priority
-            />
+            <div className="font-display font-black text-4xl tracking-widest text-[#14120F]">ASCEND</div>
           </Link>
         </div>
 
-        <h1 className="text-2xl font-black text-white">ACCESS THE MATRIX</h1>
-        <p className="text-xs text-slate-400 mt-1">Authenticate to synchronize your Life RPG character</p>
+        <h1 className="font-display text-3xl font-black text-[#14120F] uppercase tracking-widest">Access Protocol</h1>
+        <p className="text-sm font-sans font-medium text-[#6B665C] mt-2">Authenticate to synchronize your Life RPG character</p>
 
         {errorMsg && (
-          <div className="mt-4 p-3 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs font-semibold text-left">
-            {errorMsg}
+          <div className="mt-6 p-4 border-2 border-[#141210] bg-[#F3F1EC] text-[#D97706] text-xs font-bold uppercase tracking-wider text-left shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]">
+            Error: {errorMsg}
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-4 mt-6 text-left">
+        <form onSubmit={handleLogin} className="space-y-6 mt-8 text-left">
           <div>
-            <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">
+            <label className="block text-[11px] font-sans font-bold text-[#6B665C] uppercase tracking-wider mb-2">
               Neural Email
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Mail className="w-5 h-5 text-[#14120F] absolute left-4 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="seeker@ascend.rpg"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                className="w-full pl-12 pr-4 py-3 bg-white border-2 border-[#141210] text-[#14120F] font-sans font-medium text-sm placeholder-[#6B665C] focus:outline-none focus:shadow-[4px_4px_0_0_#E85D25] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)] transition-all"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">
+            <label className="block text-[11px] font-sans font-bold text-[#6B665C] uppercase tracking-wider mb-2">
               Secret Passkey
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Lock className="w-5 h-5 text-[#14120F] absolute left-4 top-1/2 -translate-y-1/2" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="••••••••••••"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                className="w-full pl-12 pr-4 py-3 bg-white border-2 border-[#141210] text-[#14120F] font-sans font-medium text-sm placeholder-[#6B665C] focus:outline-none focus:shadow-[4px_4px_0_0_#E85D25] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)] transition-all"
               />
             </div>
           </div>
@@ -124,28 +117,28 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-xs shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all flex items-center justify-center space-x-2"
+            className="w-full py-4 bg-[#E85D25] border-2 border-[#141210] text-white font-display font-black text-sm uppercase tracking-widest shadow-[4px_4px_0_0_#141210] hover:translate-y-0.5 hover:shadow-[2px_2px_0_0_#141210] transition-all flex items-center justify-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span>{isLoading ? 'Verifying Credentials...' : 'Sign In to Matrix'}</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>{isLoading ? 'Verifying...' : 'Sign In to Matrix'}</span>
+            <ArrowRight className="w-5 h-5 stroke-[3]" />
           </button>
         </form>
 
         {/* Instant Demo Access Button */}
-        <div className="mt-4 pt-4 border-t border-white/10">
+        <div className="mt-6 pt-6 border-t-2 border-[#141210]/10">
           <button
             onClick={handleDemoAccess}
             type="button"
-            className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-white/10 hover:border-cyan-500/40 text-xs font-bold transition-all flex items-center justify-center space-x-2"
+            className="w-full py-3 bg-white border-2 border-[#141210] text-[#14120F] font-display font-bold text-xs uppercase tracking-widest shadow-[4px_4px_0_0_#141210] hover:translate-y-0.5 hover:shadow-[2px_2px_0_0_#141210] transition-all flex items-center justify-center space-x-2"
           >
-            <Play className="w-4 h-4 text-cyan-400" />
+            <Play className="w-4 h-4 text-[#E85D25]" />
             <span>Launch Instant Demo Guest Mode</span>
           </button>
         </div>
 
-        <div className="mt-6 text-xs text-slate-400">
+        <div className="mt-8 text-xs font-sans font-bold text-[#6B665C] uppercase tracking-wider">
           Need an account?{' '}
-          <Link href="/auth/signup" className="text-cyan-400 font-bold hover:underline">
+          <Link href="/auth/signup" className="text-[#E85D25] hover:underline">
             Initialize New Hero
           </Link>
         </div>

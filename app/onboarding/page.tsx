@@ -2,6 +2,7 @@
 
 // ==============================================================================
 // ASCEND - ONBOARDING & ARCHETYPE SELECTION SCREEN
+// Minimalist Editorial Theme
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -15,14 +16,8 @@ import { Archetype } from '@/types/rpg';
 import {
   Sparkles,
   ArrowRight,
-  Shield,
   Zap,
   Check,
-  Brain,
-  Dumbbell,
-  Heart,
-  Target,
-  Users,
 } from 'lucide-react';
 
 export default function OnboardingPage() {
@@ -53,37 +48,30 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto py-8 px-4">
+    <div className="max-w-5xl mx-auto py-12 px-4">
       {/* Header */}
-      <div className="text-center max-w-2xl mx-auto mb-10">
-        <div className="flex justify-center mb-5">
+      <div className="text-center max-w-2xl mx-auto mb-12">
+        <div className="flex justify-center mb-6">
           <Link href="/">
-            <Image
-              src="/logo.svg"
-              alt="ASCEND"
-              width={180}
-              height={46}
-              className="h-9 w-auto object-contain drop-shadow-[0_0_16px_rgba(34,211,238,0.4)]"
-              priority
-            />
+            <div className="font-display font-black text-4xl tracking-widest text-[#14120F]">ASCEND</div>
           </Link>
         </div>
-        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-3">
-          <Sparkles className="w-3.5 h-3.5" />
+        <div className="inline-flex items-center space-x-2 px-3 py-1 bg-[#F3F1EC] border-2 border-[#141210] text-[#14120F] text-[10px] font-sans font-bold uppercase tracking-widest mb-4">
+          <Sparkles className="w-3.5 h-3.5 text-[#E85D25]" />
           <span>Character Initialization</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-          CHOOSE YOUR ARCHETYPE
+        <h1 className="font-display text-4xl sm:text-5xl font-black text-[#14120F] tracking-widest uppercase mb-4">
+          Choose Your Archetype
         </h1>
-        <p className="text-xs sm:text-sm text-slate-400 mt-2">
+        <p className="text-sm text-[#4A463F] font-sans font-medium leading-relaxed">
           Select your starting RPG class. Your archetype defines your primary attribute growth bonuses and provides your initial batch of starter quests.
         </p>
       </div>
 
-      <form onSubmit={handleInitialize} className="space-y-8">
+      <form onSubmit={handleInitialize} className="space-y-12">
         {/* Username input */}
         <div className="max-w-md mx-auto">
-          <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 text-center">
+          <label className="block text-xs font-sans font-bold text-[#6B665C] uppercase tracking-widest mb-3 text-center">
             Your Hero Codename / Username
           </label>
           <input
@@ -91,58 +79,53 @@ export default function OnboardingPage() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            className="w-full text-center px-4 py-3 rounded-xl bg-slate-900/90 border border-white/15 text-white font-bold text-base focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+            className="w-full text-center px-4 py-4 bg-white border-2 border-[#141210] text-[#14120F] font-display font-bold text-xl uppercase tracking-widest focus:outline-none focus:shadow-[4px_4px_0_0_#E85D25] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)] transition-all"
             placeholder="e.g., Kaelen Vance"
           />
         </div>
 
         {/* Archetype Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {ARCHETYPE_LIST.map((arch) => {
             const isSelected = selectedArchetype === arch.id;
 
             return (
               <motion.div
                 key={arch.id}
-                whileHover={{ y: -3 }}
+                whileHover={{ y: -4 }}
                 onClick={() => setSelectedArchetype(arch.id)}
-                className={`cursor-pointer rounded-2xl p-5 border transition-all relative overflow-hidden flex flex-col justify-between ${
+                className={`cursor-pointer p-6 border-4 transition-all relative flex flex-col justify-between ${
                   isSelected
-                    ? 'bg-slate-900/95 border-cyan-500/80 shadow-[0_0_25px_rgba(6,182,212,0.3)] ring-1 ring-cyan-500'
-                    : 'bg-[#0F1420]/60 border-white/5 hover:border-white/20'
+                    ? 'bg-white border-[#141210] shadow-[8px_8px_0_0_#141210]'
+                    : 'bg-[#F3F1EC] border-[#141210]/20 hover:border-[#141210]/60'
                 }`}
               >
                 {isSelected && (
-                  <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-cyan-500 text-slate-950 flex items-center justify-center font-bold">
-                    <Check className="w-3.5 h-3.5" />
+                  <div className="absolute -top-3 -right-3 w-8 h-8 border-2 border-[#141210] bg-[#E85D25] text-white flex items-center justify-center font-bold shadow-[2px_2px_0_0_#141210]">
+                    <Check className="w-5 h-5 stroke-[3]" />
                   </div>
                 )}
 
                 <div>
                   <div
-                    className="inline-block text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full mb-2 border"
-                    style={{
-                      color: arch.color,
-                      backgroundColor: `${arch.color}15`,
-                      borderColor: `${arch.color}40`,
-                    }}
+                    className="inline-block text-[10px] font-sans font-bold uppercase tracking-widest px-3 py-1 border-2 border-[#141210] mb-4 bg-white"
                   >
                     {arch.role}
                   </div>
 
-                  <h3 className="text-lg font-black text-white">{arch.name}</h3>
-                  <p className="text-xs text-cyan-400 font-semibold mb-2">{arch.title}</p>
-                  <p className="text-xs text-slate-400 leading-relaxed mb-4">{arch.description}</p>
+                  <h3 className="font-display text-2xl font-black text-[#14120F] uppercase tracking-widest mb-1">{arch.name}</h3>
+                  <p className="text-xs text-[#E85D25] font-sans font-bold uppercase tracking-wider mb-3">{arch.title}</p>
+                  <p className="text-sm text-[#4A463F] font-medium leading-relaxed mb-6 font-sans">{arch.description}</p>
                 </div>
 
-                <div className="pt-3 border-t border-white/5 space-y-2">
-                  <div className="text-[11px] font-bold text-emerald-400">
-                    ⚡ {arch.perk}
+                <div className="pt-4 border-t-2 border-[#141210]/10 space-y-3">
+                  <div className="text-xs font-sans font-bold text-[#14120F]">
+                    <span className="text-[#E85D25]">⚡</span> {arch.perk}
                   </div>
-                  <div className="flex items-center space-x-2 text-[10px] text-slate-400">
-                    <span>Primary: <strong className="text-white">{arch.primaryAttribute}</strong></span>
+                  <div className="flex items-center space-x-2 text-[10px] font-sans font-bold text-[#6B665C] uppercase tracking-wider">
+                    <span>Primary: <strong className="text-[#14120F]">{arch.primaryAttribute}</strong></span>
                     <span>•</span>
-                    <span>Secondary: <strong className="text-white">{arch.secondaryAttribute}</strong></span>
+                    <span>Secondary: <strong className="text-[#14120F]">{arch.secondaryAttribute}</strong></span>
                   </div>
                 </div>
               </motion.div>
@@ -151,37 +134,37 @@ export default function OnboardingPage() {
         </div>
 
         {/* Selected Archetype Starter Quests Preview */}
-        <div className="cyber-panel p-6 rounded-2xl border-white/10 max-w-3xl mx-auto">
-          <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/10">
-            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-              <Zap className="w-4 h-4 text-cyan-400" />
-              <span>Initial Starter Quests for {activeArch.name}</span>
+        <div className="p-8 bg-white border-4 border-[#141210] max-w-3xl mx-auto shadow-[8px_8px_0_0_#141210]">
+          <div className="flex items-center justify-between mb-6 pb-3 border-b-2 border-[#141210]/10">
+            <h4 className="text-sm font-display font-black text-[#14120F] uppercase tracking-widest flex items-center gap-2">
+              <Zap className="w-5 h-5 text-[#E85D25]" />
+              <span>Starter Quests for {activeArch.name}</span>
             </h4>
-            <span className="text-[11px] text-emerald-400 font-bold">Auto-Generated on Launch</span>
+            <span className="text-[10px] text-[#4A463F] font-sans font-bold uppercase tracking-wider hidden sm:inline-block">Auto-Generated on Launch</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {activeArch.starterQuests.map((q, idx) => (
-              <div key={idx} className="p-3 rounded-xl bg-slate-900 border border-white/5">
-                <span className="text-[9px] font-bold uppercase text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded">
+              <div key={idx} className="p-4 bg-[#F3F1EC] border-2 border-[#141210]">
+                <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-[#14120F] bg-white border border-[#141210] px-2 py-0.5">
                   {q.difficulty}
                 </span>
-                <div className="text-xs font-bold text-white mt-1.5 truncate">{q.title}</div>
-                <div className="text-[10px] text-slate-400 mt-1">{q.attribute} XP</div>
+                <div className="text-sm font-bold text-[#14120F] mt-3 font-sans leading-snug">{q.title}</div>
+                <div className="text-[11px] font-sans font-bold text-[#E85D25] mt-2 uppercase tracking-wider">{q.attribute} XP</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Submit button */}
-        <div className="text-center pt-4">
+        <div className="text-center pt-8">
           <button
             type="submit"
             disabled={isInitializing || !username.trim()}
-            className="px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold text-sm shadow-[0_0_30px_rgba(6,182,212,0.5)] transition-all inline-flex items-center space-x-2"
+            className="px-12 py-5 bg-[#E85D25] border-2 border-[#141210] text-white font-display font-black text-base uppercase tracking-widest shadow-[6px_6px_0_0_#141210] hover:translate-y-0.5 hover:shadow-[4px_4px_0_0_#141210] transition-all inline-flex items-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span>{isInitializing ? 'Calibrating Neural Link...' : 'Initialize Ascension'}</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>{isInitializing ? 'Calibrating...' : 'Initialize Ascension'}</span>
+            <ArrowRight className="w-6 h-6 stroke-[3]" />
           </button>
         </div>
       </form>

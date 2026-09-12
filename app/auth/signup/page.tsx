@@ -2,15 +2,15 @@
 
 // ==============================================================================
 // ASCEND - SIGNUP AUTHENTICATION
+// Minimalist Editorial Theme
 // ==============================================================================
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import { useGame } from '@/lib/context/game-context';
-import { Sparkles, ArrowRight, UserPlus, Mail, Lock, User } from 'lucide-react';
+import { ArrowRight, UserPlus, Mail, Lock, User } from 'lucide-react';
 import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
 import { Archetype } from '@/types/rpg';
 
@@ -66,90 +66,83 @@ export default function SignupPage() {
 
   return (
     <div className="max-w-md mx-auto py-12 px-4">
-      <div className="cyber-panel p-8 rounded-3xl border-purple-500/40 shadow-[0_0_40px_rgba(168,85,247,0.2)] text-center relative overflow-hidden">
+      <div className="p-8 bg-white border-4 border-[#141210] shadow-[8px_8px_0_0_#141210] text-center relative">
         {/* Top Logo */}
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-8">
           <Link href="/">
-            <Image
-              src="/logo.svg"
-              alt="ASCEND"
-              width={180}
-              height={46}
-              className="h-9 w-auto object-contain drop-shadow-[0_0_16px_rgba(168,85,247,0.4)]"
-              priority
-            />
+            <div className="font-display font-black text-4xl tracking-widest text-[#14120F]">ASCEND</div>
           </Link>
         </div>
 
-        <h1 className="text-2xl font-black text-white">FORGE YOUR HERO</h1>
-        <p className="text-xs text-slate-400 mt-1">Register new consciousness in the ASCEND Grid</p>
+        <h1 className="font-display text-3xl font-black text-[#14120F] uppercase tracking-widest">Forge Your Hero</h1>
+        <p className="text-sm font-sans font-medium text-[#6B665C] mt-2">Register new consciousness in the ASCEND Grid</p>
 
         {errorMsg && (
-          <div className="mt-4 p-3 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs font-semibold text-left">
-            {errorMsg}
+          <div className="mt-6 p-4 border-2 border-[#141210] bg-[#F3F1EC] text-[#D97706] text-xs font-bold uppercase tracking-wider text-left shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]">
+            Error: {errorMsg}
           </div>
         )}
 
-        <form onSubmit={handleSignup} className="space-y-4 mt-6 text-left">
+        <form onSubmit={handleSignup} className="space-y-6 mt-8 text-left">
           <div>
-            <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">
+            <label className="block text-[11px] font-sans font-bold text-[#6B665C] uppercase tracking-wider mb-2">
               Codename / Username
             </label>
             <div className="relative">
-              <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <User className="w-5 h-5 text-[#14120F] absolute left-4 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 placeholder="e.g. Kaelen Vance"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                className="w-full pl-12 pr-4 py-3 bg-white border-2 border-[#141210] text-[#14120F] font-sans font-medium text-sm placeholder-[#6B665C] focus:outline-none focus:shadow-[4px_4px_0_0_#E85D25] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)] transition-all"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">
+            <label className="block text-[11px] font-sans font-bold text-[#6B665C] uppercase tracking-wider mb-2">
               Neural Email
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Mail className="w-5 h-5 text-[#14120F] absolute left-4 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="hero@ascend.rpg"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                className="w-full pl-12 pr-4 py-3 bg-white border-2 border-[#141210] text-[#14120F] font-sans font-medium text-sm placeholder-[#6B665C] focus:outline-none focus:shadow-[4px_4px_0_0_#E85D25] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)] transition-all"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">
+            <label className="block text-[11px] font-sans font-bold text-[#6B665C] uppercase tracking-wider mb-2">
               Secret Passkey
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Lock className="w-5 h-5 text-[#14120F] absolute left-4 top-1/2 -translate-y-1/2" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="••••••••••••"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                className="w-full pl-12 pr-4 py-3 bg-white border-2 border-[#141210] text-[#14120F] font-sans font-medium text-sm placeholder-[#6B665C] focus:outline-none focus:shadow-[4px_4px_0_0_#E85D25] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)] transition-all"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1">
+            <label className="block text-[11px] font-sans font-bold text-[#6B665C] uppercase tracking-wider mb-2">
               Starting Archetype
             </label>
             <select
               value={archetype}
               onChange={(e) => setArchetype(e.target.value as Archetype)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs focus:outline-none focus:border-purple-500"
+              className="w-full px-4 py-3 bg-white border-2 border-[#141210] text-[#14120F] font-sans font-medium text-sm focus:outline-none focus:shadow-[4px_4px_0_0_#E85D25] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)] transition-all"
             >
               {ARCHETYPE_LIST.map((arch) => (
                 <option key={arch.id} value={arch.id}>
@@ -162,16 +155,16 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-bold text-xs shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all flex items-center justify-center space-x-2"
+            className="w-full py-4 bg-[#E85D25] border-2 border-[#141210] text-white font-display font-black text-sm uppercase tracking-widest shadow-[4px_4px_0_0_#141210] hover:translate-y-0.5 hover:shadow-[2px_2px_0_0_#141210] transition-all flex items-center justify-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span>{isLoading ? 'Creating Hero Record...' : 'Forge Account & Launch'}</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>{isLoading ? 'Creating Hero...' : 'Forge Account & Launch'}</span>
+            <ArrowRight className="w-5 h-5 stroke-[3]" />
           </button>
         </form>
 
-        <div className="mt-6 text-xs text-slate-400">
+        <div className="mt-8 text-xs font-sans font-bold text-[#6B665C] uppercase tracking-wider">
           Already forged?{' '}
-          <Link href="/auth/login" className="text-purple-400 font-bold hover:underline">
+          <Link href="/auth/login" className="text-[#E85D25] hover:underline">
             Sign In to Existing Identity
           </Link>
         </div>

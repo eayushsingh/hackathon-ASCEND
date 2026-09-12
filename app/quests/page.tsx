@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - QUEST MANAGEMENT BOARD
-// Clean, quiet, tactical quest matrix with Orbitron display typography
+// Minimalist Editorial Theme
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -10,15 +10,7 @@ import { useGame } from '@/lib/context/game-context';
 import { QuestCard } from '@/components/quests/QuestCard';
 import { CreateQuestModal } from '@/components/modals/CreateQuestModal';
 import {
-  Swords,
-  Plus,
   Search,
-  Filter,
-  CheckCircle2,
-  Clock,
-  Zap,
-  Coins,
-  Sparkles,
 } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 
@@ -27,7 +19,6 @@ export default function QuestsPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('All');
   const [selectedStatus, setSelectedStatus] = useState<'All' | 'Active' | 'Completed'>('Active');
   const [sortBy, setSortBy] = useState<'newest' | 'xp' | 'gold'>('newest');
 
@@ -36,7 +27,6 @@ export default function QuestsPage() {
       if (selectedStatus === 'Active' && q.status !== 'Active') return false;
       if (selectedStatus === 'Completed' && q.status !== 'Completed') return false;
       if (selectedCategory !== 'All' && q.category !== selectedCategory) return false;
-      if (selectedDifficulty !== 'All' && q.difficulty !== selectedDifficulty) return false;
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         return (
@@ -59,53 +49,53 @@ export default function QuestsPage() {
   const categories = ['All', 'Work', 'Fitness', 'Learning', 'Habit', 'Creative', 'Social'];
 
   return (
-    <div className="space-y-6 pb-10">
+    <div className="space-y-12 pb-16 pt-8">
       {/* 1. TOP STATS BAR */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="cyber-panel p-4 rounded-xl text-center bg-[#0D111A]">
-          <div className="font-display text-2xl font-black text-white">{quests.length}</div>
-          <div className="text-[10px] font-mono text-slate-400 uppercase">TOTAL QUESTS</div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 border-b-2 border-[#141210] pb-8">
+        <div className="text-center sm:text-left sm:border-r border-[#141210]/20 last:border-0 sm:pr-4">
+          <div className="font-display text-5xl font-bold text-[#141210]">{quests.length}</div>
+          <div className="text-sm font-sans font-bold text-[#57534E] uppercase tracking-widest mt-1">Total Quests</div>
         </div>
-        <div className="cyber-panel p-4 rounded-xl text-center bg-[#0D111A]">
-          <div className="font-display text-2xl font-black text-cyan-400">
+        <div className="text-center sm:text-left sm:border-r border-[#141210]/20 last:border-0 sm:pr-4">
+          <div className="font-display text-5xl font-bold text-[#D97706]">
             {quests.filter((q) => q.status === 'Active').length}
           </div>
-          <div className="text-[10px] font-mono text-slate-400 uppercase">ACTIVE BOUNTIES</div>
+          <div className="text-sm font-sans font-bold text-[#57534E] uppercase tracking-widest mt-1">Active Bounties</div>
         </div>
-        <div className="cyber-panel p-4 rounded-xl text-center bg-[#0D111A]">
-          <div className="font-display text-2xl font-black text-emerald-400">{totalCompleted}</div>
-          <div className="text-[10px] font-mono text-slate-400 uppercase">ERADICATED</div>
+        <div className="text-center sm:text-left sm:border-r border-[#141210]/20 last:border-0 sm:pr-4">
+          <div className="font-display text-5xl font-bold text-[#E85D25]">{totalCompleted}</div>
+          <div className="text-sm font-sans font-bold text-[#57534E] uppercase tracking-widest mt-1">Eradicated</div>
         </div>
-        <div className="cyber-panel p-4 rounded-xl text-center bg-[#0D111A]">
-          <div className="font-display text-2xl font-black text-purple-400">{completionRate}%</div>
-          <div className="text-[10px] font-mono text-slate-400 uppercase">DISCIPLINE RATE</div>
+        <div className="text-center sm:text-left">
+          <div className="font-display text-5xl font-bold text-[#141210]">{completionRate}%</div>
+          <div className="text-sm font-sans font-bold text-[#57534E] uppercase tracking-widest mt-1">Discipline Rate</div>
         </div>
       </div>
 
       {/* 2. SEARCH & CONTROLS */}
-      <div className="cyber-panel p-5 rounded-2xl space-y-4 bg-[#0D111A]">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="relative w-full md:w-80">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+      <div className="flex flex-col space-y-6">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-[#141210]/20 pb-6">
+          <div className="relative w-full md:w-96">
+            <Search className="w-5 h-5 text-[#57534E] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search quests, attributes, keywords..."
-              className="w-full pl-9 pr-4 py-2 rounded-xl bg-[#07090E] border border-white/10 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-400"
+              placeholder="Search quests, attributes..."
+              className="w-full pl-10 pr-4 py-3 bg-white border-2 border-[#141210] text-[#141210] placeholder-[#6B665C] font-sans font-bold uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-[#E85D25]"
             />
           </div>
 
-          <div className="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-end">
-            <div className="flex items-center space-x-1 p-1 bg-[#07090E] rounded-xl border border-white/5">
+          <div className="flex items-center space-x-6 w-full md:w-auto justify-between md:justify-end">
+            <div className="flex items-center space-x-4">
               {(['Active', 'Completed', 'All'] as const).map((st) => (
                 <button
                   key={st}
                   onClick={() => setSelectedStatus(st)}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                  className={`font-display text-lg tracking-widest uppercase transition-colors ${
                     selectedStatus === st
-                      ? 'bg-cyan-500/20 text-cyan-300'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'text-[#E85D25] font-bold border-b-2 border-[#E85D25]'
+                      : 'text-[#6B665C] hover:text-[#141210]'
                   }`}
                 >
                   {st}
@@ -115,26 +105,24 @@ export default function QuestsPage() {
 
             <button
               onClick={() => setIsCreateModalOpen(true)}
-              className="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-display text-xs font-bold transition-all flex items-center space-x-1.5 shrink-0 cursor-pointer shadow-[0_0_12px_rgba(6,182,212,0.3)]"
+              className="px-6 py-3 bg-[#E85D25] text-white font-display text-sm font-bold tracking-widest uppercase hover:bg-[#C54A18] transition-colors whitespace-nowrap border-2 border-[#141210]"
             >
-              <Plus className="w-4 h-4 stroke-[3]" />
-              <span>Forge Quest</span>
+              Forge Quest
             </button>
           </div>
         </div>
 
         {/* Filter Pills */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-white/5 text-xs">
-          <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0">
-            <span className="text-[10px] font-mono uppercase text-slate-500 mr-1">CATEGORY:</span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center space-x-4 overflow-x-auto pb-2 sm:pb-0 hide-scrollbar">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-2.5 py-1 rounded-lg font-semibold transition-all shrink-0 border ${
+                className={`font-sans text-sm font-bold tracking-wider uppercase transition-colors whitespace-nowrap ${
                   selectedCategory === cat
-                    ? 'bg-cyan-500/15 text-cyan-300 border-cyan-500/40'
-                    : 'bg-[#07090E] text-slate-400 hover:bg-white/5 border-white/5'
+                    ? 'text-[#141210] border-b-2 border-[#141210]'
+                    : 'text-[#6B665C] hover:text-[#141210]'
                 }`}
               >
                 {cat}
@@ -142,28 +130,27 @@ export default function QuestsPage() {
             ))}
           </div>
 
-          <div className="flex items-center space-x-2 shrink-0">
-            <span className="text-[10px] font-mono uppercase text-slate-500">SORT:</span>
+          <div className="flex items-center space-x-3 shrink-0">
+            <span className="text-xs font-sans font-bold uppercase text-[#6B665C]">Sort by:</span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as 'newest' | 'xp' | 'gold')}
-              className="bg-[#07090E] border border-white/10 text-white text-xs rounded-lg px-2.5 py-1 focus:outline-none focus:border-cyan-400"
+              className="bg-transparent text-[#141210] font-sans font-bold uppercase text-sm border-b-2 border-[#141210] pb-1 focus:outline-none cursor-pointer"
             >
-              <option value="newest">Newest First</option>
-              <option value="xp">Highest XP Bounty</option>
-              <option value="gold">Highest Gold Bounty</option>
+              <option value="newest">Newest</option>
+              <option value="xp">Highest XP</option>
+              <option value="gold">Highest Gold</option>
             </select>
           </div>
         </div>
       </div>
 
       {/* 3. QUESTS GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6 border-t border-[#141210]/10">
         {filteredQuests.length === 0 ? (
-          <div className="col-span-full py-16 text-center rounded-2xl bg-[#0D111A] border border-dashed border-white/10">
-            <Swords className="w-10 h-10 text-slate-600 mx-auto mb-3" />
-            <h4 className="font-display text-sm font-bold text-slate-300">NO QUESTS MATCH CRITERIA</h4>
-            <p className="text-xs text-slate-500 mt-1">Try resetting search filters or forge a new quest bounty.</p>
+          <div className="col-span-full py-20 text-center">
+            <h4 className="font-display text-2xl font-bold text-[#141210] tracking-widest uppercase">No Quests Match Criteria</h4>
+            <p className="text-sm font-sans font-bold text-[#57534E] uppercase tracking-widest mt-2">Try resetting search filters or forge a new quest.</p>
           </div>
         ) : (
           <AnimatePresence mode="popLayout">

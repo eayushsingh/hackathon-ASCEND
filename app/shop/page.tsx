@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - GUILD SHOP MARKETPLACE
-// Distinct Merchant Bazaar with Featured Item Spotlight and Treasury HUD
+// Minimalist Editorial Theme
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -12,13 +12,7 @@ import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import {
   ShoppingBag,
   Coins,
-  Sparkles,
-  ShieldAlert,
-  Palette,
   Crown,
-  Tag,
-  Hexagon,
-  Flame,
 } from 'lucide-react';
 
 export default function ShopPage() {
@@ -37,29 +31,29 @@ export default function ShopPage() {
   const isFeaturedOwned = inventory.some((inv) => inv.item_id === featuredItem.id);
 
   return (
-    <div className="space-y-6 pb-10">
+    <div className="space-y-12 pb-12 pt-8">
       {/* 1. TOP TREASURY HUD */}
-      <div className="cyber-panel p-6 rounded-2xl border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#0D111A]">
-        <div className="flex items-center space-x-3.5">
-          <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
-            <ShoppingBag className="w-6 h-6" />
+      <div className="p-8 bg-white border-4 border-[#141210] shadow-[8px_8px_0_0_#141210] flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex items-center space-x-6 text-center md:text-left">
+          <div className="w-16 h-16 bg-[#D97706] border-4 border-[#141210] flex items-center justify-center text-white shrink-0 shadow-[4px_4px_0_0_#141210]">
+            <ShoppingBag className="w-8 h-8" />
           </div>
           <div>
-            <h1 className="font-display text-xl sm:text-2xl font-black text-white">
-              GUILD MARKET & TREASURY
+            <h1 className="font-display text-3xl md:text-4xl font-black text-[#14120F] uppercase tracking-widest">
+              Guild Market
             </h1>
-            <p className="text-xs text-slate-400">
+            <p className="text-sm font-sans font-medium text-[#6B665C] mt-2">
               Exchange quest bounties for server-verified cosmetic themes, badges, titles, and relics.
             </p>
           </div>
         </div>
 
-        <div className="px-4 py-2.5 rounded-xl bg-[#07090E] border border-amber-500/30 flex items-center space-x-3 shrink-0">
-          <Coins className="w-5 h-5 text-amber-400" />
+        <div className="px-6 py-4 bg-[#F3F1EC] border-2 border-[#141210] flex items-center space-x-4 shrink-0 shadow-[4px_4px_0_0_#141210]">
+          <Coins className="w-6 h-6 text-[#D97706]" />
           <div>
-            <div className="text-[10px] font-mono text-slate-400 uppercase">TREASURY BALANCE</div>
-            <div className="font-display text-base font-black text-amber-300">
-              <AnimatedCounter value={profile.gold} /> GOLD
+            <div className="text-[10px] font-sans font-bold text-[#6B665C] uppercase tracking-widest">Treasury Balance</div>
+            <div className="font-display text-xl font-black text-[#D97706] uppercase tracking-widest mt-1">
+              <AnimatedCounter value={profile.gold} /> G
             </div>
           </div>
         </div>
@@ -67,24 +61,24 @@ export default function ShopPage() {
 
       {/* 2. FEATURED ITEM HERO BANNER SPOTLIGHT */}
       {featuredItem && (
-        <div className="cyber-panel p-6 rounded-2xl border-amber-500/30 bg-gradient-to-r from-[#140F06] via-[#0D111A] to-[#07090E] relative overflow-hidden">
+        <div className="p-8 bg-[#141210] border-4 border-[#141210] shadow-[8px_8px_0_0_#D97706] relative">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-            <div className="space-y-2 text-center md:text-left">
-              <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-[10px] font-display font-black tracking-wider uppercase">
-                <Crown className="w-3 h-3" />
-                <span>GUILD MASTER SPOTLIGHT</span>
+            <div className="space-y-4 text-center md:text-left">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-white border-2 border-white text-[#141210] text-[10px] font-sans font-bold tracking-widest uppercase">
+                <Crown className="w-3 h-3 text-[#D97706]" />
+                <span>Guild Master Spotlight</span>
               </div>
-              <h2 className="font-display text-xl font-black text-white">{featuredItem.name}</h2>
-              <p className="text-xs text-slate-300 max-w-xl leading-relaxed">
+              <h2 className="font-display text-3xl font-black text-white uppercase tracking-widest">{featuredItem.name}</h2>
+              <p className="text-sm font-sans font-medium text-[#A8A29E] max-w-xl leading-relaxed">
                 {featuredItem.description}
               </p>
             </div>
 
-            <div className="flex items-center space-x-4 shrink-0">
-              <div className="text-right">
-                <div className="text-[10px] font-mono text-slate-400">PRICE</div>
-                <div className="font-display text-lg font-black text-amber-300 flex items-center gap-1">
-                  <Coins className="w-4 h-4" />
+            <div className="flex flex-col items-center md:items-end space-y-4 shrink-0">
+              <div className="text-center md:text-right">
+                <div className="text-[10px] font-sans font-bold text-[#A8A29E] uppercase tracking-widest">Price</div>
+                <div className="font-display text-2xl font-black text-[#D97706] flex items-center justify-center md:justify-end gap-1.5 mt-1">
+                  <Coins className="w-5 h-5" />
                   <span>{featuredItem.price} G</span>
                 </div>
               </div>
@@ -93,7 +87,7 @@ export default function ShopPage() {
                 <button
                   onClick={() => purchaseItem(featuredItem.id)}
                   disabled={profile.gold < featuredItem.price}
-                  className="px-5 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-display text-xs font-black transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)] cursor-pointer"
+                  className="px-6 py-3 bg-[#D97706] text-white border-2 border-white font-sans text-sm font-bold uppercase tracking-widest transition-all hover:bg-[#B45309] disabled:opacity-50 disabled:cursor-not-allowed shadow-[4px_4px_0_0_white]"
                 >
                   Acquire Now
                 </button>
@@ -104,15 +98,15 @@ export default function ShopPage() {
       )}
 
       {/* 3. CATEGORY TABS */}
-      <div className="flex items-center space-x-2 overflow-x-auto pb-2">
+      <div className="flex items-center space-x-2 overflow-x-auto pb-2 hide-scrollbar">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0 border ${
+            className={`px-4 py-2 text-xs font-sans font-bold uppercase tracking-widest transition-all shrink-0 border-2 ${
               selectedCategory === cat
-                ? 'bg-cyan-500/15 text-cyan-300 border-cyan-500/40 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
-                : 'bg-[#0D111A] text-slate-400 hover:bg-white/5 border-white/5'
+                ? 'bg-[#141210] text-white border-[#141210] shadow-[4px_4px_0_0_#D97706]'
+                : 'bg-white text-[#57534E] hover:text-[#141210] border-[#141210]/20 hover:border-[#141210] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]'
             }`}
           >
             {cat}s
@@ -121,7 +115,7 @@ export default function ShopPage() {
       </div>
 
       {/* 4. ITEMS CATALOG GRID */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredItems.map((item) => (
           <ShopCard key={item.id} item={item} />
         ))}

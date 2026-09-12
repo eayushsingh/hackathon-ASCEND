@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - GUILD SHOP ITEM CARD COMPONENT
-// Disciplined, high-contrast merchant item card with clear rarity styling
+// Minimalist Editorial Theme
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -75,15 +75,15 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
   const getRarityBadge = (rarity: ItemRarity) => {
     switch (rarity) {
       case 'Common':
-        return 'text-slate-400 bg-slate-900 border-slate-700';
+        return 'text-[#6B665C] bg-[#F3F1EC] border-[#141210]';
       case 'Rare':
-        return 'text-cyan-400 bg-cyan-950/40 border-cyan-700/60';
+        return 'text-[#E85D25] bg-white border-[#141210] shadow-[2px_2px_0_0_#141210]';
       case 'Epic':
-        return 'text-purple-400 bg-purple-950/40 border-purple-700/60';
+        return 'text-[#D97706] bg-white border-[#141210] shadow-[2px_2px_0_0_#141210]';
       case 'Legendary':
-        return 'text-amber-400 bg-amber-950/40 border-amber-700/60';
+        return 'text-white bg-[#141210] border-[#141210] shadow-[2px_2px_0_0_#D97706]';
       case 'Mythic':
-        return 'text-rose-400 bg-rose-950/40 border-rose-500/80 shadow-[0_0_15px_rgba(244,63,94,0.4)]';
+        return 'text-white bg-[#E85D25] border-[#141210] shadow-[2px_2px_0_0_#141210]';
     }
   };
 
@@ -108,46 +108,46 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
   };
 
   return (
-    <div className="cyber-panel p-4 sm:p-5 rounded-xl flex flex-col justify-between border-white/10 hover:border-white/20 transition-all bg-[#0D111A]">
+    <div className="p-6 bg-white border-4 border-[#141210] flex flex-col justify-between shadow-[8px_8px_0_0_rgba(20,18,16,0.1)] hover:shadow-[8px_8px_0_0_#141210] transition-all">
       <div>
         {/* Top Tag Bar */}
-        <div className="flex items-center justify-between mb-3">
-          <span className={`font-display text-[10px] font-black uppercase px-2 py-0.5 rounded border ${getRarityBadge(item.rarity)}`}>
+        <div className="flex items-center justify-between mb-4">
+          <span className={`font-sans text-[10px] font-bold uppercase tracking-widest px-2 py-1 border-2 ${getRarityBadge(item.rarity)}`}>
             {item.rarity}
           </span>
-          <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">
+          <span className="text-[10px] font-sans font-bold text-[#6B665C] uppercase tracking-widest">
             {item.category}
           </span>
         </div>
 
         {/* Icon & Details */}
-        <div className="flex items-start space-x-3.5 mb-3">
-          <div className="w-11 h-11 rounded-xl bg-[#07090E] border border-white/10 flex items-center justify-center text-cyan-400 shrink-0">
-            <IconComponent className="w-5 h-5" />
+        <div className="flex items-start space-x-4 mb-4">
+          <div className="w-12 h-12 bg-[#F3F1EC] border-2 border-[#141210] flex items-center justify-center text-[#141210] shrink-0 shadow-[2px_2px_0_0_#141210]">
+            <IconComponent className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="font-display text-xs sm:text-sm font-bold text-white tracking-tight">
+            <h3 className="font-display text-lg font-black text-[#141210] uppercase tracking-widest leading-tight">
               {item.name}
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5 line-clamp-2 leading-relaxed">
+            <p className="text-xs font-sans font-medium text-[#6B665C] mt-1 line-clamp-2 leading-relaxed">
               {item.description}
             </p>
           </div>
         </div>
       </div>
 
-      {/* Price & Action Button (Solid flat styling, no rainbow gradients) */}
-      <div className="pt-3 border-t border-white/5 mt-2">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xs text-slate-400">Guild Price</span>
-          <span className="font-display text-xs font-bold text-amber-400 flex items-center gap-1">
-            <Coins className="w-3.5 h-3.5" />
-            <AnimatedCounter value={item.price} /> Gold
+      {/* Price & Action Button */}
+      <div className="pt-4 border-t-2 border-[#141210]/10 mt-2">
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-xs font-sans font-bold text-[#6B665C] uppercase tracking-widest">Guild Price</span>
+          <span className="font-display text-lg font-black text-[#D97706] flex items-center gap-1.5">
+            <Coins className="w-4 h-4" />
+            <AnimatedCounter value={item.price} /> G
           </span>
         </div>
 
         {feedback && (
-          <div className="text-[11px] text-cyan-300 font-semibold mb-2 text-center bg-cyan-950/80 p-1.5 rounded-lg border border-cyan-500/40">
+          <div className="text-[11px] text-[#141210] font-bold uppercase tracking-widest mb-3 text-center bg-[#F3F1EC] p-2 border-2 border-[#141210]">
             {feedback}
           </div>
         )}
@@ -155,15 +155,15 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
         {isOwned && item.category !== 'Consumable' ? (
           <button
             onClick={handleEquip}
-            className={`w-full py-2 rounded-lg font-bold text-xs flex items-center justify-center space-x-1.5 transition-all border ${
+            className={`w-full py-3 font-sans text-xs font-bold uppercase tracking-widest flex items-center justify-center space-x-2 transition-all border-2 ${
               isEquipped
-                ? 'bg-cyan-500/15 text-cyan-300 border-cyan-500/40'
-                : 'bg-[#131824] hover:bg-white/10 text-slate-200 border-white/10'
+                ? 'bg-[#141210] text-white border-[#141210]'
+                : 'bg-white text-[#141210] border-[#141210] hover:bg-[#F3F1EC]'
             }`}
           >
             {isEquipped ? (
               <>
-                <Check className="w-3.5 h-3.5 text-cyan-400" />
+                <Check className="w-4 h-4 text-white" />
                 <span>Currently Active</span>
               </>
             ) : (
@@ -174,21 +174,21 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
           <button
             onClick={handlePurchase}
             disabled={!canAfford || isPurchasing}
-            className={`w-full py-2 rounded-lg font-display text-xs font-bold flex items-center justify-center space-x-1.5 transition-all ${
+            className={`w-full py-3 font-sans text-xs font-bold uppercase tracking-widest flex items-center justify-center space-x-2 transition-all border-2 ${
               canAfford
-                ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 cursor-pointer shadow-[0_0_12px_rgba(6,182,212,0.3)]'
-                : 'bg-[#131824] text-slate-500 border border-white/5 cursor-not-allowed'
+                ? 'bg-[#E85D25] text-white border-[#141210] hover:bg-[#C54A18] shadow-[2px_2px_0_0_#141210] cursor-pointer'
+                : 'bg-[#F3F1EC] text-[#6B665C] border-[#6B665C] opacity-75 cursor-not-allowed'
             }`}
           >
             {canAfford ? (
               <>
-                <Coins className="w-3.5 h-3.5" />
+                <Coins className="w-4 h-4" />
                 <span>{isPurchasing ? 'Purchasing...' : 'Acquire Item'}</span>
               </>
             ) : (
               <>
-                <Lock className="w-3.5 h-3.5" />
-                <span>Need {item.price - profile.gold} more Gold</span>
+                <Lock className="w-4 h-4" />
+                <span>Need {item.price - profile.gold} more G</span>
               </>
             )}
           </button>
@@ -196,4 +196,4 @@ export const ShopCard: React.FC<ShopCardProps> = ({ item }) => {
       </div>
     </div>
   );
-};
+};;

@@ -1,15 +1,15 @@
 import type { Metadata } from 'next';
-import { Orbitron, Inter } from 'next/font/google';
+import { Oswald, Inter } from 'next/font/google';
 import './globals.css';
 import { GameProvider } from '@/lib/context/game-context';
 import { Navbar } from '@/components/layout/Navbar';
 import { LevelUpModal } from '@/components/modals/LevelUpModal';
 import { AchievementUnlockBanner } from '@/components/modals/AchievementUnlockBanner';
 
-const orbitron = Orbitron({
+const oswald = Oswald({
   subsets: ['latin'],
   variable: '--font-display',
-  weight: ['400', '600', '700', '800', '900'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 });
 
@@ -36,10 +36,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`dark theme-cyberpunk ${orbitron.variable} ${inter.variable}`}>
-      <body className="min-h-screen bg-[#07090E] font-sans text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
+    <html lang="en" className={`${oswald.variable} ${inter.variable}`}>
+      <body className="min-h-screen bg-[#F3F1EC] font-sans text-[#141210] antialiased selection:bg-[#E85D25] selection:text-[#F3F1EC]">
+        {/* Minimalist edge (No border) */}
+        
         <GameProvider>
-          <div className="relative min-h-screen flex flex-col cyber-grid-bg">
+          <div className="relative min-h-screen flex flex-col">
             <Navbar />
             <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
               {children}

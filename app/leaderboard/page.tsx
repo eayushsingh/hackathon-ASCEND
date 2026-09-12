@@ -2,9 +2,7 @@
 
 // ==============================================================================
 // ASCEND - GLOBAL LEADERBOARD & HALL OF ASCENSION
-// Live Supabase-backed rankings only — zero fake/seeded data.
-// Current user pinned in a separate "Your Standing" card, never duplicated
-// in the ranking table below.
+// Minimalist Editorial Theme
 // ==============================================================================
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -20,38 +18,35 @@ import {
   Shield,
   Search,
   Users,
-  Sparkles,
   Database,
-  Wifi,
   WifiOff,
 } from 'lucide-react';
-import { formatNumber } from '@/lib/utils';
 
 // ─── Rank badge renderer ────────────────────────────────────────────────────
 function RankBadge({ rank }: { rank: number }) {
   if (rank === 1) {
     return (
-      <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-400 text-amber-300 flex items-center justify-center font-display font-black text-sm shadow-[0_0_15px_rgba(245,158,11,0.5)] rank-1-shimmer">
-        <Crown className="w-4 h-4 text-amber-400" />
+      <div className="w-8 h-8 bg-white border-2 border-[#141210] text-[#E85D25] flex items-center justify-center font-display font-black text-sm shadow-[2px_2px_0_0_#141210]">
+        <Crown className="w-4 h-4 text-[#E85D25]" />
       </div>
     );
   }
   if (rank === 2) {
     return (
-      <div className="w-8 h-8 rounded-lg bg-slate-300/20 border border-slate-300 text-slate-200 flex items-center justify-center font-display font-black text-sm shadow-[0_0_12px_rgba(203,213,225,0.4)]">
-        <Medal className="w-4 h-4 text-slate-300" />
+      <div className="w-8 h-8 bg-white border-2 border-[#141210] text-[#141210] flex items-center justify-center font-display font-black text-sm shadow-[2px_2px_0_0_#141210]">
+        <Medal className="w-4 h-4 text-[#141210]" />
       </div>
     );
   }
   if (rank === 3) {
     return (
-      <div className="w-8 h-8 rounded-lg bg-amber-700/20 border border-amber-600 text-amber-400 flex items-center justify-center font-display font-black text-sm shadow-[0_0_12px_rgba(180,83,9,0.4)]">
-        <Medal className="w-4 h-4 text-amber-600" />
+      <div className="w-8 h-8 bg-white border-2 border-[#141210] text-[#D97706] flex items-center justify-center font-display font-black text-sm shadow-[2px_2px_0_0_#141210]">
+        <Medal className="w-4 h-4 text-[#D97706]" />
       </div>
     );
   }
   return (
-    <div className="w-8 h-8 rounded-lg bg-[#07090E] border border-white/10 text-slate-400 flex items-center justify-center font-display font-bold text-xs">
+    <div className="w-8 h-8 bg-[#F3F1EC] border-2 border-[#141210] text-[#141210] flex items-center justify-center font-display font-bold text-xs">
       #{rank}
     </div>
   );
@@ -80,33 +75,32 @@ function LeaderboardRow({
           ? { delay: index * 0.12, duration: 0.45, ease: [0.22, 1, 0.36, 1] }
           : { type: 'spring', stiffness: 400, damping: 35 }
       }
-      className={`hover:bg-white/[0.03] transition-colors ${
-        entry.rank === 1 ? 'rank-1-shimmer-row' : ''
+      className={`hover:bg-[#141210]/5 transition-colors border-b-2 border-[#141210]/10 ${
+        entry.rank === 1 ? 'bg-[#E85D25]/5' : ''
       }`}
     >
       {/* ── Desktop layout (≥640px): grid row ── */}
-      <div className="hidden sm:grid grid-cols-12 gap-3 px-5 py-3.5 items-center">
+      <div className="hidden sm:grid grid-cols-12 gap-3 px-6 py-4 items-center">
         {/* Rank */}
         <div className="col-span-1 flex justify-center">
           <RankBadge rank={entry.rank} />
         </div>
 
         {/* Identity */}
-        <div className="col-span-5 flex items-center space-x-3 min-w-0">
+        <div className="col-span-5 flex items-center space-x-4 min-w-0">
           <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-display font-black text-white shrink-0 border"
+            className="w-10 h-10 flex items-center justify-center text-base font-display font-black text-white shrink-0 border-2 border-[#141210] shadow-[2px_2px_0_0_#141210]"
             style={{
-              backgroundColor: `${archMeta.color}20`,
-              borderColor: `${archMeta.color}40`,
+              backgroundColor: archMeta.color,
             }}
           >
             {entry.username.charAt(0).toUpperCase()}
           </div>
           <div className="min-w-0">
-            <span className="font-display text-sm font-bold text-white truncate block">
+            <span className="font-display text-base font-bold text-[#141210] uppercase tracking-widest truncate block">
               {entry.username}
             </span>
-            <span className="text-[11px] text-slate-400 truncate block">
+            <span className="text-[10px] text-[#57534E] font-sans font-bold uppercase tracking-widest truncate block mt-0.5">
               {entry.title}
             </span>
           </div>
@@ -115,11 +109,10 @@ function LeaderboardRow({
         {/* Archetype */}
         <div className="col-span-3 flex items-center">
           <span
-            className="text-[10px] font-display font-bold uppercase px-2 py-0.5 rounded border"
+            className="text-[10px] font-sans font-bold uppercase tracking-widest px-2 py-1 border-2 bg-white"
             style={{
-              color: archMeta.color,
-              backgroundColor: `${archMeta.color}15`,
-              borderColor: `${archMeta.color}35`,
+              color: '#141210',
+              borderColor: '#141210',
             }}
           >
             {entry.archetype}
@@ -128,17 +121,17 @@ function LeaderboardRow({
 
         {/* Level */}
         <div className="col-span-1 text-center">
-          <span className="font-display text-sm font-black text-cyan-300">
+          <span className="font-display text-lg font-black text-[#E85D25]">
             {entry.level}
           </span>
         </div>
 
         {/* XP + Trophies */}
         <div className="col-span-2 text-right">
-          <div className="font-display text-sm font-bold text-white">
+          <div className="font-display text-base font-bold text-[#141210]">
             <AnimatedCounter value={entry.total_xp} />
           </div>
-          <div className="text-[10px] text-amber-400 font-semibold flex items-center justify-end gap-1">
+          <div className="text-[10px] text-[#D97706] font-sans font-bold uppercase tracking-widest flex items-center justify-end gap-1 mt-0.5">
             <Trophy className="w-3 h-3" />
             <span>{entry.achievement_count} Trophies</span>
           </div>
@@ -146,39 +139,33 @@ function LeaderboardRow({
       </div>
 
       {/* ── Mobile layout (<640px): stacked card ── */}
-      <div className="sm:hidden px-4 py-3.5 flex items-center gap-3">
+      <div className="sm:hidden px-4 py-4 flex items-center gap-4">
         <RankBadge rank={entry.rank} />
         <div
-          className="w-9 h-9 rounded-lg flex items-center justify-center text-xs font-display font-black text-white shrink-0 border"
+          className="w-10 h-10 flex items-center justify-center text-base font-display font-black text-white shrink-0 border-2 border-[#141210] shadow-[2px_2px_0_0_#141210]"
           style={{
-            backgroundColor: `${archMeta.color}20`,
-            borderColor: `${archMeta.color}40`,
+            backgroundColor: archMeta.color,
           }}
         >
           {entry.username.charAt(0).toUpperCase()}
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="font-display text-sm font-bold text-white truncate">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="font-display text-sm font-bold text-[#141210] uppercase tracking-widest truncate">
               {entry.username}
             </span>
             <span
-              className="text-[9px] font-display font-bold uppercase px-1.5 py-0.5 rounded border shrink-0"
-              style={{
-                color: archMeta.color,
-                backgroundColor: `${archMeta.color}15`,
-                borderColor: `${archMeta.color}35`,
-              }}
+              className="text-[9px] font-sans font-bold uppercase tracking-widest px-1.5 py-0.5 border-2 border-[#141210] shrink-0 bg-white"
             >
               {entry.archetype.split(' ')[1] || entry.archetype}
             </span>
           </div>
-          <div className="flex items-center gap-3 mt-0.5 text-[11px] text-slate-400">
-            <span className="font-display font-bold text-cyan-300">LVL {entry.level}</span>
-            <span className="text-white font-semibold">
+          <div className="flex items-center gap-3 text-[10px] font-sans font-bold uppercase tracking-widest">
+            <span className="text-[#E85D25]">LVL {entry.level}</span>
+            <span className="text-[#57534E]">
               <AnimatedCounter value={entry.total_xp} /> XP
             </span>
-            <span className="text-amber-400 flex items-center gap-0.5">
+            <span className="text-[#D97706] flex items-center gap-0.5">
               <Trophy className="w-2.5 h-2.5" /> {entry.achievement_count}
             </span>
           </div>
@@ -198,7 +185,7 @@ export default function LeaderboardPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedArchetype, setSelectedArchetype] = useState<string>('All');
-  const isInitialMount = useRef(true);
+  const [isInitialMount, setIsInitialMount] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchLeaderboard() {
@@ -213,9 +200,12 @@ export default function LeaderboardPage() {
             setTotalCount(data.totalParticipants || 0);
             setIsLoading(false);
             // After initial mount, disable stagger animations
-            setTimeout(() => { isInitialMount.current = false; }, 800);
+            setTimeout(() => { setIsInitialMount(false); }, 800);
             return;
           }
+          // Log the actual error so it's visible in dev tools
+          const errBody = await res.text();
+          console.error(`[ASCEND Leaderboard] API returned ${res.status}:`, errBody);
         }
 
         // No Supabase configured: show only the real current demo user
@@ -236,8 +226,9 @@ export default function LeaderboardPage() {
         setCurrentUserStanding(myEntry);
         setTotalCount(1);
         setIsLoading(false);
-        setTimeout(() => { isInitialMount.current = false; }, 800);
-      } catch {
+        setTimeout(() => { setIsInitialMount(false); }, 800);
+      } catch (err) {
+        console.error('[ASCEND Leaderboard] Failed to fetch rankings:', err);
         setIsLoading(false);
       }
     }
@@ -267,34 +258,34 @@ export default function LeaderboardPage() {
   const categories = ['All', ...ARCHETYPE_LIST.map((a) => a.id)];
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-12 pb-12 pt-8">
       {/* 1. HERO HEADER */}
-      <div className="cyber-panel p-6 sm:p-8 rounded-2xl border-white/10 bg-[#0D111A]">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-white/10">
-          <div className="flex items-center space-x-3.5">
-            <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
-              <Trophy className="w-6 h-6" />
+      <div className="p-8 bg-white border-4 border-[#141210] shadow-[8px_8px_0_0_#141210]">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b-2 border-[#141210]/10">
+          <div className="flex items-center space-x-6 text-center md:text-left">
+            <div className="w-16 h-16 bg-[#E85D25] border-4 border-[#141210] flex items-center justify-center text-white shrink-0 shadow-[4px_4px_0_0_#141210]">
+              <Trophy className="w-8 h-8" />
             </div>
             <div>
-              <div className="flex items-center space-x-2 text-[11px] font-mono text-cyan-400">
-                <Shield className="w-3.5 h-3.5" />
-                <span>HALL OF ASCENSION // GLOBAL RANKINGS</span>
+              <div className="flex items-center justify-center md:justify-start space-x-2 text-[10px] font-sans font-bold uppercase tracking-widest text-[#E85D25]">
+                <Shield className="w-3 h-3" />
+                <span>Hall of Ascension // Global Rankings</span>
               </div>
-              <h1 className="font-display text-xl sm:text-2xl font-black text-white mt-1">
-                GLOBAL ASCENDANT LEADERBOARD
+              <h1 className="font-display text-3xl md:text-4xl font-black text-[#14120F] uppercase tracking-widest mt-2">
+                Leaderboard
               </h1>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-sm font-sans font-medium text-[#6B665C] mt-2 max-w-lg">
                 Public career standings verified by server-authoritative level and cumulative XP.
               </p>
             </div>
           </div>
 
-          <div className="px-4 py-2.5 rounded-xl bg-[#07090E] border border-white/10 flex items-center space-x-3 shrink-0">
-            <Users className="w-4 h-4 text-cyan-400" />
+          <div className="px-6 py-4 bg-[#F3F1EC] border-2 border-[#141210] flex items-center space-x-4 shrink-0 shadow-[4px_4px_0_0_#141210]">
+            <Users className="w-6 h-6 text-[#141210]" />
             <div>
-              <div className="text-[10px] font-mono text-slate-400 uppercase">ACTIVE ASCENDANTS</div>
-              <div className="font-display text-base font-black text-cyan-300">
-                <AnimatedCounter value={totalCount} /> {totalCount === 1 ? 'HERO' : 'HEROES'}
+              <div className="text-[10px] font-sans font-bold text-[#6B665C] uppercase tracking-widest">Active Ascendants</div>
+              <div className="font-display text-xl font-black text-[#141210] uppercase tracking-widest mt-1">
+                <AnimatedCounter value={totalCount} /> {totalCount === 1 ? 'Hero' : 'Heroes'}
               </div>
             </div>
           </div>
@@ -302,12 +293,12 @@ export default function LeaderboardPage() {
 
         {/* Supabase not configured banner */}
         {!isConfigured && !isLoading && (
-          <div className="mt-4 px-4 py-3 rounded-xl bg-amber-950/30 border border-amber-600/30 flex items-center gap-3">
-            <WifiOff className="w-4 h-4 text-amber-400 shrink-0" />
+          <div className="mt-6 px-6 py-4 bg-[#F3F1EC] border-2 border-[#141210] flex items-center gap-4 shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]">
+            <WifiOff className="w-5 h-5 text-[#D97706] shrink-0" />
             <div>
-              <div className="text-xs font-semibold text-amber-300">Offline Demo Mode</div>
-              <div className="text-[11px] text-slate-400">
-                Connect Supabase credentials in <code className="text-amber-400/80">.env.local</code> to see live global rankings from real signed-up users.
+              <div className="text-sm font-display font-black text-[#D97706] uppercase tracking-widest">Offline Demo Mode</div>
+              <div className="text-xs font-sans font-medium text-[#6B665C] mt-1">
+                Connect Supabase credentials in <code className="font-bold text-[#141210]">.env.local</code> to see live global rankings from real signed-up users.
               </div>
             </div>
           </div>
@@ -319,44 +310,44 @@ export default function LeaderboardPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-4 p-4 rounded-xl bg-[#07090E] border border-cyan-500/40 shadow-[0_0_20px_rgba(6,182,212,0.15)] flex flex-col sm:flex-row items-center justify-between gap-4"
+            className="mt-8 p-6 bg-[#141210] border-4 border-[#141210] shadow-[8px_8px_0_0_#E85D25] flex flex-col sm:flex-row items-center justify-between gap-6"
           >
-            <div className="flex items-center space-x-3.5 text-center sm:text-left">
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/50 flex items-center justify-center font-display font-black text-cyan-300 text-sm">
+            <div className="flex items-center space-x-4 text-center sm:text-left">
+              <div className="w-14 h-14 bg-white border-2 border-white flex items-center justify-center font-display font-black text-[#141210] text-xl shadow-[4px_4px_0_0_#E85D25]">
                 #{currentUserStanding.rank}
               </div>
               <div>
-                <div className="flex items-center space-x-2">
-                  <span className="font-display text-sm font-black text-white">
+                <div className="flex items-center justify-center sm:justify-start space-x-3 mb-1">
+                  <span className="font-display text-xl font-black text-white uppercase tracking-widest">
                     {currentUserStanding.username}
                   </span>
-                  <span className="text-[10px] font-display font-bold uppercase px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                  <span className="text-[10px] font-sans font-bold uppercase tracking-widest px-2 py-1 bg-[#E85D25] text-white border-2 border-white">
                     YOU
                   </span>
                 </div>
-                <div className="text-xs text-slate-400">
+                <div className="text-xs font-sans font-medium text-[#A8A29E] uppercase tracking-widest">
                   {currentUserStanding.archetype} • {currentUserStanding.title}
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center space-x-6 text-center sm:text-right">
+            <div className="flex items-center justify-center space-x-8 text-center sm:text-right">
               <div>
-                <div className="text-[10px] font-mono text-slate-500 uppercase">YOUR LEVEL</div>
-                <div className="font-display text-sm font-black text-cyan-400">
-                  LVL {currentUserStanding.level}
+                <div className="text-[10px] font-sans font-bold text-[#A8A29E] uppercase tracking-widest">Level</div>
+                <div className="font-display text-lg font-black text-[#E85D25] mt-1">
+                  {currentUserStanding.level}
                 </div>
               </div>
               <div>
-                <div className="text-[10px] font-mono text-slate-500 uppercase">TOTAL XP</div>
-                <div className="font-display text-sm font-black text-white">
-                  <AnimatedCounter value={currentUserStanding.total_xp} /> XP
+                <div className="text-[10px] font-sans font-bold text-[#A8A29E] uppercase tracking-widest">Total XP</div>
+                <div className="font-display text-lg font-black text-white mt-1">
+                  <AnimatedCounter value={currentUserStanding.total_xp} />
                 </div>
               </div>
               <div>
-                <div className="text-[10px] font-mono text-slate-500 uppercase">TROPHIES</div>
-                <div className="font-display text-sm font-black text-amber-400 flex items-center justify-center sm:justify-end gap-1">
-                  <Trophy className="w-3.5 h-3.5" />
+                <div className="text-[10px] font-sans font-bold text-[#A8A29E] uppercase tracking-widest">Trophies</div>
+                <div className="font-display text-lg font-black text-[#D97706] flex items-center justify-center sm:justify-end gap-1.5 mt-1">
+                  <Trophy className="w-4 h-4" />
                   <span>{currentUserStanding.achievement_count}</span>
                 </div>
               </div>
@@ -366,32 +357,30 @@ export default function LeaderboardPage() {
       </div>
 
       {/* 3. SEARCH & ARCHETYPE FILTER CONTROLS */}
-      <div className="cyber-panel p-4 rounded-xl space-y-3 bg-[#0D111A] border-white/10">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="relative w-full sm:w-72">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+      <div className="p-6 bg-white border-4 border-[#141210] shadow-[8px_8px_0_0_#141210]">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="relative w-full lg:w-96">
+            <Search className="w-5 h-5 text-[#141210] absolute left-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search hero codename..."
-              className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-[#07090E] border border-white/10 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-cyan-400"
-              aria-label="Search hero codename"
+              className="w-full pl-12 pr-4 py-3 bg-white border-2 border-[#141210] text-[#141210] font-sans font-bold uppercase tracking-wider placeholder-[#6B665C] focus:outline-none focus:shadow-[4px_4px_0_0_#E85D25] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)] transition-all"
             />
           </div>
 
-          <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0" role="tablist" aria-label="Filter by archetype">
-            <span className="text-[10px] font-mono uppercase text-slate-500 mr-1 shrink-0">ARCHETYPE:</span>
+          <div className="flex items-center space-x-2 overflow-x-auto pb-2 lg:pb-0 hide-scrollbar shrink-0">
             {categories.map((cat) => (
               <button
                 key={cat}
                 role="tab"
                 aria-selected={selectedArchetype === cat}
                 onClick={() => setSelectedArchetype(cat)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all shrink-0 border ${
+                className={`px-4 py-2 text-xs font-sans font-bold uppercase tracking-widest transition-all shrink-0 border-2 ${
                   selectedArchetype === cat
-                    ? 'bg-cyan-500/15 text-cyan-300 border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)]'
-                    : 'bg-[#07090E] text-slate-400 hover:bg-white/5 border-white/5'
+                    ? 'bg-[#141210] text-white border-[#141210] shadow-[4px_4px_0_0_#E85D25]'
+                    : 'bg-white text-[#57534E] hover:text-[#141210] border-[#141210]/20 hover:border-[#141210] shadow-[4px_4px_0_0_rgba(20,18,16,0.1)]'
                 }`}
               >
                 {cat}
@@ -402,30 +391,30 @@ export default function LeaderboardPage() {
       </div>
 
       {/* 4. LEADERBOARD RANKING TABLE */}
-      <div className="cyber-panel rounded-2xl border-white/10 bg-[#0D111A] overflow-hidden">
+      <div className="bg-white border-4 border-[#141210] shadow-[8px_8px_0_0_#141210] overflow-hidden">
         {/* Table Header (desktop only) */}
-        <div className="hidden sm:grid grid-cols-12 gap-3 px-5 py-3 border-b border-white/10 text-[10px] font-mono uppercase text-slate-500 bg-[#07090E]">
-          <div className="col-span-1 text-center">RANK</div>
-          <div className="col-span-5">HERO IDENTITY</div>
-          <div className="col-span-3">CLASS ARCHETYPE</div>
-          <div className="col-span-1 text-center">LEVEL</div>
-          <div className="col-span-2 text-right">PROGRESSION XP</div>
+        <div className="hidden sm:grid grid-cols-12 gap-3 px-6 py-4 border-b-4 border-[#141210] text-[10px] font-sans font-bold uppercase tracking-widest text-[#57534E] bg-[#F3F1EC]">
+          <div className="col-span-1 text-center">Rank</div>
+          <div className="col-span-5">Hero Identity</div>
+          <div className="col-span-3">Class Archetype</div>
+          <div className="col-span-1 text-center">Level</div>
+          <div className="col-span-2 text-right">Progression XP</div>
         </div>
 
         {/* Rows */}
         {isLoading ? (
-          <div className="py-16 text-center text-xs font-mono text-slate-400 flex flex-col items-center gap-3">
-            <Database className="w-6 h-6 text-cyan-500/50 animate-pulse" />
+          <div className="py-20 text-center text-xs font-sans font-bold uppercase tracking-widest text-[#57534E] flex flex-col items-center gap-4">
+            <Database className="w-8 h-8 text-[#E85D25] animate-bounce" />
             <span>Querying Neural Ascension Registry...</span>
           </div>
         ) : !hasOtherPlayers ? (
           // Empty/solo state: no other players to show in the table
-          <div className="py-20 text-center space-y-2">
-            <Trophy className="w-10 h-10 text-slate-600 mx-auto" />
-            <h3 className="font-display text-sm font-bold text-slate-300">
+          <div className="py-24 text-center space-y-4">
+            <Trophy className="w-12 h-12 text-[#141210]/30 mx-auto" />
+            <h3 className="font-display text-xl font-black text-[#141210] uppercase tracking-widest">
               The Hall of Ascension awaits its first champion.
             </h3>
-            <p className="text-xs text-slate-500 max-w-xs mx-auto">
+            <p className="text-sm font-sans font-medium text-[#6B665C] max-w-md mx-auto">
               {isConfigured
                 ? 'Complete quests and gain XP to climb the global rankings. Invite others to compete!'
                 : 'Connect Supabase to unlock global leaderboard competition across real players.'}
@@ -433,44 +422,30 @@ export default function LeaderboardPage() {
           </div>
         ) : filteredLeaderboard.length === 0 ? (
           // Filter returned no results
-          <div className="py-16 text-center space-y-2">
-            <Search className="w-8 h-8 text-slate-600 mx-auto" />
-            <h3 className="font-display text-sm font-bold text-slate-300">
+          <div className="py-20 text-center space-y-4">
+            <Search className="w-10 h-10 text-[#141210]/30 mx-auto" />
+            <h3 className="font-display text-lg font-black text-[#141210] uppercase tracking-widest">
               No heroes match your search.
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="text-sm font-sans font-medium text-[#6B665C]">
               Try a different codename or archetype filter.
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-white/5">
+          <div className="divide-y-2 divide-[#141210]/10">
             <AnimatePresence mode="popLayout">
               {filteredLeaderboard.map((entry, index) => (
                 <LeaderboardRow
                   key={entry.user_id}
                   entry={entry}
                   index={index}
-                  isTop3Initial={isInitialMount.current && entry.rank <= 3}
+                  isTop3Initial={isInitialMount && entry.rank <= 3}
                 />
               ))}
             </AnimatePresence>
           </div>
         )}
       </div>
-
-      {/* Inline CSS for rank #1 gold shimmer — scoped keyframe */}
-      <style jsx global>{`
-        @keyframes rank1Shimmer {
-          0%, 100% { box-shadow: 0 0 15px rgba(245,158,11,0.5); }
-          50% { box-shadow: 0 0 25px rgba(245,158,11,0.7), 0 0 8px rgba(251,191,36,0.3); }
-        }
-        .rank-1-shimmer {
-          animation: rank1Shimmer 3s ease-in-out infinite;
-        }
-        .rank-1-shimmer-row {
-          background: linear-gradient(90deg, rgba(245,158,11,0.04) 0%, transparent 40%);
-        }
-      `}</style>
     </div>
   );
 }

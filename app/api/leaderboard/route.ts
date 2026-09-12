@@ -62,6 +62,8 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       // Fallback: if the view doesn't exist yet, query profiles directly
+      // Note: We cannot join user_achievements directly because they both link to auth.users,
+      // not to each other. We omit the achievement count in the fallback to prevent crashes.
       const { data: profileRows, error: profileError } = await supabase
         .from('profiles')
         .select(`
@@ -71,8 +73,7 @@ export async function GET(request: NextRequest) {
           avatar_url,
           level,
           xp,
-          title,
-          user_achievements ( id )
+          title
         `)
         .order('level', { ascending: false })
         .order('xp', { ascending: false })
@@ -83,9 +84,6 @@ export async function GET(request: NextRequest) {
       }
 
       const entries: LeaderboardEntry[] = (profileRows || []).map((row, idx) => {
-        const achievementCount = Array.isArray(row.user_achievements)
-          ? row.user_achievements.length
-          : 0;
         const isMe = user ? row.user_id === user.id : false;
         return sanitizeEntry({
           rank: idx + 1,
@@ -96,7 +94,7 @@ export async function GET(request: NextRequest) {
           level: row.level,
           total_xp: row.xp,
           title: row.title,
-          achievement_count: achievementCount,
+          achievement_count: 0,
         }, isMe);
       });
 
@@ -157,6 +155,7 @@ export async function GET(request: NextRequest) {
     res.headers.set('Cache-Control', 's-maxage=30, stale-while-revalidate=60');
     return res;
   } catch (err: unknown) {
+    console.error('[ASCEND API Leaderboard] Unhandled error:', err);
     return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
 }

@@ -2,7 +2,7 @@
 
 // ==============================================================================
 // ASCEND - CHARACTER DOSSIER & RPG ASCENSION SHEET
-// Distinctive Cyberpunk Terminal architecture, roadmap circuits, and mastery tree
+// Minimalist Editorial Theme
 // ==============================================================================
 
 import React, { useState } from 'react';
@@ -12,34 +12,12 @@ import { ARCHETYPES } from '@/lib/progression/archetypes';
 import { ATTRIBUTE_LIST, calculateAttributeLevel, getAttributeMasteryTitle } from '@/lib/progression/attributes';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import {
-  Shield,
-  Zap,
   Sparkles,
-  Trophy,
-  Flame,
-  Coins,
-  Crown,
   CheckCircle2,
   Lock,
-  Brain,
-  Dumbbell,
-  Heart,
-  Target,
-  Users,
-  Terminal,
-  Activity,
-  ChevronRight,
+  Zap,
 } from 'lucide-react';
 import { formatNumber } from '@/lib/utils';
-
-const ICON_MAP: Record<string, React.ElementType> = {
-  Brain,
-  Dumbbell,
-  Heart,
-  Target,
-  Sparkles,
-  Users,
-};
 
 export default function CharacterPage() {
   const { profile, streak, quests, attributes } = useGame();
@@ -60,168 +38,107 @@ export default function CharacterPage() {
   const previewXpRequired = calculateXPForLevel(previewFormulaLevel);
 
   return (
-    <div className="space-y-8 pb-10">
-      {/* 1. CYBER TERMINAL DOSSIER HEADER */}
-      <div className="cyber-panel p-6 sm:p-8 rounded-2xl border-white/10 relative overflow-hidden">
-        {/* Terminal Header Bar */}
-        <div className="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
-          <div className="flex items-center space-x-2 text-xs font-mono text-cyan-400">
-            <Terminal className="w-4 h-4" />
-            <span>NEURAL_DOSSIER // CLASSIFIED_HERO_RECORD</span>
+    <div className="space-y-16 pb-16 pt-8">
+      {/* 1. DOSSIER HEADER */}
+      <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12 border-b-2 border-[#141210] pb-12">
+        {/* Large Avatar Badge */}
+        <div className="relative group shrink-0 text-center">
+          <div className="w-48 h-48 rounded-full border-[8px] border-[#141210] flex items-center justify-center bg-white text-[#141210]">
+            <div className="text-8xl font-display font-bold">
+              {profile.archetype.charAt(0)}
+            </div>
           </div>
-          <div className="flex items-center space-x-2 text-[11px] font-mono text-slate-500">
-            <span>STATUS: ACTIVE_CONSCIOUSNESS</span>
-            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-[#E85D25] text-white px-6 py-2 border-4 border-[#141210] font-display text-xl tracking-widest">
+            LVL <AnimatedCounter value={progress.currentLevel} />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Hero Avatar Badge */}
-          <div className="lg:col-span-4 flex flex-col items-center text-center">
-            <div
-              className="w-32 h-32 rounded-2xl p-1 flex items-center justify-center relative shadow-2xl"
-              style={{
-                background: `linear-gradient(135deg, ${archetypeInfo.color}, #3B82F6)`,
-                boxShadow: `0 0 35px ${archetypeInfo.accentGlow}`,
-              }}
-            >
-              <div className="w-full h-full bg-[#07090E] rounded-[13px] flex items-center justify-center text-5xl font-display font-black text-white">
-                {profile.username.charAt(0)}
-              </div>
-              <div className="absolute -bottom-3 px-3 py-0.5 rounded-full bg-[#07090E] border border-cyan-400 font-display font-black text-[11px] text-cyan-300">
-                LVL {progress.currentLevel}
-              </div>
+        <div className="flex-1 w-full text-center lg:text-left pt-2">
+          <h1 className="font-display text-6xl font-bold text-[#141210] uppercase tracking-tight">
+            {profile.username}
+          </h1>
+          <div className="text-sm font-display tracking-widest text-[#57534E] uppercase mt-2 mb-4">
+            {profile.title} • {profile.archetype}
+          </div>
+          
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 py-6 border-y border-[#141210]/20">
+            <div>
+              <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#6B665C]">Cumulative XP</div>
+              <div className="font-display text-3xl font-bold text-[#E85D25] mt-1"><AnimatedCounter value={profile.xp} /></div>
             </div>
-
-            <h1 className="font-display text-2xl font-black text-white mt-5">
-              {profile.username}
-            </h1>
-            <div className="text-xs font-semibold text-cyan-400 mt-0.5">{profile.title}</div>
-
-            <div className="mt-3 px-3 py-1 rounded-full text-xs font-bold uppercase bg-white/5 border border-white/10 text-slate-300">
-              {profile.archetype} • {progress.rankTitle}
+            <div>
+              <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#6B665C]">Guild Gold</div>
+              <div className="font-display text-3xl font-bold text-[#D97706] mt-1"><AnimatedCounter value={profile.gold} /></div>
+            </div>
+            <div>
+              <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#6B665C]">Active Combo</div>
+              <div className="font-display text-3xl font-bold text-[#141210] mt-1">{streak.current_streak}D</div>
+            </div>
+            <div>
+              <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#6B665C]">Quests Cleared</div>
+              <div className="font-display text-3xl font-bold text-[#141210] mt-1">{quests.filter((q) => q.status === 'Completed').length}</div>
             </div>
           </div>
-
-          {/* Dossier Telemetry Stats & Passive Perk */}
-          <div className="lg:col-span-8 space-y-4">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3.5 rounded-xl bg-[#07090E] border border-white/10">
-                <div className="text-[10px] font-mono uppercase text-slate-500">EXPERIENCE</div>
-                <div className="font-display text-xl font-black text-cyan-400 mt-1">
-                  <AnimatedCounter value={profile.xp} />
-                </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">Cumulative XP</div>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-[#07090E] border border-white/10">
-                <div className="text-[10px] font-mono uppercase text-slate-500">TREASURY</div>
-                <div className="font-display text-xl font-black text-amber-400 mt-1 flex items-center gap-1">
-                  <Coins className="w-4 h-4" />
-                  <AnimatedCounter value={profile.gold} />
-                </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">Guild Gold</div>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-[#07090E] border border-white/10">
-                <div className="text-[10px] font-mono uppercase text-slate-500">DISCIPLINE</div>
-                <div className="font-display text-xl font-black text-orange-400 mt-1">
-                  {streak.current_streak}d
-                </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">Active Combo</div>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-[#07090E] border border-white/10">
-                <div className="text-[10px] font-mono uppercase text-slate-500">COMPLETIONS</div>
-                <div className="font-display text-xl font-black text-emerald-400 mt-1">
-                  {quests.filter((q) => q.status === 'Completed').length}
-                </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">Quests Cleared</div>
-              </div>
-            </div>
-
-            {/* Passive Archetype Perk Box */}
-            <div className="p-4 rounded-xl bg-[#07090E] border border-cyan-500/30 flex items-start space-x-3">
-              <Sparkles className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
-              <div>
-                <div className="text-xs font-display font-bold uppercase text-cyan-300">
-                  {archetypeInfo.name} Passive Specialization
-                </div>
-                <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                  {archetypeInfo.perk} {archetypeInfo.lore}
-                </p>
-              </div>
+          
+          <div className="mt-6 flex flex-col sm:flex-row sm:items-center gap-4">
+            <Sparkles className="w-6 h-6 text-[#141210]" />
+            <div>
+              <div className="text-sm font-display font-bold uppercase tracking-widest text-[#141210]">Class Passive Perk</div>
+              <p className="text-sm font-sans text-[#57534E] italic mt-1">{archetypeInfo.perk} {archetypeInfo.lore}</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 2. MATHEMATICAL PROGRESSION BLUEPRINT (Formula Inspection) */}
-      <div className="cyber-panel p-6 rounded-2xl border-white/10">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 mb-5 border-b border-white/10">
+      {/* 2. MATHEMATICAL PROGRESSION BLUEPRINT */}
+      <div>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
-            <h2 className="font-display text-base font-black text-white flex items-center gap-2">
-              <Activity className="w-4 h-4 text-cyan-400" />
-              <span>NON-LINEAR LEVELING BLUEPRINT</span>
-            </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Strict mathematical scaling curve: <code className="font-mono text-cyan-400">XP(n) = 100 * n^1.5</code>
-            </p>
+            <h2 className="font-display text-3xl font-bold text-[#141210] uppercase tracking-widest">Scaling Blueprint</h2>
+            <p className="text-sm font-sans font-bold text-[#57534E] uppercase tracking-widest mt-1">XP(n) = 100 * n^1.5</p>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <span className="text-xs font-mono text-slate-400">Inspect Level:</span>
+          <div className="flex items-center space-x-4">
+            <span className="text-sm font-sans font-bold uppercase tracking-widest text-[#141210]">Inspect Level:</span>
             <input
               type="number"
               min={1}
               max={100}
               value={previewFormulaLevel}
               onChange={(e) => setPreviewFormulaLevel(Math.max(1, parseInt(e.target.value) || 1))}
-              className="w-16 px-2 py-1 rounded bg-[#07090E] border border-white/20 text-xs font-display font-bold text-center text-cyan-300 focus:outline-none focus:border-cyan-400"
+              className="w-20 px-3 py-2 border-2 border-[#141210] font-display font-bold text-center text-lg focus:outline-none focus:border-[#E85D25]"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-4 rounded-xl bg-[#07090E] border border-white/5">
-            <div className="text-[10px] font-mono uppercase text-slate-500">CURRENT TIER FORMULA</div>
-            <div className="font-display text-base font-bold text-white mt-1">Level {progress.currentLevel}</div>
-            <div className="text-xs text-slate-400 mt-1">
-              Required: {formatNumber(progress.xpForCurrentLevel)} XP total
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-6 border-2 border-[#141210]">
+            <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#6B665C]">Current Tier</div>
+            <div className="font-display text-3xl font-bold text-[#141210] mt-1">Level {progress.currentLevel}</div>
+            <div className="text-sm font-sans text-[#57534E] mt-2 italic">{formatNumber(progress.xpForCurrentLevel)} XP total req</div>
           </div>
-
-          <div className="p-4 rounded-xl bg-[#07090E] border border-cyan-500/20">
-            <div className="text-[10px] font-mono uppercase text-cyan-400">NEXT TIER GOAL</div>
-            <div className="font-display text-base font-bold text-cyan-300 mt-1">Level {progress.currentLevel + 1}</div>
-            <div className="text-xs text-slate-300 mt-1">
-              Requires <strong className="text-cyan-400">{formatNumber(progress.xpForNextLevel - profile.xp)} more XP</strong>
-            </div>
+          
+          <div className="p-6 border-2 border-[#E85D25] bg-[#E85D25]/5">
+            <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#E85D25]">Next Target</div>
+            <div className="font-display text-3xl font-bold text-[#E85D25] mt-1">Level {progress.currentLevel + 1}</div>
+            <div className="text-sm font-sans text-[#57534E] mt-2 italic">{formatNumber(progress.xpForNextLevel - profile.xp)} more XP needed</div>
           </div>
-
-          <div className="p-4 rounded-xl bg-[#07090E] border border-white/5">
-            <div className="text-[10px] font-mono uppercase text-slate-500">INSPECTED LEVEL {previewFormulaLevel}</div>
-            <div className="font-display text-base font-bold text-slate-200 mt-1">
-              {formatNumber(previewXpRequired)} XP Total
-            </div>
-            <div className="text-xs text-slate-400 mt-1">Cumulative requirement threshold</div>
+          
+          <div className="p-6 border-2 border-[#141210]/20 border-dashed">
+            <div className="text-xs font-sans font-bold uppercase tracking-wider text-[#6B665C]">Inspected Lvl {previewFormulaLevel}</div>
+            <div className="font-display text-3xl font-bold text-[#141210] mt-1">{formatNumber(previewXpRequired)} XP</div>
+            <div className="text-sm font-sans text-[#57534E] mt-2 italic">Cumulative total</div>
           </div>
         </div>
       </div>
 
-      {/* 3. ASCENSION RANK ROADMAP CIRCUITS */}
-      <div className="cyber-panel p-6 rounded-2xl border-white/10">
-        <div className="pb-4 mb-6 border-b border-white/10">
-          <h2 className="font-display text-base font-black text-white flex items-center gap-2">
-            <Crown className="w-5 h-5 text-amber-400" />
-            <span>ASCENSION ROADMAP & RANK TIERS</span>
-          </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Progress through six discrete character ranks by conquering real-world life quests
-          </p>
+      {/* 3. ASCENSION RANK ROADMAP */}
+      <div>
+        <div className="mb-8 border-b-2 border-[#141210] pb-2">
+          <h2 className="font-display text-3xl font-bold text-[#141210] uppercase tracking-widest">Ascension Ranks</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {rankMilestones.map((milestone) => {
             const isUnlocked = profile.level >= milestone.level;
             const isCurrent = progress.tier === milestone.tier;
@@ -229,29 +146,29 @@ export default function CharacterPage() {
             return (
               <div
                 key={milestone.tier}
-                className={`p-4 rounded-xl border transition-all relative ${
+                className={`p-6 border-2 transition-all ${
                   isCurrent
-                    ? 'bg-[#0D1524] border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.3)] ring-1 ring-cyan-400'
+                    ? 'border-[#E85D25] bg-[#E85D25]/5'
                     : isUnlocked
-                    ? 'bg-[#0D111A] border-white/15'
-                    : 'bg-[#07090E]/60 border-white/5 opacity-50'
+                    ? 'border-[#141210]'
+                    : 'border-[#141210]/20 bg-[#F3F1EC]/50 opacity-70'
                 }`}
               >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-display text-[10px] font-black uppercase tracking-wider text-cyan-400">
-                    LEVEL {milestone.level}+
+                <div className="flex items-center justify-between mb-4">
+                  <span className={`font-display text-xs font-bold uppercase tracking-widest ${isCurrent ? 'text-[#E85D25]' : 'text-[#141210]'}`}>
+                    Level {milestone.level}+
                   </span>
                   {isUnlocked ? (
-                    <CheckCircle2 className="w-4 h-4 text-cyan-400" />
+                    <CheckCircle2 className={`w-5 h-5 ${isCurrent ? 'text-[#E85D25]' : 'text-[#141210]'}`} />
                   ) : (
-                    <Lock className="w-4 h-4 text-slate-600" />
+                    <Lock className="w-5 h-5 text-[#6B665C]" />
                   )}
                 </div>
 
-                <h3 className="font-display text-sm font-black text-white">{milestone.name}</h3>
-                <div className="text-xs text-slate-400 font-semibold mt-0.5">{milestone.tier} Tier</div>
+                <h3 className="font-display text-xl font-bold text-[#141210] uppercase tracking-wider">{milestone.name}</h3>
+                <div className="text-xs font-sans font-bold uppercase text-[#57534E] mt-1">{milestone.tier} Tier</div>
 
-                <p className="text-xs text-slate-300 mt-2.5 pt-2 border-t border-white/5 leading-relaxed">
+                <p className="text-sm font-sans text-[#57534E] mt-4 pt-4 border-t border-[#141210]/10 italic">
                   {milestone.perk}
                 </p>
               </div>
@@ -261,78 +178,44 @@ export default function CharacterPage() {
       </div>
 
       {/* 4. ATTRIBUTE MASTERY MATRIX */}
-      <div className="cyber-panel p-6 rounded-2xl border-white/10">
-        <div className="pb-4 mb-6 border-b border-white/10">
-          <h2 className="font-display text-base font-black text-white flex items-center gap-2">
-            <Zap className="w-5 h-5 text-cyan-400" />
-            <span>6-ATTRIBUTE SPECIALIZATION MATRIX</span>
-          </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
-            XP gained in each attribute advances your mastery level and unlocks distinct life buffs
-          </p>
+      <div>
+        <div className="mb-8 border-b-2 border-[#141210] pb-2">
+          <h2 className="font-display text-3xl font-bold text-[#141210] uppercase tracking-widest">Attribute Specializations</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {ATTRIBUTE_LIST.map((attr) => {
             const attrKey = `${attr.type.toLowerCase()}_xp` as keyof typeof attributes;
             const currentXP = (attributes[attrKey] as number) || 0;
             const level = calculateAttributeLevel(currentXP);
             const masteryTitle = getAttributeMasteryTitle(level);
-            const IconComp = ICON_MAP[attr.icon] || Zap;
-
+            
             const xpInCurrentLevel = currentXP % 150;
             const percent = Math.min(100, Math.floor((xpInCurrentLevel / 150) * 100));
 
             return (
-              <div
-                key={attr.type}
-                className="p-4 rounded-xl bg-[#07090E] border border-white/10 hover:border-white/20 transition-all flex flex-col justify-between"
-              >
+              <div key={attr.type} className="group flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center space-x-2.5">
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center border"
-                        style={{
-                          backgroundColor: attr.accentBg,
-                          borderColor: `${attr.color}50`,
-                          color: attr.color,
-                        }}
-                      >
-                        <IconComp className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <h4 className="font-display text-xs font-bold text-white">{attr.name}</h4>
-                        <div className="text-[10px] text-slate-400">{masteryTitle} Tier</div>
-                      </div>
-                    </div>
-
-                    <span
-                      className="font-display text-[10px] font-black px-2 py-0.5 rounded border"
-                      style={{
-                        backgroundColor: `${attr.color}15`,
-                        color: attr.color,
-                        borderColor: `${attr.color}40`,
-                      }}
-                    >
-                      LVL {level}
-                    </span>
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-display text-2xl font-bold uppercase" style={{ color: attr.color }}>{attr.name}</h4>
+                    <span className="font-display text-sm font-bold tracking-widest text-[#141210]">LVL {level}</span>
                   </div>
-
-                  <p className="text-xs text-slate-400 leading-relaxed mt-1">
+                  <div className="text-xs font-sans font-bold uppercase text-[#57534E] tracking-wider mb-4">{masteryTitle} Tier</div>
+                  
+                  <p className="text-sm font-sans text-[#57534E] leading-relaxed mb-6">
                     {attr.description}
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-white/5">
-                  <div className="flex items-center justify-between text-[11px] font-semibold text-slate-300 mb-1.5">
-                    <span>Mastery Progress</span>
+                <div>
+                  <div className="flex items-center justify-between text-xs font-display tracking-widest font-bold text-[#141210] mb-2">
+                    <span>Progress</span>
                     <span>{xpInCurrentLevel}/150 XP</span>
                   </div>
 
-                  <div className="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden">
+                  <div className="w-full bg-[#E5E5E5] h-2">
                     <div
-                      className="h-full rounded-full transition-all duration-500"
+                      className="h-full transition-all duration-500"
                       style={{
                         width: `${percent}%`,
                         backgroundColor: attr.color,
@@ -340,8 +223,8 @@ export default function CharacterPage() {
                     />
                   </div>
 
-                  <div className="text-[10px] text-slate-400 mt-2 font-medium">
-                    ⚡ {attr.buffBenefit}
+                  <div className="text-xs font-sans text-[#57534E] italic mt-3">
+                    <Zap className="w-3 h-3 inline mr-1" /> {attr.buffBenefit}
                   </div>
                 </div>
               </div>

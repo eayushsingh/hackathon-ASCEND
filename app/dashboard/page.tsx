@@ -42,145 +42,126 @@ export default function DashboardPage() {
   if (filterType === 'Completed') displayedQuests = completedQuests;
 
   return (
-    <div className="space-y-6 pb-10">
-      {/* 1. TOP CHARACTER STATUS HUD (DOMINANT VISUAL ELEMENT) */}
+    <div className="space-y-12 pb-16">
+      {/* 1. TOP CHARACTER STATUS HUD */}
       <CharacterHUD />
 
       {/* 2. MAIN 2-COLUMN GRID */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* LEFT COLUMN: ACTIVE QUESTS (7 COLS) */}
-        <div className="lg:col-span-7 space-y-4">
-          <div className="cyber-panel p-5 rounded-2xl border-white/10 bg-[#0D111A]">
-            {/* Header & Filter Bar */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10">
-              <div className="flex items-center space-x-2.5">
-                <div className="p-2 rounded-xl bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
-                  <Swords className="w-5 h-5" />
-                </div>
-                <div>
-                  <h2 className="font-display text-base font-bold text-white flex items-center gap-2">
-                    <span>ACTIVE QUEST MATRIX</span>
-                    <span className="font-display text-xs px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-black">
-                      {activeQuests.length}
-                    </span>
-                  </h2>
-                  <p className="text-xs text-slate-400">Complete tasks to gain authoritative XP and Gold</p>
-                </div>
-              </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        {/* LEFT COLUMN: ACTIVE QUESTS (8 COLS) */}
+        <div className="lg:col-span-8 space-y-6">
+          <div className="flex items-end justify-between border-b-2 border-[#141210] pb-4">
+            <div>
+              <h2 className="font-display text-3xl font-bold text-[#141210] uppercase tracking-widest">
+                Active Quests
+              </h2>
+            </div>
+            <button
+              onClick={() => setIsCreateModalOpen(true)}
+              className="px-4 py-2 bg-[#E85D25] text-white font-display text-sm font-bold tracking-widest uppercase hover:bg-[#C54A18] transition-colors"
+            >
+              Forge Quest
+            </button>
+          </div>
 
+          {/* Filter Plain Text Links */}
+          <div className="flex items-center space-x-6 py-2">
+            {(['Active', 'Daily', 'All', 'Completed'] as const).map((type) => (
               <button
-                onClick={() => setIsCreateModalOpen(true)}
-                className="px-3.5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-display text-xs font-bold transition-all flex items-center justify-center space-x-1.5 shrink-0 cursor-pointer shadow-[0_0_12px_rgba(6,182,212,0.3)]"
+                key={type}
+                onClick={() => setFilterType(type)}
+                className={`font-display text-sm tracking-widest uppercase transition-colors ${
+                  filterType === type
+                    ? 'text-[#E85D25] font-bold'
+                    : 'text-[#6B665C] hover:text-[#141210]'
+                }`}
               >
-                <Plus className="w-4 h-4 stroke-[3]" />
-                <span>Forge Quest</span>
+                {type}
               </button>
-            </div>
+            ))}
+          </div>
 
-            {/* Filter Pills */}
-            <div className="flex items-center space-x-2 pt-3 pb-2 overflow-x-auto">
-              {(['Active', 'Daily', 'All', 'Completed'] as const).map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setFilterType(type)}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all shrink-0 border ${
-                    filterType === type
-                      ? 'bg-cyan-500/15 text-cyan-300 border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)]'
-                      : 'bg-[#07090E] text-slate-400 hover:bg-white/5 border-white/5'
-                  }`}
-                >
-                  {type}
-                </button>
-              ))}
-            </div>
-
-            {/* Quest Cards List with AnimatePresence */}
-            <div className="space-y-2.5 mt-3">
-              {displayedQuests.length === 0 ? (
-                <div className="py-12 text-center rounded-xl bg-[#07090E] border border-dashed border-white/10">
-                  <Swords className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-                  <p className="font-display text-xs font-bold text-slate-400">NO {filterType.toUpperCase()} QUESTS FOUND</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Click "Forge Quest" above to create a real-life task bounty</p>
-                </div>
-              ) : (
-                <AnimatePresence mode="popLayout">
-                  {displayedQuests.map((quest) => (
-                    <QuestCard key={quest.id} quest={quest} />
-                  ))}
-                </AnimatePresence>
-              )}
-            </div>
+          {/* Quest Cards List */}
+          <div className="space-y-4">
+            {displayedQuests.length === 0 ? (
+              <div className="py-12 text-center text-[#57534E]">
+                <p className="font-display text-xl tracking-widest">NO {filterType.toUpperCase()} QUESTS</p>
+                <p className="font-sans text-sm mt-2 italic">Awaiting your command.</p>
+              </div>
+            ) : (
+              <AnimatePresence mode="popLayout">
+                {displayedQuests.map((quest) => (
+                  <QuestCard key={quest.id} quest={quest} />
+                ))}
+              </AnimatePresence>
+            )}
           </div>
         </div>
 
-        {/* RIGHT COLUMN: ATTRIBUTES & PROGRESSION (5 COLS) */}
-        <div className="lg:col-span-5 space-y-6">
-          {/* Attributes Breakdown */}
-          <div className="cyber-panel p-5 rounded-2xl border-white/10 bg-[#0D111A]">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
-              <div>
-                <h3 className="font-display text-sm font-bold text-white">6-ATTRIBUTE MASTERY</h3>
-                <p className="text-xs text-slate-400">Real-life stat distribution</p>
-              </div>
-              <Link
-                href="/character"
-                className="font-display text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-colors"
-              >
-                View Sheet →
+        {/* RIGHT COLUMN: SPARSE PANELS (4 COLS) */}
+        <div className="lg:col-span-4 space-y-12">
+          {/* Menu / Navigation list */}
+          <div>
+            <h3 className="font-display text-lg tracking-widest text-[#141210] uppercase mb-2">Command Links</h3>
+            <hr className="border-[#141210]/20 mb-4" />
+            <div className="flex flex-col space-y-4">
+              <Link href="/leaderboard" className="font-display text-2xl uppercase tracking-widest text-[#57534E] hover:text-[#E85D25] transition-colors">
+                Global Leaderboard
+              </Link>
+              <Link href="/shop" className="font-display text-2xl uppercase tracking-widest text-[#57534E] hover:text-[#E85D25] transition-colors">
+                Guild Shop
+              </Link>
+              <Link href="/inventory" className="font-display text-2xl uppercase tracking-widest text-[#57534E] hover:text-[#E85D25] transition-colors">
+                Inventory
+              </Link>
+              <Link href="/achievements" className="font-display text-2xl uppercase tracking-widest text-[#57534E] hover:text-[#E85D25] transition-colors">
+                Trophies
               </Link>
             </div>
-            <AttributeBarList />
           </div>
 
-          {/* Activity Heatmap Grid */}
-          <HeatmapGrid />
+          {/* Sparse Stats Panel */}
+          <div>
+            <h3 className="font-display text-lg tracking-widest text-[#141210] uppercase mb-2">Today&apos;s Targets</h3>
+            <hr className="border-[#141210]/20 mb-4" />
+            
+            <div className="space-y-3 font-sans text-sm">
+              <div className="flex justify-between items-center group">
+                <span className="font-bold text-[#141210]">Daily Quests</span>
+                <div className="flex items-center gap-4">
+                  <span className="text-[#57534E] font-display tracking-widest">{quests.filter(q => q.is_recurring && q.status === 'Completed').length}/{dailyQuests.length + quests.filter(q => q.is_recurring && q.status === 'Completed').length}</span>
+                  <span className="text-[#D97706] font-display tracking-widest w-12 text-right">+25G</span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center group">
+                <span className="font-bold text-[#141210]">Active Bounties</span>
+                <div className="flex items-center gap-4">
+                  <span className="text-[#57534E] font-display tracking-widest">0/{activeQuests.length}</span>
+                  <span className="text-[#E85D25] font-display tracking-widest w-12 text-right">XP</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          {/* Quick Shortcuts */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            <Link
-              href="/leaderboard"
-              className="p-3 rounded-xl bg-[#0D111A] border border-cyan-500/20 hover:border-cyan-500/40 text-center transition-all group"
-            >
-              <Crown className="w-4 h-4 text-cyan-400 mx-auto mb-1 group-hover:scale-110 transition-transform" />
-              <div className="font-display text-xs font-bold text-cyan-300">Rankings</div>
-              <div className="text-[10px] text-slate-400">Leaderboard</div>
-            </Link>
-
-            <Link
-              href="/shop"
-              className="p-3 rounded-xl bg-[#0D111A] border border-amber-500/20 hover:border-amber-500/40 text-center transition-all group"
-            >
-              <ShoppingBag className="w-4 h-4 text-amber-400 mx-auto mb-1 group-hover:scale-110 transition-transform" />
-              <div className="font-display text-xs font-bold text-amber-300">Shop</div>
-              <div className="text-[10px] text-slate-400">Cosmetics</div>
-            </Link>
-
-            <Link
-              href="/inventory"
-              className="p-3 rounded-xl bg-[#0D111A] border border-purple-500/20 hover:border-purple-500/40 text-center transition-all group"
-            >
-              <Package className="w-4 h-4 text-purple-400 mx-auto mb-1 group-hover:scale-110 transition-transform" />
-              <div className="font-display text-xs font-bold text-purple-300">Inventory</div>
-              <div className="text-[10px] text-slate-400">Loadout</div>
-            </Link>
-
-            <Link
-              href="/achievements"
-              className="p-3 rounded-xl bg-[#0D111A] border border-cyan-500/20 hover:border-cyan-500/40 text-center transition-all group"
-            >
-              <Trophy className="w-4 h-4 text-cyan-400 mx-auto mb-1 group-hover:scale-110 transition-transform" />
-              <div className="font-display text-xs font-bold text-cyan-300">Trophies</div>
-              <div className="text-[10px] text-slate-400">Rewards</div>
-            </Link>
+          {/* Minimal Attributes */}
+          <div>
+            <div className="flex justify-between items-end mb-2">
+              <h3 className="font-display text-lg tracking-widest text-[#141210] uppercase">Attribute Mastery</h3>
+              <Link href="/character" className="font-display text-xs tracking-widest text-[#57534E] hover:text-[#141210]">VIEW →</Link>
+            </div>
+            <hr className="border-[#141210]/20 mb-4" />
+            <AttributeBarList />
+          </div>
+          
+          <div>
+             <h3 className="font-display text-lg tracking-widest text-[#141210] uppercase mb-2">Activity Protocol</h3>
+             <hr className="border-[#141210]/20 mb-4" />
+             <HeatmapGrid />
           </div>
         </div>
       </div>
 
-      {/* Modal */}
-      <CreateQuestModal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-      />
+      <CreateQuestModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
     </div>
   );
 }
