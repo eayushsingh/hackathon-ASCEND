@@ -318,15 +318,20 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     soundManager.playClick();
 
     if (!isDemoUser && isSupabaseConfigured()) {
-      const res = await fetch('/api/quests', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(questData),
-      });
-      if (!res.ok) throw new Error('Failed to create quest');
-      const { quest } = await res.json();
-      setQuests((prev) => [quest, ...prev]);
-      return quest;
+      try {
+        const res = await fetch('/api/quests', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(questData),
+        });
+        if (res.ok) {
+          const { quest } = await res.json();
+          setQuests((prev) => [quest, ...prev]);
+          return quest;
+        }
+      } catch (err) {
+        console.warn('Network error in createQuest, applying local authoritative fallback:', err);
+      }
     }
 
     // Local state fallback

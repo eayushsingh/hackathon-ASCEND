@@ -26,6 +26,10 @@ import {
   Target,
   Loader2,
   Check,
+  Bell,
+  Clock,
+  AlertCircle,
+  RotateCw,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -53,9 +57,15 @@ export default function CalendarPage() {
 
   // New Quest Form State
   const [newTitle, setNewTitle] = useState('');
+  const [newDescription, setNewDescription] = useState('');
   const [newCategory, setNewCategory] = useState<QuestCategory>('Work');
   const [newDifficulty, setNewDifficulty] = useState<QuestDifficulty>('Medium');
   const [newAttribute, setNewAttribute] = useState<AttributeType>('Intellect');
+  const [isAlarmEnabled, setIsAlarmEnabled] = useState(false);
+  const [reminderTime, setReminderTime] = useState('08:00');
+  const [isRecurring, setIsRecurring] = useState(false);
+  const [isSubmittingCustom, setIsSubmittingCustom] = useState(false);
+  const [customError, setCustomError] = useState<string | null>(null);
 
   // Compute Current Week Days (Mon - Sun)
   const getWeekDates = (offsetWeeks: number = 0) => {
@@ -82,7 +92,7 @@ export default function CalendarPage() {
         return due === dateStr;
       }
       if (q.is_recurring && (q.recurrence_interval === 'Daily' || !q.recurrence_interval)) return true;
-      const created = q.created_at.includes('T') ? q.created_at.split('T')[0] : q.created_at;
+      const created = q.created_at ? (q.created_at.includes('T') ? q.created_at.split('T')[0] : q.created_at) : '';
       return created === dateStr;
     });
   };
@@ -185,20 +195,51 @@ export default function CalendarPage() {
 
   const handleScheduleCustomQuest = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTitle.trim()) return;
+    setCustomError(null);
 
-    await createQuest({
-      title: newTitle.trim(),
-      category: newCategory,
-      difficulty: newDifficulty,
-      attribute: newAttribute,
-      due_date: selectedDateForNewQuest,
-      is_recurring: false,
-    });
+    if (!newTitle.trim()) {
+      setCustomError('Please enter a quest or task title.');
+      return;
+    }
 
-    soundManager.playGoldClink();
-    setNewTitle('');
-    setIsScheduleModalOpen(false);
+    if (isSubmittingCustom) return;
+    setIsSubmittingCustom(true);
+
+    try {
+      await createQuest({
+        title: newTitle.trim(),
+        description: newDescription.trim(),
+        category: newCategory,
+        difficulty: newDifficulty,
+        attribute: newAttribute,
+        due_date: selectedDateForNewQuest,
+        is_recurring: isRecurring,
+        reminder_time: isAlarmEnabled ? reminderTime : null,
+        reminder_enabled: isAlarmEnabled,
+      });
+
+      soundManager.playGoldClink();
+      if (typeof window !== 'undefined') {
+        confetti({
+          particleCount: 60,
+          spread: 60,
+          origin: { y: 0.6 },
+          colors: ['#7C3AED', '#38BDF8', '#10B981'],
+        });
+      }
+
+      setNewTitle('');
+      setNewDescription('');
+      setIsAlarmEnabled(false);
+      setIsRecurring(false);
+      setCustomError(null);
+      setIsScheduleModalOpen(false);
+    } catch (err: unknown) {
+      console.error('Error scheduling quest:', err);
+      setCustomError((err as Error).message || 'Could not schedule quest. Please try again.');
+    } finally {
+      setIsSubmittingCustom(false);
+    }
   };
 
   // Weekly Stats
@@ -633,20 +674,28 @@ export default function CalendarPage() {
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="w-full max-w-lg bg-white border border-[#E5E5EA] rounded-3xl p-6 sm:p-8 shadow-2xl"
+            className="w-full max-w-lg bg-white border border-[#E5E5EA] rounded-3xl p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
           >
-            <div className="flex items-center justify-between pb-4 mb-6 border-b border-[#E5E5EA]">
+            <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#E5E5EA]">
               <h3 className="text-xl font-bold text-[#1D1D1F] flex items-center gap-2">
                 <CalendarDays className="w-5 h-5 text-[#7C3AED]" />
                 <span>Schedule Quest</span>
               </h3>
               <button
+                type="button"
                 onClick={() => setIsScheduleModalOpen(false)}
                 className="text-lg font-bold text-[#8E8E93] hover:text-[#1D1D1F] cursor-pointer"
               >
                 ✕
               </button>
             </div>
+
+            {customError && (
+              <div className="mb-4 p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>{customError}</span>
+              </div>
+            )}
 
             <form onSubmit={handleScheduleCustomQuest} className="space-y-4">
               <div>
@@ -663,15 +712,31 @@ export default function CalendarPage() {
 
               <div>
                 <label className="block text-xs font-semibold text-[#6E6E73] uppercase mb-1">
-                  Quest Title
+                  Quest Title *
                 </label>
                 <input
                   type="text"
                   value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
+                  onChange={(e) => {
+                    setNewTitle(e.target.value);
+                    if (customError) setCustomError(null);
+                  }}
                   required
-                  placeholder="e.g. 5K Workout or 2-Hour Deep Coding Block"
+                  placeholder="e.g. 5K Workout, Deep Work Block, or Study Session"
                   className="w-full px-4 py-2.5 bg-[#FAF9F5] border border-[#E5E5EA] rounded-2xl text-[#1D1D1F] text-xs focus:outline-none focus:border-[#7C3AED]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-[#6E6E73] uppercase mb-1">
+                  Notes / Details (Optional)
+                </label>
+                <textarea
+                  value={newDescription}
+                  onChange={(e) => setNewDescription(e.target.value)}
+                  placeholder="Checklist items or specific routine instructions..."
+                  rows={2}
+                  className="w-full px-4 py-2.5 bg-[#FAF9F5] border border-[#E5E5EA] rounded-2xl text-[#1D1D1F] text-xs focus:outline-none focus:border-[#7C3AED] resize-none"
                 />
               </div>
 
@@ -730,6 +795,73 @@ export default function CalendarPage() {
                 </select>
               </div>
 
+              {/* Scheduled Alarm Reminder Toggle */}
+              <div className="p-3.5 bg-[#FAF9F5] rounded-2xl border border-[#E5E5EA] space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <Bell className="w-5 h-5 text-purple-600" />
+                    <div>
+                      <div className="text-xs font-bold text-[#1D1D1F]">Scheduled Alarm Reminder</div>
+                      <div className="text-[11px] text-[#6E6E73]">Rings an audio alarm chime when it&apos;s time for this task</div>
+                    </div>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={isAlarmEnabled}
+                    onChange={(e) => setIsAlarmEnabled(e.target.checked)}
+                    className="w-5 h-5 accent-purple-600 rounded cursor-pointer"
+                  />
+                </div>
+
+                {isAlarmEnabled && (
+                  <div className="pt-2.5 border-t border-[#E5E5EA] flex flex-col sm:flex-row items-center gap-2">
+                    <input
+                      type="time"
+                      value={reminderTime}
+                      onChange={(e) => setReminderTime(e.target.value)}
+                      className="w-full sm:w-auto px-3 py-1.5 bg-white border border-[#E5E5EA] rounded-xl text-xs font-mono font-bold text-[#1D1D1F] focus:outline-none focus:border-purple-500 cursor-pointer"
+                    />
+                    <div className="flex items-center gap-1.5 w-full sm:w-auto flex-wrap">
+                      {[
+                        { label: '🌅 08:00 AM', time: '08:00' },
+                        { label: '☀️ 02:00 PM', time: '14:00' },
+                        { label: '🌙 08:00 PM', time: '20:00' },
+                      ].map((preset) => (
+                        <button
+                          key={preset.time}
+                          type="button"
+                          onClick={() => setReminderTime(preset.time)}
+                          className={`px-2 py-1 text-[11px] font-mono rounded-lg border transition-all cursor-pointer ${
+                            reminderTime === preset.time
+                              ? 'bg-purple-600 text-white border-purple-600 shadow-xs'
+                              : 'bg-white text-[#6E6E73] border-[#E5E5EA] hover:border-purple-300'
+                          }`}
+                        >
+                          {preset.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Repeat Daily Habit Option */}
+              <div className="flex items-center justify-between p-3.5 bg-[#FAF9F5] rounded-2xl border border-[#E5E5EA]">
+                <div className="flex items-center space-x-3">
+                  <RotateCw className="w-5 h-5 text-purple-600" />
+                  <div>
+                    <div className="text-xs font-bold text-[#1D1D1F]">Repeat Daily (Habit)</div>
+                    <div className="text-[11px] text-[#6E6E73]">Resets every morning to build your daily streak</div>
+                  </div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={isRecurring}
+                  onChange={(e) => setIsRecurring(e.target.checked)}
+                  className="w-5 h-5 accent-purple-600 rounded cursor-pointer"
+                />
+              </div>
+
               <div className="flex items-center justify-end space-x-3 pt-4 border-t border-[#E5E5EA]">
                 <button
                   type="button"
@@ -740,9 +872,17 @@ export default function CalendarPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 btn-primary-gradient text-white text-xs font-semibold uppercase tracking-wider rounded-full shadow-md cursor-pointer"
+                  disabled={isSubmittingCustom || !newTitle.trim()}
+                  className="px-5 py-2.5 btn-primary-gradient text-white text-xs font-semibold uppercase tracking-wider rounded-full shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
                 >
-                  Schedule Quest
+                  {isSubmittingCustom ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <span>Scheduling...</span>
+                    </>
+                  ) : (
+                    <span>Schedule Quest</span>
+                  )}
                 </button>
               </div>
             </form>
