@@ -188,25 +188,36 @@ export default function LeaderboardPage() {
             const data = await res.json();
             setLeaderboardData(data.leaderboard || []);
             setCurrentUserStanding(data.currentUserEntry || null);
-            setTotalCount(data.totalParticipants || 0);
+            setTotalCount(data.totalParticipants || (data.leaderboard ? data.leaderboard.length : 0));
           } else {
-            throw new Error('Leaderboard fetch failed');
+            setLeaderboardData([]);
+            setTotalCount(0);
           }
         } else {
-          throw new Error('Supabase unconfigured');
+          // Supabase unconfigured or local demo mode — display ONLY current user profile if available, zero fake names
+          if (profile && profile.username) {
+            const userEntry: LeaderboardEntry = {
+              rank: 1,
+              user_id: profile.user_id || 'demo-user',
+              username: profile.username,
+              title: profile.title || 'Initiate Seeker',
+              archetype: profile.archetype,
+              level: profile.level || 1,
+              total_xp: profile.xp || 0,
+              achievement_count: achievements.length,
+              is_current_user: true,
+            };
+            setLeaderboardData([userEntry]);
+            setCurrentUserStanding(userEntry);
+            setTotalCount(1);
+          } else {
+            setLeaderboardData([]);
+            setTotalCount(0);
+          }
         }
       } catch {
-        // Fallback demo data
-        const fallbackData: LeaderboardEntry[] = [
-          { rank: 1, user_id: '1', username: 'Alex Sovereign', title: 'Grandmaster Arcane', archetype: 'Cyber Mage' as any, level: 34, total_xp: 28400, achievement_count: 14 },
-          { rank: 2, user_id: '2', username: 'Elena Vance', title: 'Vanguard Paragon', archetype: 'Iron Titan' as any, level: 29, total_xp: 22100, achievement_count: 11 },
-          { rank: 3, user_id: '3', username: 'Kaelen Voss', title: 'Shadow Stalker', archetype: 'Shadow Rogue' as any, level: 27, total_xp: 19800, achievement_count: 9 },
-          { rank: 4, user_id: '4', username: profile.username || 'You', title: profile.title, archetype: profile.archetype, level: profile.level, total_xp: profile.xp, achievement_count: achievements.length },
-          { rank: 5, user_id: '5', username: 'Marcus Kane', title: 'Bio Hacker', archetype: 'Bio Hacker' as any, level: 22, total_xp: 14200, achievement_count: 7 },
-        ].sort((a, b) => b.total_xp - a.total_xp).map((item, idx) => ({ ...item, rank: idx + 1 }));
-
-        setLeaderboardData(fallbackData);
-        setTotalCount(fallbackData.length);
+        setLeaderboardData([]);
+        setTotalCount(0);
       } finally {
         setIsLoading(false);
         setIsInitialMount(false);
@@ -309,7 +320,9 @@ export default function LeaderboardPage() {
           </div>
         ) : filteredData.length === 0 ? (
           <div className="py-20 text-center text-[#6E6E73] font-mono text-xs">
-            No players match the search criteria.
+            {leaderboardData.length === 0
+              ? 'No players ranked yet. Complete quests to claim rank #1!'
+              : 'No players match the search criteria.'}
           </div>
         ) : (
           <div>

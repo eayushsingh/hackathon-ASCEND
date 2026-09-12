@@ -66,12 +66,12 @@ Every task contributes directly to one of six core life attributes:
 
 ## 🛠️ Technology Stack
 
-- **Framework**: Next.js 14+ (App Router with TypeScript)
-- **Styling**: Tailwind CSS v4 + Curated Cyberpunk Design Tokens & Themes
+- **Framework**: Next.js 16+ (App Router with TypeScript, Turbopack)
+- **Styling**: Tailwind CSS + Apple-Inspired Design System (Vibrant Purple-to-Blue Gradients, Sleek Cards, Responsive Grid)
 - **Motion & Polish**: Framer Motion, Canvas Confetti, Lucide Icons
 - **Database & Auth**: Supabase (PostgreSQL + Auth + Row Level Security)
 - **Audio Engine**: Synthesized Procedural Web Audio API
-- **Testing**: Built-in TypeScript Progression Test Suite (`scripts/test-progression.ts`)
+- **Testing**: Built-in TypeScript Progression & Security Test Suite (`scripts/test-progression.ts`)
 
 ---
 
