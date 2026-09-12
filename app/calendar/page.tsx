@@ -2,13 +2,15 @@
 
 // ==============================================================================
 // ASCEND - QUEST CALENDAR & WEEKLY SCHEDULER
-// Apple-Inspired Bright Premium Scheduler Layout
+// Apple-Inspired Bright Premium Scheduler Layout with One-Click Routine Deployers
 // ==============================================================================
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useGame } from '@/lib/context/game-context';
 import { Quest, QuestCategory, QuestDifficulty, AttributeType } from '@/types/rpg';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
+import { soundManager } from '@/lib/sound/sfx';
+import confetti from 'canvas-confetti';
 import {
   CalendarDays,
   Plus,
@@ -16,24 +18,38 @@ import {
   Sparkles,
   Zap,
   Coins,
-  Flame,
   Dumbbell,
   Brain,
   Layers,
   ChevronLeft,
   ChevronRight,
   Target,
+  Loader2,
+  Check,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function CalendarPage() {
   const { quests, completeQuest, createQuest, profile } = useGame();
   const [viewMode, setViewMode] = useState<'week' | 'month'>('week');
   const [currentWeekOffset, setCurrentWeekOffset] = useState<number>(0);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
-  const [selectedDateForNewQuest, setSelectedDateForNewQuest] = useState<string>(
-    new Date().toISOString().split('T')[0]
-  );
+  const [deployingPreset, setDeployingPreset] = useState<'gym' | 'code' | 'habit' | null>(null);
+  const [deployedSuccess, setDeployedSuccess] = useState<string | null>(null);
+
+  const calendarMatrixRef = useRef<HTMLDivElement>(null);
+
+  // Local date formatter (YYYY-MM-DD) that avoids UTC timezone offsets
+  const formatDateIso = (d: Date) => {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const todayIso = formatDateIso(new Date());
+
+  const [selectedDateForNewQuest, setSelectedDateForNewQuest] = useState<string>(todayIso);
 
   // New Quest Form State
   const [newTitle, setNewTitle] = useState('');
@@ -46,97 +62,124 @@ export default function CalendarPage() {
     const today = new Date();
     const dayOfWeek = today.getDay(); // 0 is Sun, 1 is Mon
     const distanceToMon = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-    
-    const monday = new Date(today);
-    monday.setDate(today.getDate() + distanceToMon + offsetWeeks * 7);
+
+    const monday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + distanceToMon + offsetWeeks * 7);
 
     const week = [];
     for (let i = 0; i < 7; i++) {
-      const d = new Date(monday);
-      d.setDate(monday.getDate() + i);
+      const d = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i);
       week.push(d);
     }
     return week;
   };
 
   const weekDates = getWeekDates(currentWeekOffset);
-  const todayIso = new Date().toISOString().split('T')[0];
-
-  const formatDateIso = (d: Date) => d.toISOString().split('T')[0];
 
   const getQuestsForDate = (dateStr: string) => {
     return quests.filter((q) => {
       if (q.due_date) {
-        return q.due_date.split('T')[0] === dateStr;
+        const due = q.due_date.includes('T') ? q.due_date.split('T')[0] : q.due_date;
+        return due === dateStr;
       }
-      if (q.is_recurring && q.recurrence_interval === 'Daily') return true;
-      return q.created_at.split('T')[0] === dateStr;
+      if (q.is_recurring && (q.recurrence_interval === 'Daily' || !q.recurrence_interval)) return true;
+      const created = q.created_at.includes('T') ? q.created_at.split('T')[0] : q.created_at;
+      return created === dateStr;
     });
   };
 
   // Deployment Presets
   const handleDeployPreset = async (presetType: 'gym' | 'code' | 'habit') => {
+    if (deployingPreset) return;
+    setDeployingPreset(presetType);
+    setDeployedSuccess(null);
+
     const today = new Date();
 
-    if (presetType === 'gym') {
-      const gymPlan = [
-        { dayOffset: 0, title: 'Upper Body Power & Workout', category: 'Fitness' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Strength' as AttributeType },
-        { dayOffset: 2, title: 'Lower Body & Core Workout', category: 'Fitness' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Vitality' as AttributeType },
-        { dayOffset: 4, title: 'Cardio & Mobility Session', category: 'Fitness' as QuestCategory, difficulty: 'Medium' as QuestDifficulty, attribute: 'Vitality' as AttributeType },
-        { dayOffset: 6, title: 'Active Recovery & Stretching', category: 'Fitness' as QuestCategory, difficulty: 'Easy' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
-      ];
+    try {
+      if (presetType === 'gym') {
+        const gymPlan = [
+          { dayOffset: 0, title: 'Upper Body Strength Workout', category: 'Fitness' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Strength' as AttributeType },
+          { dayOffset: 2, title: 'Lower Body & Core Training', category: 'Fitness' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Vitality' as AttributeType },
+          { dayOffset: 4, title: 'Cardio & Stamina Session', category: 'Fitness' as QuestCategory, difficulty: 'Medium' as QuestDifficulty, attribute: 'Vitality' as AttributeType },
+          { dayOffset: 6, title: 'Active Recovery & Stretching', category: 'Fitness' as QuestCategory, difficulty: 'Easy' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
+        ];
 
-      for (const p of gymPlan) {
-        const targetDate = new Date(today);
-        targetDate.setDate(today.getDate() + p.dayOffset);
-        await createQuest({
-          title: p.title,
-          category: p.category,
-          difficulty: p.difficulty,
-          attribute: p.attribute,
-          due_date: formatDateIso(targetDate),
-          is_recurring: false,
+        for (const p of gymPlan) {
+          const targetDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + p.dayOffset);
+          await createQuest({
+            title: p.title,
+            category: p.category,
+            difficulty: p.difficulty,
+            attribute: p.attribute,
+            due_date: formatDateIso(targetDate),
+            is_recurring: false,
+          });
+        }
+        setDeployedSuccess('7-Day Workout Routine added! 4 workouts scheduled in your calendar.');
+      } else if (presetType === 'code') {
+        const codePlan = [
+          { dayOffset: 0, title: 'System Architecture & Data Schema', category: 'Work' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Intellect' as AttributeType },
+          { dayOffset: 1, title: 'API Endpoint Hardening & Unit Tests', category: 'Work' as QuestCategory, difficulty: 'Epic' as QuestDifficulty, attribute: 'Intellect' as AttributeType },
+          { dayOffset: 3, title: 'UI Polish & Responsive Styling', category: 'Work' as QuestCategory, difficulty: 'Medium' as QuestDifficulty, attribute: 'Creativity' as AttributeType },
+          { dayOffset: 5, title: 'Production Deployment & Launch', category: 'Work' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
+        ];
+
+        for (const p of codePlan) {
+          const targetDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + p.dayOffset);
+          await createQuest({
+            title: p.title,
+            category: p.category,
+            difficulty: p.difficulty,
+            attribute: p.attribute,
+            due_date: formatDateIso(targetDate),
+            is_recurring: false,
+          });
+        }
+        setDeployedSuccess('Code Sprint Protocol added! 4 development sprints scheduled in your calendar.');
+      } else if (presetType === 'habit') {
+        const habitPlan = [
+          { dayOffset: 0, title: '20-Min Morning Reading & Reflection', category: 'Habit' as QuestCategory, difficulty: 'Easy' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
+          { dayOffset: 1, title: 'Read 20 Pages of Non-Fiction Book', category: 'Learning' as QuestCategory, difficulty: 'Medium' as QuestDifficulty, attribute: 'Intellect' as AttributeType },
+          { dayOffset: 3, title: '90-Min Focused Deep Work Session', category: 'Work' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
+        ];
+
+        for (const p of habitPlan) {
+          const targetDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + p.dayOffset);
+          await createQuest({
+            title: p.title,
+            category: p.category,
+            difficulty: p.difficulty,
+            attribute: p.attribute,
+            due_date: formatDateIso(targetDate),
+            is_recurring: true,
+          });
+        }
+        setDeployedSuccess('Habit Mastery Routine added! 3 daily habits scheduled in your calendar.');
+      }
+
+      // Audio & Confetti Celebrations
+      soundManager.playGoldClink();
+      if (typeof window !== 'undefined') {
+        confetti({
+          particleCount: 90,
+          spread: 70,
+          origin: { y: 0.65 },
+          colors: ['#7C3AED', '#38BDF8', '#10B981', '#F59E0B'],
         });
       }
-    } else if (presetType === 'code') {
-      const codePlan = [
-        { dayOffset: 0, title: 'System Architecture & Data Schema', category: 'Work' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Intellect' as AttributeType },
-        { dayOffset: 1, title: 'API Endpoint Hardening & Tests', category: 'Work' as QuestCategory, difficulty: 'Epic' as QuestDifficulty, attribute: 'Intellect' as AttributeType },
-        { dayOffset: 3, title: 'UI Polish & Styling Optimization', category: 'Work' as QuestCategory, difficulty: 'Medium' as QuestDifficulty, attribute: 'Creativity' as AttributeType },
-        { dayOffset: 5, title: 'Deployment Audit & Launch', category: 'Work' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
-      ];
 
-      for (const p of codePlan) {
-        const targetDate = new Date(today);
-        targetDate.setDate(today.getDate() + p.dayOffset);
-        await createQuest({
-          title: p.title,
-          category: p.category,
-          difficulty: p.difficulty,
-          attribute: p.attribute,
-          due_date: formatDateIso(targetDate),
-          is_recurring: false,
-        });
-      }
-    } else if (presetType === 'habit') {
-      const habitPlan = [
-        { dayOffset: 0, title: '20-Min Morning Reading & Meditation', category: 'Habit' as QuestCategory, difficulty: 'Easy' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
-        { dayOffset: 1, title: 'Read 30 Pages of Non-Fiction Book', category: 'Learning' as QuestCategory, difficulty: 'Medium' as QuestDifficulty, attribute: 'Intellect' as AttributeType },
-        { dayOffset: 3, title: '90-Min Zero-Distraction Deep Work', category: 'Work' as QuestCategory, difficulty: 'Hard' as QuestDifficulty, attribute: 'Discipline' as AttributeType },
-      ];
+      // Auto-scroll down to calendar matrix so user sees the newly added quests
+      setTimeout(() => {
+        calendarMatrixRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 250);
 
-      for (const p of habitPlan) {
-        const targetDate = new Date(today);
-        targetDate.setDate(today.getDate() + p.dayOffset);
-        await createQuest({
-          title: p.title,
-          category: p.category,
-          difficulty: p.difficulty,
-          attribute: p.attribute,
-          due_date: formatDateIso(targetDate),
-          is_recurring: true,
-        });
-      }
+      setTimeout(() => {
+        setDeployedSuccess(null);
+      }, 7000);
+    } catch (err: unknown) {
+      console.error('Error deploying routine:', err);
+    } finally {
+      setDeployingPreset(null);
     }
   };
 
@@ -153,6 +196,7 @@ export default function CalendarPage() {
       is_recurring: false,
     });
 
+    soundManager.playGoldClink();
     setNewTitle('');
     setIsScheduleModalOpen(false);
   };
@@ -237,37 +281,68 @@ export default function CalendarPage() {
 
       {/* 2. ROUTINE DEPLOYMENT PRESETS */}
       <div className="apple-card p-6 sm:p-8">
-        <div className="pb-4 mb-6 border-b border-[#E5E5EA]">
-          <h2 className="text-xl font-bold text-[#1D1D1F]">
-            Routine Presets
-          </h2>
-          <p className="text-xs text-[#6E6E73] mt-1">
-            One-click deploy pre-configured weekly routines directly into your active quest calendar.
-          </p>
+        <div className="pb-4 mb-6 border-b border-[#E5E5EA] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 className="text-xl font-bold text-[#1D1D1F]">
+              Routine Presets
+            </h2>
+            <p className="text-xs text-[#6E6E73] mt-1">
+              One-click add pre-configured weekly routines directly into your active quest calendar.
+            </p>
+          </div>
         </div>
 
+        {/* Success Alert Banner */}
+        <AnimatePresence>
+          {deployedSuccess && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2.5 shadow-sm"
+            >
+              <Check className="w-5 h-5 text-emerald-600 shrink-0" />
+              <span>{deployedSuccess}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-5 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] flex flex-col justify-between hover:border-[#D1D1D6] transition-all">
+          {/* Gym Preset */}
+          <div className="p-5 rounded-3xl bg-[#FAF9F5] border border-[#E5E5EA] flex flex-col justify-between hover:border-purple-300 hover:shadow-md transition-all">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-[#F2F2F7] text-[#7C3AED] flex items-center justify-center font-bold mb-4">
+              <div className="w-11 h-11 rounded-2xl bg-purple-50 border border-purple-200 text-purple-700 flex items-center justify-center font-bold mb-4 shadow-sm">
                 <Dumbbell className="w-5 h-5" />
               </div>
               <h3 className="text-base font-bold text-[#1D1D1F]">7-Day Workout Routine</h3>
               <p className="text-xs text-[#6E6E73] mt-2 leading-relaxed">
-                Upper body strength, lower body workouts, HIIT cardio, and recovery sessions.
+                Upper body strength, lower body workouts, cardio, and recovery sessions.
               </p>
             </div>
             <button
+              type="button"
+              disabled={deployingPreset !== null}
               onClick={() => handleDeployPreset('gym')}
-              className="mt-6 w-full py-2.5 bg-white hover:bg-[#F2F2F7] text-[#1D1D1F] border border-[#E5E5EA] font-semibold text-xs rounded-full transition-all text-center cursor-pointer shadow-sm"
+              className="mt-6 w-full py-3 bg-white hover:bg-purple-50 text-[#1D1D1F] hover:text-purple-700 border border-[#E5E5EA] hover:border-purple-300 font-bold text-xs rounded-2xl transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-sm disabled:opacity-50"
             >
-              Deploy Workout Plan
+              {deployingPreset === 'gym' ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
+                  <span>Adding Workout Plan...</span>
+                </>
+              ) : (
+                <>
+                  <Plus className="w-4 h-4 text-purple-600" />
+                  <span>Add Workout Plan</span>
+                </>
+              )}
             </button>
           </div>
 
-          <div className="p-5 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] flex flex-col justify-between hover:border-[#D1D1D6] transition-all">
+          {/* Code Sprint Preset */}
+          <div className="p-5 rounded-3xl bg-[#FAF9F5] border border-[#E5E5EA] flex flex-col justify-between hover:border-sky-300 hover:shadow-md transition-all">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-[#F2F2F7] text-[#38BDF8] flex items-center justify-center font-bold mb-4">
+              <div className="w-11 h-11 rounded-2xl bg-sky-50 border border-sky-200 text-sky-600 flex items-center justify-center font-bold mb-4 shadow-sm">
                 <Brain className="w-5 h-5" />
               </div>
               <h3 className="text-base font-bold text-[#1D1D1F]">Code Sprint Protocol</h3>
@@ -276,16 +351,29 @@ export default function CalendarPage() {
               </p>
             </div>
             <button
+              type="button"
+              disabled={deployingPreset !== null}
               onClick={() => handleDeployPreset('code')}
-              className="mt-6 w-full py-2.5 bg-white hover:bg-[#F2F2F7] text-[#1D1D1F] border border-[#E5E5EA] font-semibold text-xs rounded-full transition-all text-center cursor-pointer shadow-sm"
+              className="mt-6 w-full py-3 bg-white hover:bg-sky-50 text-[#1D1D1F] hover:text-sky-700 border border-[#E5E5EA] hover:border-sky-300 font-bold text-xs rounded-2xl transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-sm disabled:opacity-50"
             >
-              Deploy Code Sprint
+              {deployingPreset === 'code' ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-sky-600" />
+                  <span>Adding Code Sprint...</span>
+                </>
+              ) : (
+                <>
+                  <Plus className="w-4 h-4 text-sky-600" />
+                  <span>Add Code Sprint</span>
+                </>
+              )}
             </button>
           </div>
 
-          <div className="p-5 rounded-2xl bg-[#FAF9F5] border border-[#E5E5EA] flex flex-col justify-between hover:border-[#D1D1D6] transition-all">
+          {/* Habit Preset */}
+          <div className="p-5 rounded-3xl bg-[#FAF9F5] border border-[#E5E5EA] flex flex-col justify-between hover:border-amber-300 hover:shadow-md transition-all">
             <div>
-              <div className="w-10 h-10 rounded-xl bg-[#F2F2F7] text-[#C9A227] flex items-center justify-center font-bold mb-4">
+              <div className="w-11 h-11 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center font-bold mb-4 shadow-sm">
                 <Layers className="w-5 h-5" />
               </div>
               <h3 className="text-base font-bold text-[#1D1D1F]">Habit Mastery Routine</h3>
@@ -294,17 +382,29 @@ export default function CalendarPage() {
               </p>
             </div>
             <button
+              type="button"
+              disabled={deployingPreset !== null}
               onClick={() => handleDeployPreset('habit')}
-              className="mt-6 w-full py-2.5 bg-white hover:bg-[#F2F2F7] text-[#1D1D1F] border border-[#E5E5EA] font-semibold text-xs rounded-full transition-all text-center cursor-pointer shadow-sm"
+              className="mt-6 w-full py-3 bg-white hover:bg-amber-50 text-[#1D1D1F] hover:text-amber-700 border border-[#E5E5EA] hover:border-amber-300 font-bold text-xs rounded-2xl transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-sm disabled:opacity-50"
             >
-              Deploy Habit Routine
+              {deployingPreset === 'habit' ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-amber-600" />
+                  <span>Adding Habit Routine...</span>
+                </>
+              ) : (
+                <>
+                  <Plus className="w-4 h-4 text-amber-600" />
+                  <span>Add Habit Routine</span>
+                </>
+              )}
             </button>
           </div>
         </div>
       </div>
 
       {/* 3. CALENDAR MATRIX CONTROLS */}
-      <div className="apple-card p-5">
+      <div ref={calendarMatrixRef} id="calendar-matrix" className="apple-card p-5 scroll-mt-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
             <button
@@ -338,7 +438,7 @@ export default function CalendarPage() {
             <button
               onClick={() => setViewMode('week')}
               className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                viewMode === 'week' ? 'btn-primary-gradient' : 'text-[#6E6E73] hover:text-[#1D1D1F]'
+                viewMode === 'week' ? 'btn-primary-gradient text-white' : 'text-[#6E6E73] hover:text-[#1D1D1F]'
               }`}
             >
               Weekly Matrix
@@ -346,7 +446,7 @@ export default function CalendarPage() {
             <button
               onClick={() => setViewMode('month')}
               className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                viewMode === 'month' ? 'btn-primary-gradient' : 'text-[#6E6E73] hover:text-[#1D1D1F]'
+                viewMode === 'month' ? 'btn-primary-gradient text-white' : 'text-[#6E6E73] hover:text-[#1D1D1F]'
               }`}
             >
               Month Overview
@@ -370,7 +470,7 @@ export default function CalendarPage() {
                 key={dateIso}
                 className={`p-4 rounded-3xl border flex flex-col justify-between min-h-[380px] transition-all apple-card ${
                   isToday
-                    ? 'bg-white border-[#7C3AED]/60 shadow-[0_4px_16px_rgba(124,58,237,0.12)]'
+                    ? 'bg-white border-[#7C3AED]/60 shadow-[0_4px_16px_rgba(124,58,237,0.12)] ring-1 ring-[#7C3AED]/30'
                     : 'bg-white border-[#E5E5EA]'
                 }`}
               >
@@ -386,7 +486,7 @@ export default function CalendarPage() {
                       </div>
                     </div>
                     {isToday && (
-                      <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 btn-primary-gradient rounded-full">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 btn-primary-gradient text-white rounded-full">
                         TODAY
                       </span>
                     )}
@@ -486,8 +586,7 @@ export default function CalendarPage() {
 
           <div className="grid grid-cols-7 gap-2">
             {Array.from({ length: 28 }).map((_, i) => {
-              const d = new Date(weekDates[0]);
-              d.setDate(weekDates[0].getDate() + i - 7);
+              const d = new Date(weekDates[0].getFullYear(), weekDates[0].getMonth(), weekDates[0].getDate() + i - 7);
               const dateIso = formatDateIso(d);
               const dayQuests = getQuestsForDate(dateIso);
               const isToday = dateIso === todayIso;
@@ -597,7 +696,7 @@ export default function CalendarPage() {
 
                 <div>
                   <label className="block text-xs font-semibold text-[#6E6E73] uppercase mb-1">
-                    Difficulty Tier
+                    Difficulty Level
                   </label>
                   <select
                     value={newDifficulty}
@@ -641,7 +740,7 @@ export default function CalendarPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 btn-primary-gradient text-xs font-semibold uppercase tracking-wider rounded-full shadow-md cursor-pointer"
+                  className="px-5 py-2.5 btn-primary-gradient text-white text-xs font-semibold uppercase tracking-wider rounded-full shadow-md cursor-pointer"
                 >
                   Schedule Quest
                 </button>
