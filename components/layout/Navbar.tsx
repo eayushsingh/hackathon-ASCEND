@@ -30,7 +30,7 @@ import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
-  const { profile, streak, toggleSound, switchArchetype } = useGame();
+  const { profile, streak, toggleSound, switchArchetype, isDemoUser, isLoaded } = useGame();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [archetypeDropdownOpen, setArchetypeDropdownOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
@@ -98,69 +98,88 @@ export const Navbar: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation (Visible at xl: 1280px+) */}
-          <nav className="hidden xl:flex items-center gap-5 2xl:gap-6 text-sm font-medium text-[#6E6E73] whitespace-nowrap overflow-visible">
-            {primaryNavLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`transition-colors py-1 shrink-0 ${
-                    isActive
+          {!isDemoUser && (
+            <nav className="hidden xl:flex items-center gap-5 2xl:gap-6 text-sm font-medium text-[#6E6E73] whitespace-nowrap overflow-visible">
+              {primaryNavLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`transition-colors py-1 shrink-0 ${
+                      isActive
+                        ? 'text-[#1D1D1F] font-semibold border-b-2 border-[#7C3AED]'
+                        : 'hover:text-[#1D1D1F]'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+
+              {/* "More" Dropdown Menu */}
+              <div className="relative shrink-0" ref={moreDropdownRef}>
+                <button
+                  onClick={() => setMoreMenuOpen(!moreMenuOpen)}
+                  className={`flex items-center gap-1 py-1 transition-colors cursor-pointer shrink-0 ${
+                    isSecondaryActive
                       ? 'text-[#1D1D1F] font-semibold border-b-2 border-[#7C3AED]'
                       : 'hover:text-[#1D1D1F]'
                   }`}
                 >
-                  {link.label}
-                </Link>
-              );
-            })}
+                  <span>Progress</span>
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${moreMenuOpen ? 'rotate-180 text-[#7C3AED]' : ''}`} />
+                </button>
 
-            {/* "More" Dropdown Menu */}
-            <div className="relative shrink-0" ref={moreDropdownRef}>
-              <button
-                onClick={() => setMoreMenuOpen(!moreMenuOpen)}
-                className={`flex items-center gap-1 py-1 transition-colors cursor-pointer shrink-0 ${
-                  isSecondaryActive
-                    ? 'text-[#1D1D1F] font-semibold border-b-2 border-[#7C3AED]'
-                    : 'hover:text-[#1D1D1F]'
-                }`}
-              >
-                <span>Progress</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${moreMenuOpen ? 'rotate-180 text-[#7C3AED]' : ''}`} />
-              </button>
-
-              {moreMenuOpen && (
-                <div className="absolute left-0 mt-2 w-48 rounded-2xl bg-white border border-[#E5E5EA] shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-1.5 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                  {secondaryNavLinks.map((link) => {
-                    const Icon = link.icon;
-                    const isActive = pathname === link.href;
-                    return (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-colors ${
-                          isActive
-                            ? 'bg-[#F2F2F7] text-[#7C3AED] font-semibold'
-                            : 'text-[#1D1D1F] hover:bg-[#FAF9F5]'
-                        }`}
-                      >
-                        <Icon className={`w-4 h-4 ${isActive ? 'text-[#7C3AED]' : 'text-[#8E8E93]'}`} />
-                        <span>{link.label}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          </nav>
+                {moreMenuOpen && (
+                  <div className="absolute left-0 mt-2 w-48 rounded-2xl bg-white border border-[#E5E5EA] shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-1.5 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                    {secondaryNavLinks.map((link) => {
+                      const Icon = link.icon;
+                      const isActive = pathname === link.href;
+                      return (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-colors ${
+                            isActive
+                              ? 'bg-[#F2F2F7] text-[#7C3AED] font-semibold'
+                              : 'text-[#1D1D1F] hover:bg-[#FAF9F5]'
+                          }`}
+                        >
+                          <Icon className={`w-4 h-4 ${isActive ? 'text-[#7C3AED]' : 'text-[#8E8E93]'}`} />
+                          <span>{link.label}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </nav>
+          )}
         </div>
 
-        {/* Right: Telemetry Badges & Profile */}
+        {/* Right: Telemetry Badges & Profile / Auth Buttons */}
         <div className="flex items-center gap-3 shrink-0 ml-auto pl-4">
           
-          {/* Telemetry Pills */}
-          <div className="hidden sm:flex items-center gap-2.5 text-xs font-semibold shrink-0">
+          {isLoaded && isDemoUser ? (
+            <div className="flex items-center gap-3 shrink-0">
+              <Link
+                href="/auth/login"
+                className="px-4 py-2 text-sm font-semibold text-[#1D1D1F] hover:text-[#7C3AED] transition-colors shrink-0"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/auth/signup"
+                className="px-4 py-2 text-sm font-semibold text-white btn-primary-gradient rounded-full hover:opacity-90 transition-opacity shrink-0 shadow-sm"
+              >
+                Get Started
+              </Link>
+            </div>
+          ) : isLoaded && !isDemoUser ? (
+            <>
+              {/* Telemetry Pills */}
+              <div className="hidden sm:flex items-center gap-2.5 text-xs font-semibold shrink-0">
             <Link
               href="/shop"
               className="px-3 py-1.5 rounded-full bg-[#FAF9F5] border border-[#E5E5EA] text-[#C9A227] flex items-center gap-1.5 hover:bg-[#F2F2F7] transition-colors shrink-0"
@@ -234,19 +253,21 @@ export const Navbar: React.FC = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button (Visible below xl: 1280px) */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="xl:hidden p-2 text-[#1D1D1F] cursor-pointer rounded-xl hover:bg-[#F2F2F7] transition-colors"
-            aria-label="Toggle navigation menu"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+            {/* Mobile Menu Button (Visible below xl: 1280px) */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="xl:hidden p-2 text-[#1D1D1F] cursor-pointer rounded-xl hover:bg-[#F2F2F7] transition-colors"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+            </>
+          ) : null}
         </div>
       </div>
 
       {/* Mobile / Tablet Drawer (Below 1280px) */}
-      {mobileMenuOpen && (
+      {mobileMenuOpen && !isDemoUser && (
         <div className="xl:hidden bg-white border-b border-[#E5E5EA] mt-2 py-4 px-6 space-y-2 animate-in fade-in duration-150">
           <div className="grid grid-cols-2 gap-2 pb-3 border-b border-[#E5E5EA] sm:hidden">
             <Link
