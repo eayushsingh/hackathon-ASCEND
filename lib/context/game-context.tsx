@@ -449,6 +449,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const targetQuest = quests.find((q) => q.id === questId);
     if (!targetQuest) throw new Error('Quest not found');
 
+    // Instant tactile feedback — fires before any API call
+    soundManager.playClick();
+
     if (!isDemoUser && isSupabaseConfigured()) {
       const res = await fetch(`/api/quests/${questId}/complete`, {
         method: 'POST',
