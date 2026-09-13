@@ -30,7 +30,7 @@ import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
-  const { profile, streak, toggleSound, loginAsDemoUser } = useGame();
+  const { profile, streak, toggleSound, switchArchetype } = useGame();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [archetypeDropdownOpen, setArchetypeDropdownOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
@@ -208,7 +208,7 @@ export const Navbar: React.FC = () => {
                   <button
                     key={arch.id}
                     onClick={() => {
-                      loginAsDemoUser(arch.id);
+                      switchArchetype(arch.id);
                       setArchetypeDropdownOpen(false);
                     }}
                     className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${

@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import { useGame } from '@/lib/context/game-context';
-import { ArrowRight, ArrowLeft, Lock, Mail, Play, AlertCircle } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Lock, Mail, AlertCircle } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { PageMascot } from '@/components/PageMascot';
 
@@ -89,11 +89,6 @@ export default function LoginPage() {
       setErrorMsg((err as Error).message || 'Failed to initialize Google Sign-In.');
       setIsLoading(false);
     }
-  };
-
-  const handleDemoAccess = () => {
-    loginAsDemoUser('Cyber Mage');
-    router.push('/dashboard');
   };
 
   return (
@@ -230,18 +225,6 @@ export default function LoginPage() {
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
-
-        {/* Instant Demo Access Button */}
-        <div className="mt-6 pt-6 border-t border-[#F5F5F7]">
-          <button
-            onClick={handleDemoAccess}
-            type="button"
-            className="w-full py-2.5 bg-[#F5F5F7] hover:bg-[#EAEAEB] border border-[#E5E5E7] text-[#1D1D1F] font-semibold text-xs rounded-xl transition-all flex items-center justify-center space-x-2"
-          >
-            <Play className="w-3.5 h-3.5 text-[#FF5E3A]" />
-            <span>Launch Instant Demo Guest Mode</span>
-          </button>
-        </div>
 
         <div className="mt-6 text-xs text-[#86868B]">
           Don&apos;t have an account?{' '}

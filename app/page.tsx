@@ -15,7 +15,6 @@ import {
   Coins,
   Brain,
   CheckCircle2,
-  Play,
   Shield,
   Target,
   Flame,
@@ -25,13 +24,11 @@ import {
   Crown,
 } from 'lucide-react';
 import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
-import { useGame } from '@/lib/context/game-context';
 import HeroCharacter from '@/components/HeroCharacter';
 import { PageMascot, PageMascotType } from '@/components/PageMascot';
 import { AmbientBackground } from '@/components/ui/AmbientBackground';
 
 export default function LandingPage() {
-  const { loginAsDemoUser } = useGame();
   const [demoQuestCompleted, setDemoQuestCompleted] = useState(false);
   const [activeArchetypeTab, setActiveArchetypeTab] = useState(ARCHETYPE_LIST[0].id);
   const [heroMascotMode, setHeroMascotMode] = useState<'avatar' | PageMascotType>('avatar');
@@ -39,47 +36,36 @@ export default function LandingPage() {
   const selectedArch = ARCHETYPE_LIST.find((a) => a.id === activeArchetypeTab) || ARCHETYPE_LIST[0];
 
   return (
-    <div className="space-y-24 py-8 pb-20 relative">
+    <div className="space-y-16 pb-20 relative">
+      {/* Dynamic Ambient Background Motion */}
       <AmbientBackground variant="section" />
-      {/* 1. HERO SECTION (12-COL SPLIT GRID) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          {/* LEFT: HEADLINE, COPY & CTAS (7 COLS) */}
+
+      {/* 1. HERO SECTION */}
+      <section className="relative pt-6 sm:pt-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          {/* LEFT: VALUE PROPOSITION (7 COLS) */}
           <div className="lg:col-span-7 space-y-6 text-left">
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 bg-[#F2F2F7] border border-[#E5E5EA] rounded-full text-[#7C3AED] text-xs font-semibold tracking-wide">
-              <Sparkles className="w-3.5 h-3.5 text-[#7C3AED]" />
-              <span>Turn your to-do list into a game</span>
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 bg-[#FAF9F5] border border-[#E5E5EA] rounded-full text-xs font-semibold text-[#1D1D1F] shadow-xs">
+              <Sparkles className="w-4 h-4 text-[#7C3AED]" />
+              <span>Real-Life RPG Habit & Task Gamification</span>
             </div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#1D1D1F] leading-[1.05]">
-              Turn Your Daily Tasks <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7C3AED] to-[#38BDF8]">
-                Into a Rewarding RPG
-              </span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1D1D1F] tracking-tight leading-[1.08]">
+              Upgrade your real life like an <span className="bg-gradient-to-r from-[#7C3AED] via-[#FF5E3A] to-[#C9A227] bg-clip-text text-transparent">RPG hero</span>.
             </h1>
 
             <p className="text-lg sm:text-xl text-[#6E6E73] max-w-2xl font-normal leading-relaxed">
               Turn your everyday tasks, workouts, study sessions, and habits into fun quests. Earn XP, level up your character, build streaks, and stay motivated every day.
             </p>
 
-            {/* Verb-led Action Buttons */}
-            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            {/* Verb-led Action Button */}
+            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-start gap-4">
               <Link
                 href="/onboarding"
-                className="px-8 py-4 btn-primary-gradient font-semibold text-base rounded-full flex items-center justify-center space-x-2 group cursor-pointer shadow-md hover:shadow-lg transition-all"
+                className="px-8 py-4 btn-primary-gradient font-semibold text-base rounded-full inline-flex items-center justify-center space-x-2 group cursor-pointer shadow-md hover:shadow-lg transition-all"
               >
                 <span>Get Started</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-
-              <Link
-                href="/dashboard"
-                onClick={() => loginAsDemoUser('Cyber Mage')}
-                className="px-8 py-4 bg-white hover:bg-[#FAF9F5] text-[#1D1D1F] border border-[#E5E5EA] shadow-sm font-semibold text-base rounded-full transition-all flex items-center justify-center space-x-2 group cursor-pointer"
-              >
-                <Play className="w-4 h-4 text-[#7C3AED] fill-[#7C3AED]" />
-                <span>Try Instant Demo</span>
               </Link>
             </div>
 
@@ -416,7 +402,6 @@ export default function LandingPage() {
 
               <Link
                 href="/onboarding"
-                onClick={() => loginAsDemoUser(selectedArch.id)}
                 className="inline-flex items-center space-x-2 px-6 py-3.5 btn-primary-gradient font-semibold text-xs rounded-full cursor-pointer"
               >
                 <span>Start as {selectedArch.name}</span>
