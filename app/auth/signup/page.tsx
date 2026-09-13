@@ -65,8 +65,7 @@ export default function SignupPage() {
 
         router.push('/dashboard');
       } else {
-        loginAsDemoUser(archetype);
-        router.push('/dashboard');
+        setErrorMsg('Authentication is not configured. Please contact support.');
       }
     } catch (err: unknown) {
       setErrorMsg((err as Error).message || 'An unexpected error occurred. Please try again.');
@@ -94,8 +93,8 @@ export default function SignupPage() {
           setIsLoading(false);
         }
       } else {
-        loginAsDemoUser(archetype);
-        router.push('/onboarding');
+        setErrorMsg('Google Sign-In is not currently configured.');
+        setIsLoading(false);
       }
     } catch (err: unknown) {
       setErrorMsg((err as Error).message || 'Failed to initialize Google Sign-In.');

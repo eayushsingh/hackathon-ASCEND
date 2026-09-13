@@ -52,9 +52,7 @@ export default function LoginPage() {
 
         router.push('/dashboard');
       } else {
-        // Fallback demo login
-        loginAsDemoUser('Cyber Mage');
-        router.push('/dashboard');
+        setErrorMsg('Authentication is not configured. Please contact support.');
       }
     } catch (err: unknown) {
       setErrorMsg((err as Error).message || 'An unexpected error occurred. Please try again.');
@@ -82,8 +80,8 @@ export default function LoginPage() {
           setIsLoading(false);
         }
       } else {
-        loginAsDemoUser('Cyber Mage');
-        router.push('/dashboard');
+        setErrorMsg('Google Sign-In is not currently configured.');
+        setIsLoading(false);
       }
     } catch (err: unknown) {
       setErrorMsg((err as Error).message || 'Failed to initialize Google Sign-In.');
