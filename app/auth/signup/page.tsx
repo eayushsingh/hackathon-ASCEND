@@ -85,7 +85,7 @@ export default function SignupPage() {
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'google',
           options: {
-            redirectTo: `${window.location.origin}/auth/callback`,
+            redirectTo: `${window.location.origin}/dashboard`,
           },
         });
 
@@ -104,7 +104,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto py-12 px-4">
+    <div className="max-w-md mx-auto py-10 px-4">
       {/* Top Back Navigation */}
       <div className="mb-4">
         <button
@@ -124,19 +124,27 @@ export default function SignupPage() {
         </button>
       </div>
 
-      <div className="p-8 sm:p-10 bg-white border border-[#E5E5E7] rounded-3xl shadow-sm text-center relative">
-        <div className="absolute -top-3 right-6 hidden sm:block">
-          <PageMascot animationType="hanging" size={84} position="top-edge" />
+      <div className="p-8 sm:p-10 bg-white border border-[#E5E5E7] rounded-3xl shadow-sm text-center relative overflow-hidden">
+        {/* Top Studying & Goal Achievement Mascot Animation */}
+        <div className="flex flex-col items-center justify-center mb-4">
+          <div className="relative">
+            <div className="absolute -inset-2 bg-gradient-to-r from-purple-400/20 via-indigo-400/20 to-blue-400/20 rounded-full blur-lg" />
+            <PageMascot animationType="studying" size={105} position="inline" />
+          </div>
+          <span className="mt-1 text-[11px] font-mono font-bold text-purple-600 bg-purple-50 border border-purple-200/60 px-3 py-0.5 rounded-full uppercase tracking-wider">
+            Begin Your Ascension
+          </span>
         </div>
+
         {/* Top Logo */}
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-3">
           <Link href="/" className="inline-flex hover:opacity-90 transition-opacity">
-            <Logo size="lg" />
+            <Logo size="md" />
           </Link>
         </div>
 
         <h1 className="text-2xl font-bold text-[#1D1D1F] tracking-tight">Create Your Hero</h1>
-        <p className="text-sm font-medium text-[#86868B] mt-1.5">Begin your real-life RPG progression journey</p>
+        <p className="text-sm font-medium text-[#86868B] mt-1">Begin your real-life RPG progression journey</p>
 
         {errorMsg && (
           <div className="mt-6 p-4 rounded-xl border border-red-200 bg-red-50 text-red-700 text-xs font-medium text-left flex items-start space-x-2.5">
