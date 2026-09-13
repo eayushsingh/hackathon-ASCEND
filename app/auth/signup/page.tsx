@@ -79,21 +79,20 @@ export default function SignupPage() {
     setErrorMsg(null);
 
     try {
-      if (isSupabaseConfigured()) {
-        const supabase = createClient();
-        const { error } = await supabase.auth.signInWithOAuth({
-          provider: 'google',
-          options: {
-            redirectTo: `${window.location.origin}/dashboard`,
-          },
-        });
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
+      });
 
-        if (error) {
+      if (error) {
+        if (error.message.toLowerCase().includes('provider is not enabled') || error.message.toLowerCase().includes('not configured')) {
+          setErrorMsg('Google Sign-In is not currently configured.');
+        } else {
           setErrorMsg(error.message);
-          setIsLoading(false);
         }
-      } else {
-        setErrorMsg('Google Sign-In is not currently configured.');
         setIsLoading(false);
       }
     } catch (err: unknown) {
