@@ -5,7 +5,7 @@
 // Clean Minimalist Theme
 // ==============================================================================
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
@@ -19,7 +19,23 @@ import { signupAction } from '@/app/auth/actions';
 
 export default function SignupPage() {
   const router = useRouter();
-  const { loginAsDemoUser } = useGame();
+  const { loginAsDemoUser, isDemoUser, isLoaded } = useGame();
+
+  // Redirect already-authenticated users away from this page
+  useEffect(() => {
+    if (isLoaded && !isDemoUser) {
+      router.replace('/dashboard');
+    }
+  }, [isLoaded, isDemoUser, router]);
+
+  // Show spinner while checking auth to avoid a flash of the sign-in form
+  if (!isLoaded || !isDemoUser) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="w-8 h-8 rounded-full border-2 border-[#7C3AED] border-t-transparent animate-spin" />
+      </div>
+    );
+  }
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
