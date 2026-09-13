@@ -61,7 +61,7 @@ export default function LandingPage() {
             {/* Verb-led Action Button */}
             <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-start gap-4">
               <Link
-                href="/onboarding"
+                href="/auth/signup"
                 className="px-8 py-4 btn-primary-gradient font-semibold text-base rounded-full inline-flex items-center justify-center space-x-2 group cursor-pointer shadow-md hover:shadow-lg transition-all"
               >
                 <span>Get Started</span>
@@ -401,7 +401,7 @@ export default function LandingPage() {
               </div>
 
               <Link
-                href="/onboarding"
+                href="/auth/signup"
                 className="inline-flex items-center space-x-2 px-6 py-3.5 btn-primary-gradient font-semibold text-xs rounded-full cursor-pointer"
               >
                 <span>Start as {selectedArch.name}</span>

@@ -13,6 +13,7 @@ import { useGame } from '@/lib/context/game-context';
 import { ArrowRight, ArrowLeft, Lock, Mail, AlertCircle } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { PageMascot } from '@/components/PageMascot';
+import { loginAction } from '@/app/auth/actions';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -22,44 +23,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !password || isLoading) return;
-
-    setIsLoading(true);
-    setErrorMsg(null);
-
-    try {
-      if (isSupabaseConfigured()) {
-        const supabase = createClient();
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-        if (error) {
-          if (error.message.includes('Invalid login credentials')) {
-            setErrorMsg('Incorrect email or password. Please try again.');
-          } else if (error.message.includes('Email not confirmed')) {
-            setErrorMsg('Please confirm your email address before signing in.');
-          } else {
-            setErrorMsg(error.message);
-          }
-          setIsLoading(false);
-          return;
-        }
-
-        window.location.href = '/dashboard';
-      } else {
-        setErrorMsg('Authentication is not configured. Please contact support.');
-      }
-    } catch (err: unknown) {
-      setErrorMsg((err as Error).message || 'An unexpected error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
@@ -178,7 +141,17 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-4 text-left">
+        <form action={async (formData) => {
+          setIsLoading(true);
+          setErrorMsg(null);
+          
+          const result = await loginAction(formData);
+          
+          if (result?.error) {
+            setErrorMsg(result.error);
+            setIsLoading(false);
+          }
+        }} className="space-y-4 text-left">
           <div>
             <label className="block text-xs font-semibold text-[#1D1D1F] mb-1.5">
               Email Address
@@ -187,6 +160,7 @@ export default function LoginPage() {
               <Mail className="w-4 h-4 text-[#86868B] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
+                name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -204,6 +178,7 @@ export default function LoginPage() {
               <Lock className="w-4 h-4 text-[#86868B] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="password"
+                name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required

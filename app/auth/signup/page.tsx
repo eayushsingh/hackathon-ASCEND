@@ -15,6 +15,7 @@ import { Logo } from '@/components/ui/Logo';
 import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
 import { Archetype } from '@/types/rpg';
 import { PageMascot } from '@/components/PageMascot';
+import { signupAction } from '@/app/auth/actions';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -26,53 +27,6 @@ export default function SignupPage() {
   const [archetype, setArchetype] = useState<Archetype>('Cyber Mage');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !password || !username || isLoading) return;
-
-    if (password.length < 6) {
-      setErrorMsg('Password must be at least 6 characters long.');
-      return;
-    }
-
-    setIsLoading(true);
-    setErrorMsg(null);
-
-    try {
-      if (isSupabaseConfigured()) {
-        const supabase = createClient();
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              username,
-              archetype,
-            },
-          },
-        });
-
-        if (error) {
-          if (error.message.includes('User already registered')) {
-            setErrorMsg('An account with this email already exists. Please sign in.');
-          } else {
-            setErrorMsg(error.message);
-          }
-          setIsLoading(false);
-          return;
-        }
-
-        window.location.href = '/dashboard';
-      } else {
-        setErrorMsg('Authentication is not configured. Please contact support.');
-      }
-    } catch (err: unknown) {
-      setErrorMsg((err as Error).message || 'An unexpected error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
@@ -191,7 +145,17 @@ export default function SignupPage() {
           </div>
         </div>
 
-        <form onSubmit={handleSignup} className="space-y-4 text-left">
+        <form action={async (formData) => {
+          setIsLoading(true);
+          setErrorMsg(null);
+          
+          const result = await signupAction(formData);
+          
+          if (result?.error) {
+            setErrorMsg(result.error);
+            setIsLoading(false);
+          }
+        }} className="space-y-4 text-left">
           <div>
             <label className="block text-xs font-semibold text-[#1D1D1F] mb-1.5">
               Hero Codename / Username
@@ -200,6 +164,7 @@ export default function SignupPage() {
               <User className="w-4 h-4 text-[#86868B] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
+                name="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
@@ -217,6 +182,7 @@ export default function SignupPage() {
               <Mail className="w-4 h-4 text-[#86868B] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
+                name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -234,6 +200,7 @@ export default function SignupPage() {
               <Lock className="w-4 h-4 text-[#86868B] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="password"
+                name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -248,6 +215,7 @@ export default function SignupPage() {
               Starting Archetype
             </label>
             <select
+              name="archetype"
               value={archetype}
               onChange={(e) => setArchetype(e.target.value as Archetype)}
               className="w-full px-3.5 py-2.5 bg-[#F5F5F7] border border-[#E5E5E7] rounded-xl text-[#1D1D1F] text-sm focus:outline-none focus:border-[#FF5E3A] focus:bg-white transition-all cursor-pointer"
