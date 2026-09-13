@@ -127,7 +127,7 @@ export default function OnboardingPage() {
         username: username.trim(),
         archetype: selectedArchetype,
       });
-      router.push('/dashboard');
+      window.location.href = '/dashboard';
     } catch {
       setIsInitializing(false);
     }

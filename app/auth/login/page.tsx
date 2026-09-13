@@ -50,7 +50,7 @@ export default function LoginPage() {
           return;
         }
 
-        router.push('/dashboard');
+        window.location.href = '/dashboard';
       } else {
         setErrorMsg('Authentication is not configured. Please contact support.');
       }
