@@ -14,14 +14,10 @@ export async function GET(request: Request) {
   if (code) {
     try {
       const supabase = await createServerSupabaseClient();
-      const { error } = await supabase.auth.exchangeCodeForSession(code);
+      const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
-      if (!error) {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-
-        if (user) {
+      if (!error && data?.user) {
+        const user = data.user;
           // Check if profile exists and whether the user has set an archetype
           const { data: profile } = await supabase
             .from('profiles')
@@ -40,12 +36,16 @@ export async function GET(request: Request) {
             
           return NextResponse.redirect(redirectUrl);
         }
+      } else {
+        // If there was an error during exchange, append it to the URL
+        return NextResponse.redirect(`${origin}/auth/login?error=${encodeURIComponent(error.message)}`);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('[ASCEND OAuth Callback Error]:', err);
+      return NextResponse.redirect(`${origin}/auth/login?error=${encodeURIComponent(err.message || 'unknown_error')}`);
     }
   }
 
-  // Fallback if exchange fails or no code present
-  return NextResponse.redirect(`${origin}/auth/login?error=oauth_failed`);
+  // Fallback if no code present or user was somehow missing despite no error
+  return NextResponse.redirect(`${origin}/auth/login?error=oauth_failed_no_user`);
 }
