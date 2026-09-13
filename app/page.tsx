@@ -5,9 +5,9 @@
 // Apple-Inspired Bright Premium Product Design
 // ==============================================================================
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Sparkles,
   ArrowRight,
@@ -16,6 +16,7 @@ import {
   Brain,
   CheckCircle2,
   Play,
+  Pause,
   Shield,
   Target,
   Flame,
@@ -29,13 +30,86 @@ import { useGame } from '@/lib/context/game-context';
 import HeroCharacter from '@/components/HeroCharacter';
 import { AnimatedMascot, MascotAnimationType } from '@/components/AnimatedMascot';
 
+const PREVIEW_MODES = ['avatar', 'running', 'cycling', 'gaming', 'studying'] as const;
+type PreviewMode = (typeof PREVIEW_MODES)[number];
+
+const PREVIEW_CONFIG: Record<
+  PreviewMode,
+  {
+    title: string;
+    tag: string;
+    xpLabel: string;
+    xpValue: string;
+    stat1: { name: string; val: string; color: string };
+    stat2: { name: string; val: string; color: string };
+  }
+> = {
+  avatar: {
+    title: 'Cyber Mage • Level 14',
+    tag: 'RPG Character',
+    xpLabel: 'XP PROGRESSION',
+    xpValue: '1,840 / 2,500 XP',
+    stat1: { name: 'Intellect', val: 'Lvl 18', color: '#7C3AED' },
+    stat2: { name: 'Discipline', val: 'Lvl 15', color: '#38BDF8' },
+  },
+  running: {
+    title: 'Mascot • RUNNING',
+    tag: 'Daily Momentum',
+    xpLabel: 'STREAK ENERGY',
+    xpValue: '7 Day Streak Active',
+    stat1: { name: 'Vitality', val: 'Lvl 16', color: '#E8552A' },
+    stat2: { name: 'Discipline', val: 'Lvl 14', color: '#38BDF8' },
+  },
+  cycling: {
+    title: 'Mascot • CYCLING',
+    tag: 'Quests in Motion',
+    xpLabel: 'QUEST CADENCE',
+    xpValue: '12 Quests Completed',
+    stat1: { name: 'Endurance', val: 'Lvl 19', color: '#38BDF8' },
+    stat2: { name: 'Strength', val: 'Lvl 13', color: '#7C3AED' },
+  },
+  gaming: {
+    title: 'Mascot • GAMING',
+    tag: 'RPG Mastery',
+    xpLabel: 'PERK UNLOCKS',
+    xpValue: '5 Master Perks',
+    stat1: { name: 'Creativity', val: 'Lvl 20', color: '#C9A227' },
+    stat2: { name: 'Intellect', val: 'Lvl 17', color: '#7C3AED' },
+  },
+  studying: {
+    title: 'Mascot • STUDYING',
+    tag: 'Deep Focus',
+    xpLabel: 'FOCUS TELEMETRY',
+    xpValue: '145 Pomodoro Mins',
+    stat1: { name: 'Wisdom', val: 'Lvl 21', color: '#2E7D32' },
+    stat2: { name: 'Discipline', val: 'Lvl 18', color: '#38BDF8' },
+  },
+};
+
 export default function LandingPage() {
   const { loginAsDemoUser } = useGame();
   const [demoQuestCompleted, setDemoQuestCompleted] = useState(false);
   const [activeArchetypeTab, setActiveArchetypeTab] = useState(ARCHETYPE_LIST[0].id);
-  const [heroMascotMode, setHeroMascotMode] = useState<'avatar' | MascotAnimationType>('avatar');
+  const [heroMascotMode, setHeroMascotMode] = useState<PreviewMode>('avatar');
+  const [isAutoSwitching, setIsAutoSwitching] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Auto-switch preview modes continuously every 4 seconds unless hovered or manually paused
+  useEffect(() => {
+    if (!isAutoSwitching || isHovered) return;
+
+    const timer = setInterval(() => {
+      setHeroMascotMode((prev) => {
+        const nextIdx = (PREVIEW_MODES.indexOf(prev) + 1) % PREVIEW_MODES.length;
+        return PREVIEW_MODES[nextIdx];
+      });
+    }, 4000);
+
+    return () => clearInterval(timer);
+  }, [isAutoSwitching, isHovered]);
 
   const selectedArch = ARCHETYPE_LIST.find((a) => a.id === activeArchetypeTab) || ARCHETYPE_LIST[0];
+  const currentPreview = PREVIEW_CONFIG[heroMascotMode];
 
   return (
     <div className="space-y-24 py-8 pb-20 relative">
@@ -100,31 +174,57 @@ export default function LandingPage() {
 
           {/* RIGHT: DEDICATED CHARACTER & MASCOT FRAME (5 COLS) */}
           <div className="lg:col-span-5 relative">
-            <div className="apple-card p-6 sm:p-8 relative overflow-hidden group">
+            <div
+              className="apple-card p-6 sm:p-8 relative overflow-hidden group shadow-md hover:shadow-xl transition-shadow"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
               {/* Header with Mascot Activity Switcher */}
-              <div className="flex flex-col gap-2 border-b border-[#E5E5EA] pb-3 mb-3">
+              <div className="flex flex-col gap-2.5 border-b border-[#E5E5EA] pb-3.5 mb-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <div className="w-2.5 h-2.5 rounded-full bg-[#7C3AED] animate-pulse" />
-                    <span className="text-xs font-semibold text-[#1D1D1F] tracking-wide">
-                      {heroMascotMode === 'avatar' ? 'Cyber Mage • Level 14' : `Mascot • ${heroMascotMode.toUpperCase()}`}
+                    <span className="text-xs font-semibold text-[#1D1D1F] tracking-wide transition-all">
+                      {currentPreview.title}
                     </span>
                   </div>
-                  <span className="text-xs font-semibold bg-[#F2F2F7] px-2.5 py-0.5 rounded-full text-[#6E6E73]">
-                    Interactive Preview
-                  </span>
+                  <div className="flex items-center space-x-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setIsAutoSwitching(!isAutoSwitching)}
+                      className="px-2 py-0.5 rounded-full text-[10px] font-semibold border flex items-center space-x-1 transition-all cursor-pointer bg-[#F2F2F7] text-[#6E6E73] hover:text-[#1D1D1F] hover:border-[#D1D1D6]"
+                      title={isAutoSwitching ? 'Pause continuous preview switching' : 'Resume continuous preview switching'}
+                    >
+                      {isAutoSwitching ? (
+                        <>
+                          <Pause className="w-2.5 h-2.5 text-[#7C3AED]" />
+                          <span>Switching</span>
+                        </>
+                      ) : (
+                        <>
+                          <Play className="w-2.5 h-2.5 text-[#7C3AED]" />
+                          <span>Paused</span>
+                        </>
+                      )}
+                    </button>
+                    <span className="text-xs font-semibold bg-[#F2F2F7] px-2.5 py-0.5 rounded-full text-[#6E6E73]">
+                      Interactive Preview
+                    </span>
+                  </div>
                 </div>
 
                 {/* Mode Selector Tabs */}
-                <div className="flex items-center space-x-1 overflow-x-auto py-1">
-                  {(['avatar', 'running', 'cycling', 'gaming', 'studying'] as const).map((mode) => (
+                <div className="flex items-center space-x-1 overflow-x-auto py-1 scrollbar-none">
+                  {PREVIEW_MODES.map((mode) => (
                     <button
                       key={mode}
-                      onClick={() => setHeroMascotMode(mode)}
-                      className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all capitalize cursor-pointer border ${
+                      onClick={() => {
+                        setHeroMascotMode(mode);
+                      }}
+                      className={`px-3 py-1 rounded-lg text-[11px] font-semibold transition-all capitalize cursor-pointer border ${
                         heroMascotMode === mode
                           ? 'bg-[#7C3AED] text-white border-[#7C3AED] shadow-xs'
-                          : 'bg-[#FAF9F5] text-[#6E6E73] border-[#E5E5EA] hover:text-[#1D1D1F]'
+                          : 'bg-[#FAF9F5] text-[#6E6E73] border-[#E5E5EA] hover:text-[#1D1D1F] hover:border-[#D1D1D6]'
                       }`}
                     >
                       {mode === 'avatar' ? 'Avatar' : mode}
@@ -133,41 +233,64 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Illustration / Lottie Animation Canvas */}
+              {/* Illustration / Lottie Animation Canvas with Smooth Transitions */}
               <div className="relative h-72 sm:h-80 w-full flex items-center justify-center my-2">
-                {heroMascotMode === 'avatar' ? (
-                  <HeroCharacter className="w-full h-full" />
-                ) : (
-                  <div className="flex flex-col items-center justify-center">
-                    <AnimatedMascot
-                      animationType={heroMascotMode}
-                      size={200}
-                      showBadge={true}
-                    />
-                  </div>
-                )}
+                <AnimatePresence mode="wait">
+                  {heroMascotMode === 'avatar' ? (
+                    <motion.div
+                      key="avatar"
+                      initial={{ opacity: 0, scale: 0.94, y: 6 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.94, y: -6 }}
+                      transition={{ duration: 0.3 }}
+                      className="w-full h-full flex items-center justify-center"
+                    >
+                      <HeroCharacter className="w-full h-full" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key={heroMascotMode}
+                      initial={{ opacity: 0, scale: 0.92, y: 6 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.92, y: -6 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex flex-col items-center justify-center"
+                    >
+                      <AnimatedMascot
+                        animationType={heroMascotMode}
+                        size={200}
+                        showBadge={true}
+                        badgeText={currentPreview.tag}
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
-              {/* Telemetry Bar */}
+              {/* Dynamic Telemetry Bar */}
               <div className="space-y-3 pt-2">
                 <div>
                   <div className="flex justify-between text-xs font-semibold mb-1.5 text-[#6E6E73]">
-                    <span>XP PROGRESSION</span>
-                    <span className="text-[#7C3AED]">1,840 / 2,500 XP</span>
+                    <span>{currentPreview.xpLabel}</span>
+                    <span className="text-[#7C3AED] font-semibold">{currentPreview.xpValue}</span>
                   </div>
                   <div className="h-2.5 w-full bg-[#E5E5EA] rounded-full overflow-hidden">
-                    <div className="h-full btn-primary-gradient w-[73%] rounded-full" />
+                    <div className="h-full btn-primary-gradient w-[73%] rounded-full transition-all duration-500" />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-xs font-medium pt-1">
-                  <div className="bg-[#FAF9F5] p-2.5 rounded-xl border border-[#E5E5EA] flex justify-between items-center">
-                    <span className="text-[#6E6E73]">Intellect</span>
-                    <span className="text-[#7C3AED] font-semibold">Lvl 18</span>
+                  <div className="bg-[#FAF9F5] p-2.5 rounded-xl border border-[#E5E5EA] flex justify-between items-center transition-all">
+                    <span className="text-[#6E6E73]">{currentPreview.stat1.name}</span>
+                    <span className="font-semibold" style={{ color: currentPreview.stat1.color }}>
+                      {currentPreview.stat1.val}
+                    </span>
                   </div>
-                  <div className="bg-[#FAF9F5] p-2.5 rounded-xl border border-[#E5E5EA] flex justify-between items-center">
-                    <span className="text-[#6E6E73]">Discipline</span>
-                    <span className="text-[#38BDF8] font-semibold">Lvl 15</span>
+                  <div className="bg-[#FAF9F5] p-2.5 rounded-xl border border-[#E5E5EA] flex justify-between items-center transition-all">
+                    <span className="text-[#6E6E73]">{currentPreview.stat2.name}</span>
+                    <span className="font-semibold" style={{ color: currentPreview.stat2.color }}>
+                      {currentPreview.stat2.val}
+                    </span>
                   </div>
                 </div>
               </div>
