@@ -103,13 +103,22 @@ export default function OnboardingPage() {
             },
           });
 
+          // Using upsert instead of update to handle new users without DB triggers
           await supabase
             .from('profiles')
-            .update({
+            .upsert({
+              user_id: user.id,
               username: username.trim(),
               archetype: selectedArchetype,
-            })
-            .eq('user_id', user.id);
+              avatar_url: ARCHETYPE_LIST.find(a => a.id === selectedArchetype)?.avatar || '/avatars/mage.png',
+              level: 1,
+              xp: 0,
+              gold: 150,
+              title: 'Novice Seeker'
+            }, { onConflict: 'user_id' });
+
+          await supabase.from('attributes').upsert({ user_id: user.id }, { onConflict: 'user_id' });
+          await supabase.from('streaks').upsert({ user_id: user.id }, { onConflict: 'user_id' });
         }
       }
 
