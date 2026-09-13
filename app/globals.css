@@ -94,3 +94,29 @@ body {
   outline: 2px solid #7C3AED;
   outline-offset: 2px;
 }
+
+/* Mascot Gentle Hanging Swing Animation */
+@keyframes mascot-swing {
+  0% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+  100% {
+    transform: rotate(-4deg);
+  }
+}
+
+.animate-mascot-swing {
+  animation: mascot-swing 3.5s ease-in-out infinite;
+  transform-origin: 50% 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-mascot-swing {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+

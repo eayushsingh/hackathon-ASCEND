@@ -14,6 +14,7 @@ import { ArrowRight, ArrowLeft, UserPlus, Mail, Lock, User, AlertCircle } from '
 import { Logo } from '@/components/ui/Logo';
 import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
 import { Archetype } from '@/types/rpg';
+import { PageMascot } from '@/components/PageMascot';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -96,6 +97,9 @@ export default function SignupPage() {
       </div>
 
       <div className="p-8 sm:p-10 bg-white border border-[#E5E5E7] rounded-3xl shadow-sm text-center relative">
+        <div className="absolute -top-3 right-6 hidden sm:block">
+          <PageMascot animationType="hanging" size={84} position="top-edge" />
+        </div>
         {/* Top Logo */}
         <div className="flex justify-center mb-6">
           <Link href="/" className="inline-flex hover:opacity-90 transition-opacity">

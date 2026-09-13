@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import { useGame } from '@/lib/context/game-context';
 import { QuestCard } from '@/components/quests/QuestCard';
 import { CreateQuestModal } from '@/components/modals/CreateQuestModal';
-import { AnimatedMascot } from '@/components/AnimatedMascot';
+import { PageMascot } from '@/components/PageMascot';
 import {
   Search,
   Plus,
@@ -62,9 +62,10 @@ export default function QuestsPage() {
       {/* 1. HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E5E5EA] pb-5">
         <div className="flex items-center gap-4">
-          <AnimatedMascot
+          <PageMascot
             animationType="cycling"
-            size={80}
+            size={84}
+            showBadge={true}
             badgeText="Quests in Motion"
             className="shrink-0"
           />

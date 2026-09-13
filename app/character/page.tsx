@@ -13,7 +13,7 @@ import { ATTRIBUTE_LIST, calculateAttributeLevel, getAttributeMasteryTitle } fro
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { HabitTransformationCard } from '@/components/character/HabitTransformationCard';
 import { ArchetypeAvatar } from '@/components/character/ArchetypeAvatar';
-import { AnimatedMascot } from '@/components/AnimatedMascot';
+import { PageMascot } from '@/components/PageMascot';
 import {
   Sparkles,
   CheckCircle2,
@@ -47,7 +47,7 @@ export default function CharacterPage() {
   return (
     <div className="space-y-10 pb-16 pt-6 max-w-7xl mx-auto px-4 sm:px-6">
       {/* 1. DOSSIER HEADER */}
-      <div className="apple-card p-6 sm:p-8">
+      <div className="apple-card p-6 sm:p-8 relative">
         <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 pb-8 border-b border-[#E5E5EA]">
           {/* Avatar Emblem Frame */}
           <div className="relative group shrink-0 text-center">
@@ -67,10 +67,11 @@ export default function CharacterPage() {
                   {profile.title} • {profile.archetype}
                 </div>
               </div>
-              <AnimatedMascot
-                animationType="gaming"
-                size={84}
-                badgeText="RPG Mastery"
+              <PageMascot
+                animationType="gym"
+                size={88}
+                showBadge={true}
+                badgeText="Strength & Power"
                 className="shrink-0 self-center sm:self-start"
               />
             </div>

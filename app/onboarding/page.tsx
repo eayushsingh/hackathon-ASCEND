@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
 import { ArchetypeAvatar } from '@/components/character/ArchetypeAvatar';
+import { PageMascot } from '@/components/PageMascot';
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -107,7 +108,10 @@ export default function OnboardingPage() {
       </div>
 
       {/* Header */}
-      <div className="text-center max-w-2xl mx-auto mb-10">
+      <div className="text-center max-w-2xl mx-auto mb-10 relative">
+        <div className="absolute -top-6 right-0 hidden sm:block">
+          <PageMascot animationType="hanging" size={88} position="top-edge" />
+        </div>
         <div className="inline-flex items-center space-x-2 px-3.5 py-1 bg-purple-50 border border-purple-200 text-purple-700 text-xs font-mono font-bold uppercase tracking-wider rounded-full mb-3 shadow-sm">
           <Sparkles className="w-3.5 h-3.5 text-purple-600" />
           <span>Quick Setup</span>

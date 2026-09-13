@@ -28,7 +28,7 @@ import {
 import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
 import { useGame } from '@/lib/context/game-context';
 import HeroCharacter from '@/components/HeroCharacter';
-import { AnimatedMascot, MascotAnimationType } from '@/components/AnimatedMascot';
+import { PageMascot, PageMascotType } from '@/components/PageMascot';
 
 const PREVIEW_MODES = ['avatar', 'running', 'cycling', 'gaming', 'studying'] as const;
 type PreviewMode = (typeof PREVIEW_MODES)[number];
@@ -90,6 +90,7 @@ export default function LandingPage() {
   const { loginAsDemoUser } = useGame();
   const [demoQuestCompleted, setDemoQuestCompleted] = useState(false);
   const [activeArchetypeTab, setActiveArchetypeTab] = useState(ARCHETYPE_LIST[0].id);
+<<<<<<< HEAD
   const [heroMascotMode, setHeroMascotMode] = useState<PreviewMode>('avatar');
   const [isAutoSwitching, setIsAutoSwitching] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
@@ -107,6 +108,9 @@ export default function LandingPage() {
 
     return () => clearInterval(timer);
   }, [isAutoSwitching, isHovered]);
+=======
+  const [heroMascotMode, setHeroMascotMode] = useState<'avatar' | PageMascotType>('avatar');
+>>>>>>> origin/main
 
   const selectedArch = ARCHETYPE_LIST.find((a) => a.id === activeArchetypeTab) || ARCHETYPE_LIST[0];
   const currentPreview = PREVIEW_CONFIG[heroMascotMode];
@@ -174,11 +178,20 @@ export default function LandingPage() {
 
           {/* RIGHT: DEDICATED CHARACTER & MASCOT FRAME (5 COLS) */}
           <div className="lg:col-span-5 relative">
+<<<<<<< HEAD
             <div
               className="apple-card p-6 sm:p-8 relative overflow-hidden group shadow-md hover:shadow-xl transition-shadow"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
+=======
+            <div className="apple-card p-6 sm:p-8 relative overflow-hidden group">
+              {/* Subtle Hanging Mascot on the Card Top Edge */}
+              <div className="absolute -top-3 right-6 z-20 hidden sm:block">
+                <PageMascot animationType="hanging" size={76} position="top-edge" />
+              </div>
+
+>>>>>>> origin/main
               {/* Header with Mascot Activity Switcher */}
               <div className="flex flex-col gap-2.5 border-b border-[#E5E5EA] pb-3.5 mb-3">
                 <div className="flex items-center justify-between">
@@ -214,8 +227,13 @@ export default function LandingPage() {
                 </div>
 
                 {/* Mode Selector Tabs */}
+<<<<<<< HEAD
                 <div className="flex items-center space-x-1 overflow-x-auto py-1 scrollbar-none">
                   {PREVIEW_MODES.map((mode) => (
+=======
+                <div className="flex items-center space-x-1 overflow-x-auto py-1">
+                  {(['avatar', 'hanging', 'running', 'cycling', 'gym', 'studying'] as const).map((mode) => (
+>>>>>>> origin/main
                     <button
                       key={mode}
                       onClick={() => {
@@ -235,6 +253,7 @@ export default function LandingPage() {
 
               {/* Illustration / Lottie Animation Canvas with Smooth Transitions */}
               <div className="relative h-72 sm:h-80 w-full flex items-center justify-center my-2">
+<<<<<<< HEAD
                 <AnimatePresence mode="wait">
                   {heroMascotMode === 'avatar' ? (
                     <motion.div
@@ -265,6 +284,19 @@ export default function LandingPage() {
                     </motion.div>
                   )}
                 </AnimatePresence>
+=======
+                {heroMascotMode === 'avatar' ? (
+                  <HeroCharacter className="w-full h-full" />
+                ) : (
+                  <div className="flex flex-col items-center justify-center">
+                    <PageMascot
+                      animationType={heroMascotMode}
+                      size={200}
+                      showBadge={true}
+                    />
+                  </div>
+                )}
+>>>>>>> origin/main
               </div>
 
               {/* Dynamic Telemetry Bar */}
@@ -431,7 +463,7 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <Link href="/dashboard" className="apple-card apple-card-hover p-6 text-center group cursor-pointer block">
             <div className="h-36 flex items-center justify-center mb-3">
-              <AnimatedMascot animationType="running" size={110} showBadge={false} />
+              <PageMascot animationType="running" size={110} showBadge={false} />
             </div>
             <h3 className="text-base font-bold text-[#1D1D1F] group-hover:text-[#7C3AED] transition-colors">
               Running / Momentum
@@ -446,7 +478,7 @@ export default function LandingPage() {
 
           <Link href="/quests" className="apple-card apple-card-hover p-6 text-center group cursor-pointer block">
             <div className="h-36 flex items-center justify-center mb-3">
-              <AnimatedMascot animationType="cycling" size={110} showBadge={false} />
+              <PageMascot animationType="cycling" size={110} showBadge={false} />
             </div>
             <h3 className="text-base font-bold text-[#1D1D1F] group-hover:text-[#7C3AED] transition-colors">
               Cycling / Pacing
@@ -461,13 +493,13 @@ export default function LandingPage() {
 
           <Link href="/character" className="apple-card apple-card-hover p-6 text-center group cursor-pointer block">
             <div className="h-36 flex items-center justify-center mb-3">
-              <AnimatedMascot animationType="gaming" size={110} showBadge={false} />
+              <PageMascot animationType="gym" size={110} showBadge={false} />
             </div>
             <h3 className="text-base font-bold text-[#1D1D1F] group-hover:text-[#7C3AED] transition-colors">
-              Gaming / RPG Mastery
+              Gym / Strength Workout
             </h3>
             <p className="text-xs text-[#6E6E73] mt-1">
-              Anchors the <strong>Character Page</strong> to celebrate levels, perks, and RPG progression.
+              Anchors the <strong>Character Page</strong> for strength, fitness, and RPG level progression.
             </p>
             <span className="inline-block mt-3 text-[11px] font-mono font-bold text-[#7C3AED] bg-purple-50 px-2.5 py-1 rounded-full border border-purple-100">
               Character Dossier →
@@ -476,7 +508,7 @@ export default function LandingPage() {
 
           <Link href="/analytics" className="apple-card apple-card-hover p-6 text-center group cursor-pointer block">
             <div className="h-36 flex items-center justify-center mb-3">
-              <AnimatedMascot animationType="studying" size={110} showBadge={false} />
+              <PageMascot animationType="studying" size={110} showBadge={false} />
             </div>
             <h3 className="text-base font-bold text-[#1D1D1F] group-hover:text-[#7C3AED] transition-colors">
               Studying / Deep Focus

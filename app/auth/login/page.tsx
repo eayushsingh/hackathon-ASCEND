@@ -12,6 +12,7 @@ import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import { useGame } from '@/lib/context/game-context';
 import { ArrowRight, ArrowLeft, Lock, Mail, Play, AlertCircle } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
+import { PageMascot } from '@/components/PageMascot';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -89,6 +90,9 @@ export default function LoginPage() {
       </div>
 
       <div className="p-8 sm:p-10 bg-white border border-[#E5E5E7] rounded-3xl shadow-sm text-center relative">
+        <div className="absolute -top-3 right-6 hidden sm:block">
+          <PageMascot animationType="hanging" size={84} position="top-edge" />
+        </div>
         {/* Top Logo */}
         <div className="flex justify-center mb-6">
           <Link href="/" className="inline-flex hover:opacity-90 transition-opacity">

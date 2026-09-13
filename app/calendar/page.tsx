@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { isQuestScheduledForDate, isQuestCompletedOnDate } from '@/lib/progression/schedule';
+import { PageMascot } from '@/components/PageMascot';
 
 export default function CalendarPage() {
   const { quests, completeQuest, createQuest } = useGame();
@@ -231,7 +232,10 @@ export default function CalendarPage() {
   return (
     <div className="space-y-8 pb-16 pt-2 max-w-6xl mx-auto">
       {/* 1. TOP HEADER & CONTROLS */}
-      <div className="apple-card p-6 sm:p-8">
+      <div className="apple-card p-6 sm:p-8 relative">
+        <div className="absolute -top-3 right-8 hidden sm:block">
+          <PageMascot animationType="hanging" size={88} position="top-edge" />
+        </div>
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-[#E5E5EA]">
           <div className="flex items-center space-x-4 text-center md:text-left">
             <div className="w-12 h-12 bg-purple-50 border border-purple-200 rounded-2xl flex items-center justify-center text-purple-600 shrink-0 shadow-sm">

@@ -8,6 +8,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useGame } from '@/lib/context/game-context';
+import { PageMascot } from '@/components/PageMascot';
 import {
   Package,
   ShoppingBag,
@@ -32,7 +33,10 @@ export default function InventoryPage() {
   return (
     <div className="space-y-10 pb-16 pt-6 max-w-7xl mx-auto px-4 sm:px-6">
       {/* 1. TACTICAL LOADOUT DOCK */}
-      <div className="apple-card p-6 sm:p-8">
+      <div className="apple-card p-6 sm:p-8 relative">
+        <div className="absolute -top-3 right-8 hidden sm:block">
+          <PageMascot animationType="hanging" size={88} position="top-edge" />
+        </div>
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-[#E5E5EA]">
           <div className="flex items-center space-x-5 text-center md:text-left">
             <div className="w-14 h-14 bg-purple-50 border border-purple-200 rounded-2xl flex items-center justify-center text-purple-600 shrink-0 shadow-sm">

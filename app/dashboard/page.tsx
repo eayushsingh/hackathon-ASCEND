@@ -11,7 +11,7 @@ import { useGame } from '@/lib/context/game-context';
 import { CharacterHUD } from '@/components/character/CharacterHUD';
 import { QuestCard } from '@/components/quests/QuestCard';
 import { CreateQuestModal } from '@/components/modals/CreateQuestModal';
-import { AnimatedMascot } from '@/components/AnimatedMascot';
+import { PageMascot } from '@/components/PageMascot';
 import {
   Plus,
   CheckCircle2,
@@ -127,13 +127,13 @@ export default function DashboardPage() {
         {/* RIGHT: TODAY'S SUMMARY & QUICK SHORTCUTS (4 COLS) */}
         <div className="lg:col-span-4 space-y-6">
           {/* Today's Goals Summary */}
-          <div className="apple-card p-6 space-y-4">
+          <div className="apple-card p-6 space-y-4 relative">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold text-[#6E6E73] uppercase tracking-wider flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-[#7C3AED]" />
                 <span>Today&apos;s Summary</span>
               </h3>
-              <AnimatedMascot animationType="running" size={76} badgeText="Daily Momentum" />
+              <PageMascot animationType="running" size={80} showBadge={true} badgeText="Momentum" />
             </div>
 
             <div className="space-y-2.5 text-xs">
