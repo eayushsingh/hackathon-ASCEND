@@ -36,7 +36,15 @@ export async function updateSession(request: NextRequest) {
       },
     });
 
-    await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    // Protect authenticated routes
+    const protectedRoutes = ['/dashboard', '/onboarding', '/character', '/quests', '/inventory', '/calendar', '/achievements'];
+    const isProtectedRoute = protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route));
+
+    if (isProtectedRoute && !user) {
+      return NextResponse.redirect(new URL('/auth/login', request.url));
+    }
   } catch {
     // If Supabase is offline/unreachable in local dev, allow request to continue
   }

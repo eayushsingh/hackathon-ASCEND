@@ -274,7 +274,18 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
             supabase.from('user_achievements').select('*').eq('user_id', user.id),
           ]);
 
-          if (profRes.data) setProfile(profRes.data);
+          if (profRes.data) {
+            setProfile(profRes.data);
+          } else {
+            // No profile found - user must complete onboarding
+            if (window.location.pathname !== '/onboarding') {
+              window.location.href = '/onboarding';
+              return;
+            }
+            // Clear fallback data while on onboarding
+            setProfile({ ...DEFAULT_PROFILE, id: user.id, user_id: user.id, username: '' });
+          }
+
           if (attrRes.data) setAttributes(attrRes.data);
           if (streakRes.data) setStreak(streakRes.data);
           if (questRes.data) setQuests(questRes.data);
