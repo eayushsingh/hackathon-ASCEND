@@ -34,11 +34,11 @@ export async function GET(request: Request) {
           const hasUserChosenArchetype = Boolean(user.user_metadata?.archetype);
           const hasProfileArchetype = Boolean(profile?.archetype);
 
-          if (!hasUserChosenArchetype || !hasProfileArchetype) {
-            return NextResponse.redirect(`${origin}/onboarding`);
-          }
-
-          return NextResponse.redirect(`${origin}/dashboard`);
+          const redirectUrl = (!hasUserChosenArchetype || !hasProfileArchetype)
+            ? `${origin}/onboarding`
+            : `${origin}/dashboard`;
+            
+          return NextResponse.redirect(redirectUrl);
         }
       }
     } catch (err) {
