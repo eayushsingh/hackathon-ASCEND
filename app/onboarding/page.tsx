@@ -31,7 +31,7 @@ export default function OnboardingPage() {
   const router = useRouter();
   const { loginAsDemoUser, updateUserProfile } = useGame();
 
-  const [username, setUsername] = useState('Kaelen Vance');
+  const [username, setUsername] = useState('');
   const [selectedArchetype, setSelectedArchetype] = useState<Archetype>('Cyber Mage');
   const [isInitializing, setIsInitializing] = useState(false);
 
