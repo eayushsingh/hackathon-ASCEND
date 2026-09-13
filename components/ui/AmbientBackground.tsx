@@ -96,15 +96,7 @@ export function AmbientBackground({
       className={`fixed inset-0 overflow-hidden pointer-events-none -z-10 select-none ${className}`}
       aria-hidden="true"
     >
-      {/* Subtle Ambient Dot Grid Pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.035]"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 1px 1px, #1D1D1F 1px, transparent 0)',
-          backgroundSize: '32px 32px',
-        }}
-      />
+      {/* Ambient particles and glow effects overlay */}
 
       {/* Top-Right Soft Purple Glow */}
       <div
