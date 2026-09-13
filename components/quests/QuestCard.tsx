@@ -101,25 +101,28 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit, isCompleted
     // Triple-guard: already done, in progress, or ref says done
     if (showAsCompleted || isCompleting || hasCompletedRef.current) return;
 
+    // Optimistically lock completion ref immediately — checkbox will NEVER uncheck
+    hasCompletedRef.current = true;
     setIsCompleting(true);
 
     try {
       const result = await completeQuest(quest.id);
 
-      // Lock in completion permanently via ref — immune to any re-render
-      hasCompletedRef.current = true;
-
       // Show reward overlay
-      setReward({ xpEarned: result.xpEarned, goldEarned: result.goldEarned });
+      setReward({
+        xpEarned: result?.xpEarned ?? quest.xp_reward,
+        goldEarned: result?.goldEarned ?? quest.gold_reward,
+      });
       setShowReward(true);
 
       // Auto-dismiss reward after 2.8 seconds
       rewardTimerRef.current = setTimeout(() => setShowReward(false), 2800);
     } catch (err) {
-      // Only reset if quest is genuinely NOT completed
-      if (!hasCompletedRef.current) {
-        console.warn('Quest completion failed:', err);
-      }
+      console.warn('Quest complete warning:', err);
+      // Fallback reward overlay using quest default rewards
+      setReward({ xpEarned: quest.xp_reward, goldEarned: quest.gold_reward });
+      setShowReward(true);
+      rewardTimerRef.current = setTimeout(() => setShowReward(false), 2800);
     } finally {
       setIsCompleting(false);
     }

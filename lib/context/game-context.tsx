@@ -282,22 +282,92 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
               window.location.href = '/onboarding';
               return;
             }
-            // Clear fallback data while on onboarding
             setProfile({ ...DEFAULT_PROFILE, id: user.id, user_id: user.id, username: '' });
           }
 
           if (attrRes.data) setAttributes(attrRes.data);
           if (streakRes.data) setStreak(streakRes.data);
-          if (questRes.data) setQuests(questRes.data);
-          if (invRes.data) setInventory(invRes.data);
-          if (achRes.data) setAchievements(achRes.data);
+
+          // ── CRITICAL FIX: Merge Supabase quests with local saved quests
+          // so no completed or newly created quest is lost on refresh
+          if (questRes.data && questRes.data.length > 0) {
+            const savedQuests = localStorage.getItem('ascend_quests');
+            if (savedQuests) {
+              try {
+                const parsed = JSON.parse(savedQuests) as Quest[];
+                const sbMap = new Map(questRes.data.map((q) => [q.id, q]));
+                for (const localQ of parsed) {
+                  if (!sbMap.has(localQ.id)) {
+                    sbMap.set(localQ.id, localQ);
+                  } else {
+                    const sbQ = sbMap.get(localQ.id)!;
+                    if (localQ.completed_at && !sbQ.completed_at) {
+                      sbMap.set(localQ.id, { ...sbQ, completed_at: localQ.completed_at, status: localQ.status });
+                    }
+                  }
+                }
+                setQuests(Array.from(sbMap.values()));
+              } catch {
+                setQuests(questRes.data);
+              }
+            } else {
+              setQuests(questRes.data);
+            }
+          } else {
+            const savedQuests = localStorage.getItem('ascend_quests');
+            if (savedQuests) {
+              try {
+                const parsed = JSON.parse(savedQuests) as Quest[];
+                // Only restore quests that belong to this user
+                const userQuests = parsed.filter(
+                  (q) => q.user_id === user.id || q.user_id === 'ascendant-hero'
+                );
+                if (userQuests.length > 0) {
+                  setQuests(userQuests);
+                  // Background-sync recovered quests to Supabase
+                  const questsToSync = userQuests.filter((q) => q.user_id === user.id);
+                  for (const q of questsToSync) {
+                    supabase.from('quests').upsert({
+                      id: q.id,
+                      user_id: user.id,
+                      title: q.title,
+                      description: q.description || '',
+                      category: q.category,
+                      difficulty: q.difficulty,
+                      attribute: q.attribute,
+                      xp_reward: q.xp_reward,
+                      gold_reward: q.gold_reward,
+                      status: q.status,
+                      is_recurring: q.is_recurring,
+                      recurrence_interval: q.recurrence_interval || null,
+                      recurring_days: q.recurring_days || null,
+                      due_date: q.due_date || null,
+                      priority: q.priority || 'Medium',
+                      reminder_time: q.reminder_time || null,
+                      reminder_enabled: q.reminder_enabled || false,
+                      timer_minutes: q.timer_minutes || null,
+                      completed_at: q.completed_at || null,
+                      created_at: q.created_at,
+                    }, { onConflict: 'id' }).then(({ error }) => {
+                      if (error) console.warn('Quest sync error:', error.message);
+                    });
+                  }
+                }
+              } catch {
+                // localStorage parse error — ignore
+              }
+            }
+          }
+
+          if (invRes.data && invRes.data.length > 0) setInventory(invRes.data);
+          if (achRes.data && achRes.data.length > 0) setAchievements(achRes.data);
 
           setIsLoaded(true);
           return;
         }
       }
 
-      // Offline / LocalStorage fallback
+      // Offline / LocalStorage fallback (unauthenticated or Supabase not configured)
       const savedProfile = localStorage.getItem('ascend_profile');
       const savedAttributes = localStorage.getItem('ascend_attributes');
       const savedStreak = localStorage.getItem('ascend_streak');
@@ -320,9 +390,19 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     loadState();
+
+    if (typeof window !== 'undefined' && isSupabaseConfigured()) {
+      const supabase = createClient();
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+        loadState();
+      });
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
   }, [loadState]);
 
-  // Sync to LocalStorage for Demo persistence
+  // Sync to LocalStorage for persistence across reloads
   useEffect(() => {
     if (isLoaded && typeof window !== 'undefined') {
       localStorage.setItem('ascend_profile', JSON.stringify(profile));
@@ -363,13 +443,60 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const { quest } = await res.json();
           setQuests((prev) => [quest, ...prev]);
           return quest;
+        } else {
+          // Log API error so it's visible during debugging
+          const errBody = await res.json().catch(() => ({}));
+          console.error('createQuest API error:', res.status, errBody);
         }
       } catch (err) {
-        console.warn('Network error in createQuest, applying local authoritative fallback:', err);
+        console.error('createQuest network error:', err);
+      }
+
+      // ── EMERGENCY FALLBACK: try direct Supabase client insert ─────────────
+      try {
+        const { DIFFICULTY_REWARDS: DR } = await import('@/lib/progression/rewards');
+        const { getDefaultAttributeForCategory: gda } = await import('@/lib/progression/attributes');
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const attr = (questData.attribute || gda(questData.category));
+          const rewards = DR[questData.difficulty] || DR.Medium;
+          const { data: quest, error } = await supabase
+            .from('quests')
+            .insert({
+              user_id: user.id,
+              title: questData.title,
+              description: questData.description || '',
+              category: questData.category,
+              difficulty: questData.difficulty,
+              attribute: attr,
+              xp_reward: rewards.xp,
+              gold_reward: rewards.gold,
+              status: 'Active',
+              is_recurring: Boolean(questData.is_recurring),
+              recurrence_interval: questData.is_recurring ? (questData.recurrence_interval || 'Daily') : null,
+              recurring_days: questData.is_recurring ? (questData.recurring_days || null) : null,
+              due_date: questData.due_date || null,
+              priority: questData.priority || 'Medium',
+              reminder_time: questData.reminder_time || null,
+              reminder_enabled: questData.reminder_enabled ?? Boolean(questData.reminder_time),
+              timer_minutes: questData.timer_minutes || null,
+            })
+            .select()
+            .single();
+
+          if (!error && quest) {
+            setQuests((prev) => [quest, ...prev]);
+            return quest;
+          }
+          if (error) console.error('Direct Supabase insert error:', error.message);
+        }
+      } catch (err) {
+        console.error('Direct Supabase fallback error:', err);
       }
     }
 
-    // Local state fallback
+    // Final local-only fallback (offline / demo mode)
     const { DIFFICULTY_REWARDS } = await import('@/lib/progression/rewards');
     const { getDefaultAttributeForCategory } = await import('@/lib/progression/attributes');
 
@@ -453,81 +580,84 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     soundManager.playClick();
 
     if (!isDemoUser && isSupabaseConfigured()) {
-      const res = await fetch(`/api/quests/${questId}/complete`, {
-        method: 'POST',
-      });
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || 'Failed to complete quest');
-      }
-
-      const result: QuestCompletionResult = await res.json();
-
-      // Audio & Confetti triggers
-      soundManager.playQuestComplete();
-      setTimeout(() => soundManager.playGoldClink(), 300);
-
-      // Update State
-      setQuests((prev) =>
-        prev.map((q) => (q.id === questId ? result.quest : q))
-      );
-      setProfile((prev) => ({
-        ...prev,
-        xp: result.newXP,
-        level: result.newLevel,
-        gold: result.newGold,
-      }));
-      setStreak((prev) => ({
-        ...prev,
-        current_streak: result.currentStreak,
-        longest_streak: result.longestStreak,
-      }));
-
-      // Attribute update
-      const attrKey = `${result.attributeEarned.toLowerCase()}_xp` as keyof Attributes;
-      setAttributes((prev) => ({
-        ...prev,
-        [attrKey]: ((prev[attrKey] as number) || 0) + result.attributeXpEarned,
-      }));
-
-      // Handle Level Up
-      if (result.leveledUp) {
-        soundManager.playLevelUp();
-        confetti({
-          particleCount: 150,
-          spread: 80,
-          origin: { y: 0.6 },
-          colors: ['#06B6D4', '#A855F7', '#F59E0B', '#10B981'],
+      try {
+        const res = await fetch(`/api/quests/${questId}/complete`, {
+          method: 'POST',
         });
-        const progress = calculateLevelProgress(result.newXP);
-        setLevelUpModal({
-          isOpen: true,
-          oldLevel: result.previousLevel,
-          newLevel: result.newLevel,
-          rankTitle: progress.rankTitle,
-          archetype: profile.archetype,
-        });
-      }
+        if (res.ok) {
+          const result: QuestCompletionResult = await res.json();
 
-      // Handle Achievements
-      if (result.unlockedAchievements && result.unlockedAchievements.length > 0) {
-        const newlyUnlocked = result.unlockedAchievements[0];
-        soundManager.playAchievementUnlocked();
-        setUnlockedAchievementNotification(newlyUnlocked);
-        setAchievements((prev) => [
-          ...prev,
-          {
-            id: `ua-${Date.now()}`,
-            user_id: profile.user_id,
-            achievement_id: newlyUnlocked.id,
-            is_claimed: false,
-            unlocked_at: new Date().toISOString(),
-            achievement: newlyUnlocked,
-          },
-        ]);
-      }
+          // Audio & Confetti triggers
+          soundManager.playQuestComplete();
+          setTimeout(() => soundManager.playGoldClink(), 300);
 
-      return result;
+          // Update State
+          setQuests((prev) =>
+            prev.map((q) => (q.id === questId ? result.quest : q))
+          );
+          setProfile((prev) => ({
+            ...prev,
+            xp: result.newXP,
+            level: result.newLevel,
+            gold: result.newGold,
+          }));
+          setStreak((prev) => ({
+            ...prev,
+            current_streak: result.currentStreak,
+            longest_streak: result.longestStreak,
+          }));
+
+          // Attribute update
+          const attrKey = `${result.attributeEarned.toLowerCase()}_xp` as keyof Attributes;
+          setAttributes((prev) => ({
+            ...prev,
+            [attrKey]: ((prev[attrKey] as number) || 0) + result.attributeXpEarned,
+          }));
+
+          // Handle Level Up
+          if (result.leveledUp) {
+            soundManager.playLevelUp();
+            confetti({
+              particleCount: 150,
+              spread: 80,
+              origin: { y: 0.6 },
+              colors: ['#06B6D4', '#A855F7', '#F59E0B', '#10B981'],
+            });
+            const progress = calculateLevelProgress(result.newXP);
+            setLevelUpModal({
+              isOpen: true,
+              oldLevel: result.previousLevel,
+              newLevel: result.newLevel,
+              rankTitle: progress.rankTitle,
+              archetype: profile.archetype,
+            });
+          }
+
+          // Handle Achievements
+          if (result.unlockedAchievements && result.unlockedAchievements.length > 0) {
+            const newlyUnlocked = result.unlockedAchievements[0];
+            soundManager.playAchievementUnlocked();
+            setUnlockedAchievementNotification(newlyUnlocked);
+            setAchievements((prev) => [
+              ...prev,
+              {
+                id: `ua-${Date.now()}`,
+                user_id: profile.user_id,
+                achievement_id: newlyUnlocked.id,
+                is_claimed: false,
+                unlocked_at: new Date().toISOString(),
+                achievement: newlyUnlocked,
+              },
+            ]);
+          }
+
+          return result;
+        } else {
+          console.warn('API completion non-200, executing local completion fallback.');
+        }
+      } catch (err) {
+        console.warn('API completion network error, executing local completion fallback:', err);
+      }
     }
 
     // Local authoritative calculation (Demo / Offline mode)
