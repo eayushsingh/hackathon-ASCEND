@@ -25,12 +25,13 @@ import {
   Package,
   BarChart3,
   Trophy,
+  LogOut,
 } from 'lucide-react';
 import { ARCHETYPE_LIST } from '@/lib/progression/archetypes';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
-  const { profile, streak, toggleSound, switchArchetype, isDemoUser, isLoaded } = useGame();
+  const { profile, streak, toggleSound, switchArchetype, isDemoUser, isLoaded, logout } = useGame();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [archetypeDropdownOpen, setArchetypeDropdownOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
@@ -248,6 +249,16 @@ export const Navbar: React.FC = () => {
                     <Settings className="w-3.5 h-3.5" />
                     <span>Settings</span>
                   </Link>
+                  <button
+                    onClick={async () => {
+                      await logout();
+                      window.location.href = '/';
+                    }}
+                    className="w-full text-left px-3 py-2 rounded-xl text-xs text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors flex items-center space-x-2 cursor-pointer"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span>Sign Out</span>
+                  </button>
                 </div>
               </div>
             )}

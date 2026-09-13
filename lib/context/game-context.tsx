@@ -986,7 +986,22 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const supabase = createClient();
       await supabase.auth.signOut();
     }
+    // Clear cached data so sign-in page shows fresh state
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('ascend_profile');
+      localStorage.removeItem('ascend_attributes');
+      localStorage.removeItem('ascend_streak');
+      localStorage.removeItem('ascend_quests');
+      localStorage.removeItem('ascend_inventory');
+      localStorage.removeItem('ascend_achievements');
+    }
     setIsDemoUser(true);
+    setProfile(DEFAULT_PROFILE);
+    setAttributes(DEFAULT_ATTRIBUTES);
+    setStreak(DEFAULT_STREAK);
+    setQuests(DEFAULT_QUESTS);
+    setInventory([]);
+    setAchievements([]);
   };
 
   return (

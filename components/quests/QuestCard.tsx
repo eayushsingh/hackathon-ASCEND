@@ -63,7 +63,9 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit, isCompleted
     setJustCompletedAnim(true);
     try {
       await completeQuest(quest.id);
+      // Keep animation checked — parent isCompletedOverride will stay true after state update
     } catch {
+      // Only reset animation if the quest is genuinely not completed
       setJustCompletedAnim(false);
     } finally {
       setIsCompleting(false);
@@ -99,10 +101,12 @@ export const QuestCard: React.FC<QuestCardProps> = ({ quest, onEdit, isCompleted
           <motion.button
             onClick={handleComplete}
             disabled={isCompleted || isCompleting}
-            whileTap={{ scale: 0.85 }}
-            whileHover={{ scale: 1.05 }}
+            whileTap={!isCompleted ? { scale: 0.85 } : {}}
+            whileHover={!isCompleted ? { scale: 1.05 } : {}}
             aria-label={isCompleted ? 'Quest Completed' : 'Complete Quest'}
-            className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 border transition-all mt-0.5 cursor-pointer ${
+            className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 border transition-all mt-0.5 ${
+              isCompleted ? 'cursor-default' : 'cursor-pointer'
+            } ${
               isCompleted || justCompletedAnim
                 ? 'btn-primary-gradient border-transparent text-white'
                 : 'border-[#C7C7CC] hover:border-[#7C3AED] bg-white text-transparent hover:text-[#7C3AED]'

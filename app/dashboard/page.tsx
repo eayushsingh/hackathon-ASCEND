@@ -30,7 +30,7 @@ import { AmbientBackground } from '@/components/ui/AmbientBackground';
 export default function DashboardPage() {
   const { quests, streak, profile } = useGame();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [filterType, setFilterType] = useState<'Active' | 'Daily' | 'All' | 'Completed'>('Active');
+  const [filterType, setFilterType] = useState<'Active' | 'Daily' | 'All' | 'Completed'>('All');
 
   const todayIso = getTodayDateString();
 
@@ -48,7 +48,9 @@ export default function DashboardPage() {
     return q.status === 'Active' || isQuestCompletedOnDate(q, todayIso);
   });
 
-  const activeToday = todayQuests.filter((q) => !isQuestCompletedOnDate(q, todayIso));
+  // "Active" tab shows all quests for today (pending + completed recurring habits)
+  // so completed quests stay visible and don't disappear after refresh
+  const activeToday = todayQuests.filter((q) => !isQuestCompletedOnDate(q, todayIso) || q.is_recurring);
   const completedToday = todayQuests.filter((q) => isQuestCompletedOnDate(q, todayIso));
   const dailyQuests = todayQuests.filter((q) => q.is_recurring);
 
