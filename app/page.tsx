@@ -431,6 +431,14 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 pb-2 border-t border-[#E5E5EA] flex flex-col sm:flex-row items-center justify-between text-xs text-[#8E8E93]">
+        <p>© {new Date().getFullYear()} ASCEND. All rights reserved.</p>
+        <div className="mt-4 sm:mt-0 space-x-6">
+          <Link href="/privacy" className="hover:text-[#1D1D1F] transition-colors">Privacy Policy</Link>
+        </div>
+      </footer>
     </div>
   );
 }
