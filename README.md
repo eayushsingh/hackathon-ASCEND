@@ -1,4 +1,4 @@
-# ⚡ ASCEND: Life RPG Productivity Protocol
+# ⚡ ASCEND: Life RPG Productivity Protocol ⚡
 
 > Transform real-life tasks, fitness workouts, coding sprints, and daily habits into an epic Cyberpunk Life RPG with non-linear math, server-authoritative progression, calendar streaks, achievements, and an in-game economy.
 
